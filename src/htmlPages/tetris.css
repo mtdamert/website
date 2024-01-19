@@ -80,6 +80,7 @@
 #playAgainButton{
 		position: absolute;
 		top: 500;
+		left: 123; /* 80 for left margin - TODO: center this and other elements properly within the playingArea */
 		font-size: 20pt;
 		text-align: center;
 		visibility: hidden;
