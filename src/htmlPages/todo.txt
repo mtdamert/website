@@ -1,0 +1,22 @@
+- Bug: when a block is rotated when you're at the lowest height, it clips through the final row
+- Start game + enable cookies screen
+- Move high scores to back end
+- Move block generation to back end
+- Save top 5 scores
+- Fancy animation on tetris (4-rows cleared at once)
+- Inform player if they get a new high score
+- Changing colors for screen
+- Better background colors & block colors
+- Record + replay mode
+- Button to switch theme
+
+
+DONE:
+- update graphics when a line is cleared
+- First piece in game always goes one row too far (below the screen)
+- unpause
+- Top 5 scores - use an array
+- If I play 3 games in a row, the scores from the 2 latest games will appear highlighted as if they're both the most recent game
+- Don't list 0s on the high score list
+
+
