@@ -5,10 +5,11 @@
 - Save top 5 scores
 - Fancy animation on tetris (4-rows cleared at once)
 - Inform player if they get a new high score
-- Changing colors for screen
+- Changing colors for screen -> make sure the screen is easy to make out
 - Better background colors & block colors
 - Record + replay mode
 - Button to switch theme
+- Add sounds
 
 
 DONE:

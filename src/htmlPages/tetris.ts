@@ -1861,6 +1861,11 @@ function incrementScore(amount: number): void {
 function gameOver(): void {
     isGameOver = true;
 
+    // TODO: Cookies
+    // TODO: Only do this if there is an 'allowCookies' cookie 
+    //     console.log("Setting cookie: " + currentScore);
+    //     setCookie('score', currentScore, 10);
+
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
     if (scoreBox !== null) {
         scoreBox.style.backgroundColor = 'rgb(128,0,0)';
