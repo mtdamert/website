@@ -1,6 +1,6 @@
 import Link from './Link';
 
-function Sidebar() {
+function Header() {
     const links = [
         { label: 'Click here to see Test', path: '/test' },
         { label: 'AnotherTest', path: '/another-test' },
@@ -21,10 +21,10 @@ function Sidebar() {
     })
 
     return (
-        <div className="top-0">
+        <div className="top-0 text-center">
             {renderedLinks}
         </div>
     );
 }
 
-export default Sidebar;
+export default Header;

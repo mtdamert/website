@@ -1,4 +1,4 @@
-import Sidebar from './components/Sidebar';
+import Header from './components/Header';
 import Route from './components/Route';
 import AboutPage from './pages/AboutPage'
 import AnotherTestPage from './pages/AnotherTestPage';
@@ -13,7 +13,7 @@ function App() {
             </div>
 
             <div className="container mx-auto gap-4 mt-4 ">
-                <Sidebar />
+                <Header />
             </div>
 
             {/* put the rest of the page here */}
