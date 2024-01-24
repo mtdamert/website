@@ -5,10 +5,10 @@ function Header() {
         { label: 'Click here to see Test', path: '/test' },
         { label: 'AnotherTest', path: '/another-test' },
         { label: 'Tetris', path: '/tetris' },
-        { label: 'Graphs', path: '/graphs' },
+        {/*{ label: 'Graphs', path: '/graphs' },
         { label: '3D', path: '/3d_art' },
-        { label: 'Days Since App', path: 'days_since' },
-        { label: 'About Me', path: '/about' },
+        { label: 'Days Since App', path: 'days_since' },*/},
+    { label: 'About Me', path: '/about' },
     ];
 
     const renderedLinks = links.map((link) => {
