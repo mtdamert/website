@@ -8,16 +8,19 @@ import TetrisPage from './pages/TetrisPage';
 function App() {
     return (
         <div className="justify-center">
-            <div className="text-2xl py-6 px-4 text-center">
+            <div className="text-4xl py-4 px-4 text-center">
                 mtdamert.com
             </div>
 
-            <div className="container mx-auto gap-4 mt-4 ">
+            <div className="container mx-auto gap-2 mt-4 ">
                 <Header />
             </div>
 
-            {/* put the rest of the page here */}
+            {/* put the rest of the page here
+            
             <div className="h-full py-6 px-6 fixed">
+            */}
+            <div>
                 <Route path="/another-test">
                     <AnotherTestPage />
                 </Route>
