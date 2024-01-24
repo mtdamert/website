@@ -1,12 +1,4 @@
 import React, { useEffect } from 'react';
-import './tetris.css';
-import tetris_block from './tetris_block.gif';
-import tetris_block_blue from './tetris_block_blue.gif';
-import tetris_block_gray from './tetris_block_gray.gif';
-import tetris_block_green from './tetris_block_green.gif';
-import tetris_block_orange from './tetris_block_orange.gif';
-import tetris_block_purple from './tetris_block_purple.gif';
-import tetris_block_yellow from './tetris_block_yellow.gif';
 
 
 class Block {
@@ -244,7 +236,8 @@ class Piece {
             if (playingAreaScreen !== null) {
                 playingAreaScreen.style.visibility = 'hidden';
             }
-            setTimeout('gameLoop()', 50);
+
+            setTimeout(() => {gameLoop()}, 50);
         }
     }
 
@@ -270,6 +263,7 @@ class Piece {
                 let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
                 if (highScoreDiv !== null) {
                     highScoreDiv.innerHTML = "" + currentHighScore;
+                    highScoreDiv.style.top = "390px";
                     highScoreDiv.style.color = "rgb(0,0,0)";
                 }
             }
@@ -280,11 +274,10 @@ class Piece {
         for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
             let highScoreDiv: HTMLDivElement = document.createElement('div');
             // TODO: Make sure the DIV elements don't already exist
-            highScoreDiv.className = "highScoreText";
+            let top = (390 + (20) * i);
+            highScoreDiv.className = "absolute left-[440px] top-[" + top + "px] text-lg";
             highScoreDiv.id = "highScoreText" + (i + 1);
             highScoreDiv.style.color = "rgb(0,0,0)";
-            highScoreDiv.style.top = "" + (310 + (20) * i);
-            //highScoreDiv.innerHTML = "0";
 
             if (rightPanel !== null) {
                 console.log("Adding to right panel: " + highScoreDiv.id);
@@ -357,7 +350,7 @@ class Piece {
     const previewIBar = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = {tetris_block};
+                previewBlocks[i].image.src = 'tetris_block.gif';
             }
         }
 
@@ -381,7 +374,7 @@ class Piece {
     const previewLBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = {tetris_block_yellow};
+                previewBlocks[i].image.src = 'tetris_block_yellow.gif';
             }
         }
         
@@ -405,7 +398,7 @@ class Piece {
     const previewJBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = {tetris_block_purple};
+                previewBlocks[i].image.src = 'tetris_block_purple.gif';
             }
         }
 
@@ -429,7 +422,7 @@ class Piece {
     const previewSBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = {tetris_block_blue};
+                previewBlocks[i].image.src = 'tetris_block_blue.gif';
             }
         }
 
@@ -453,7 +446,7 @@ class Piece {
     const previewZBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = {tetris_block_orange};
+                previewBlocks[i].image.src = 'tetris_block_orange.gif';
             }
         }
 
@@ -477,7 +470,7 @@ class Piece {
     const previewSquareBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = {tetris_block_gray};
+                previewBlocks[i].image.src = 'tetris_block_gray.gif';
             }
         }
 
@@ -501,7 +494,7 @@ class Piece {
     const previewTBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = {tetris_block_green};
+                previewBlocks[i].image.src = 'tetris_block_green.gif';
             }
         }
 
@@ -662,7 +655,7 @@ class Piece {
     function addIBar(blocks: Block[], centerPos: number) {
         for (let i: number = 0; i < 4; i++) {
             if (blocks[i] !== null && blocks[i].image !== null) {
-                blocks[i].image.src = {tetris_block};
+                blocks[i].image.src = 'tetris_block.gif';
                 //blocks[i].image.style.left = PIECE_WIDTH * (i + centerPos) + "px";
             }
         }
@@ -694,7 +687,7 @@ class Piece {
     const addLBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
             if (blocks[i] !== null && blocks[i].image !== null)
-                blocks[i].image.src = {tetris_block_yellow};
+                blocks[i].image.src = 'tetris_block_yellow.gif';
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -725,7 +718,7 @@ class Piece {
 
     const addJBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
-            blocks[i].image.src = {tetris_block_purple};
+            blocks[i].image.src = 'tetris_block_purple.gif';
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -756,7 +749,7 @@ class Piece {
 
     const addSBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
-            blocks[i].image.src = {tetris_block_blue};
+            blocks[i].image.src = 'tetris_block_blue.gif';
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (1 + centerPos) + "px";
@@ -787,7 +780,7 @@ class Piece {
     const addZBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
             if (blocks[i] !== null && blocks[i].image !== null)
-                blocks[i].image.src = {tetris_block_orange};
+                blocks[i].image.src = 'tetris_block_orange.gif';
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -818,7 +811,7 @@ class Piece {
     const addSquareBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
             if (blocks[i] !== null && blocks[i].image !== null)
-                blocks[i].image.src = {tetris_block_gray};
+                blocks[i].image.src = 'tetris_block_gray.gif';
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -849,7 +842,7 @@ class Piece {
     const addTBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
             if (blocks[i] !== null && blocks[i].image !== null)
-                blocks[i].image.src = {tetris_block_green};
+                blocks[i].image.src = 'tetris_block_green.gif';
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (1 + centerPos) + "px";
@@ -894,7 +887,7 @@ class Piece {
             //newPieceImages[i] = document.createElement('img');
             //newBlocks[i].image = newPieceImages[i];
             newBlocks[i].image = document.createElement('img');
-            newBlocks[i].image.src = {tetris_block};
+            newBlocks[i].image.src = 'tetris_block.gif';
             newBlocks[i].div.appendChild(newBlocks[i].image);
             
             newBlocks[i].image.style.position = 'absolute';
@@ -1919,7 +1912,7 @@ export default function TetrisTest() {
                     <div id="pausedBox" className="absolute top-[500px] left-[80px] border-t-[1px] border-black w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#08080]">
                         PAUSED
                     </div>
-                    <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[123px] text-xl center invisible z-10 text-green-500 bg-[#c0c0c0]">
+                    <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[163px] text-xl center invisible z-10 text-green-500 bg-[#c0c0c0]">
                         Click to Play Again
                     </button>
                     <div id="scoreBox" className="absolute top-[840px] left-[80px] border-t-[1px] border-black w-[320px] h-[24px] text-base text-white bg-[#208040]">
@@ -1933,8 +1926,6 @@ export default function TetrisTest() {
                     <div id="highScoreHeader" className="absolute top-[365px] left-[440px] text-lg">High Scores:</div>
                 </div>
             </div>
-
-            <img src={tetris_block_blue} /> <img src={tetris_block_gray} /> <img src={tetris_block_green} /> <img src={tetris_block_orange} /> <img src={tetris_block_purple} /> <img src={tetris_block_yellow} /> 
         </div>
     );
 }
