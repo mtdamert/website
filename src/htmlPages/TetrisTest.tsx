@@ -1,4 +1,12 @@
 import React, { useEffect } from 'react';
+import './tetris.css';
+import tetris_block from './tetris_block.gif';
+import tetris_block_blue from './tetris_block_blue.gif';
+import tetris_block_gray from './tetris_block_gray.gif';
+import tetris_block_green from './tetris_block_green.gif';
+import tetris_block_orange from './tetris_block_orange.gif';
+import tetris_block_purple from './tetris_block_purple.gif';
+import tetris_block_yellow from './tetris_block_yellow.gif';
 
 
 class Block {
@@ -349,7 +357,7 @@ class Piece {
     const previewIBar = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = 'tetris_block.gif';
+                previewBlocks[i].image.src = {tetris_block};
             }
         }
 
@@ -373,7 +381,7 @@ class Piece {
     const previewLBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = 'tetris_block_yellow.gif';
+                previewBlocks[i].image.src = {tetris_block_yellow};
             }
         }
         
@@ -397,7 +405,7 @@ class Piece {
     const previewJBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = 'tetris_block_purple.gif';
+                previewBlocks[i].image.src = {tetris_block_purple};
             }
         }
 
@@ -421,7 +429,7 @@ class Piece {
     const previewSBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = 'tetris_block_blue.gif';
+                previewBlocks[i].image.src = {tetris_block_blue};
             }
         }
 
@@ -445,7 +453,7 @@ class Piece {
     const previewZBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = 'tetris_block_orange.gif';
+                previewBlocks[i].image.src = {tetris_block_orange};
             }
         }
 
@@ -469,7 +477,7 @@ class Piece {
     const previewSquareBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = 'tetris_block_gray.gif';
+                previewBlocks[i].image.src = {tetris_block_gray};
             }
         }
 
@@ -493,7 +501,7 @@ class Piece {
     const previewTBlock = (previewBlocks: Block[]): void => {
         for (let i: number = 0; i < 4; i++) {
             if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-                previewBlocks[i].image.src = 'tetris_block_green.gif';
+                previewBlocks[i].image.src = {tetris_block_green};
             }
         }
 
@@ -654,7 +662,7 @@ class Piece {
     function addIBar(blocks: Block[], centerPos: number) {
         for (let i: number = 0; i < 4; i++) {
             if (blocks[i] !== null && blocks[i].image !== null) {
-                blocks[i].image.src = 'tetris_block.gif';
+                blocks[i].image.src = {tetris_block};
                 //blocks[i].image.style.left = PIECE_WIDTH * (i + centerPos) + "px";
             }
         }
@@ -686,7 +694,7 @@ class Piece {
     const addLBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
             if (blocks[i] !== null && blocks[i].image !== null)
-                blocks[i].image.src = 'tetris_block_yellow.gif';
+                blocks[i].image.src = {tetris_block_yellow};
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -717,7 +725,7 @@ class Piece {
 
     const addJBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
-            blocks[i].image.src = 'tetris_block_purple.gif';
+            blocks[i].image.src = {tetris_block_purple};
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -748,7 +756,7 @@ class Piece {
 
     const addSBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
-            blocks[i].image.src = 'tetris_block_blue.gif';
+            blocks[i].image.src = {tetris_block_blue};
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (1 + centerPos) + "px";
@@ -779,7 +787,7 @@ class Piece {
     const addZBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
             if (blocks[i] !== null && blocks[i].image !== null)
-                blocks[i].image.src = 'tetris_block_orange.gif';
+                blocks[i].image.src = {tetris_block_orange};
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -810,7 +818,7 @@ class Piece {
     const addSquareBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
             if (blocks[i] !== null && blocks[i].image !== null)
-                blocks[i].image.src = 'tetris_block_gray.gif';
+                blocks[i].image.src = {tetris_block_gray};
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -841,7 +849,7 @@ class Piece {
     const addTBlock = (blocks: Block[], centerPos: number): boolean => {
         for (let i: number = 0; i < 4; i++)
             if (blocks[i] !== null && blocks[i].image !== null)
-                blocks[i].image.src = 'tetris_block_green.gif';
+                blocks[i].image.src = {tetris_block_green};
 
         // Set positions for the block graphics
         blocks[0].image.style.left = PIECE_WIDTH * (1 + centerPos) + "px";
@@ -886,7 +894,7 @@ class Piece {
             //newPieceImages[i] = document.createElement('img');
             //newBlocks[i].image = newPieceImages[i];
             newBlocks[i].image = document.createElement('img');
-            newBlocks[i].image.src = 'tetris_block.gif';
+            newBlocks[i].image.src = {tetris_block};
             newBlocks[i].div.appendChild(newBlocks[i].image);
             
             newBlocks[i].image.style.position = 'absolute';
@@ -894,7 +902,7 @@ class Piece {
             newBlocks[i].image.style.left = "0px";
         }
 
-        //newBlocks[0].image.src = 'tetris_block.gif'; // TEST
+        //newBlocks[0].image.src = {tetris_block}; // TEST
 
         let screenCenter: number = 4;
         let collision: boolean = false;
@@ -1898,31 +1906,35 @@ export default function TetrisTest() {
         init();
       }, []);
 
+      {/* the playing area is 22 * 10, except that the top 2 rows are hidden
+	    i.e. 320 x 704
+        */}
     return (
         <div>
-            <div>Tetris</div>
             <span className="italic">Press up arrow to rotate.<br/>Press ESC to pause.</span>
 
             <div id="fullArea">
-                <div id="playingArea">
+                <div id="playingArea" className="absolute top-[200px] left-[80px] border-t-[1px] w-[320px] h-[640px] bg-[#c0c0c0]">
                 </div>
-                    <div id="pausedBox">
+                    <div id="pausedBox" className="absolute top-[500px] left-[80px] border-t-[1px] border-black w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#08080]">
                         PAUSED
                     </div>
-                    <button id="playAgainButton" onClick={startNewGame}>
+                    <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[123px] text-xl center invisible z-10 text-green-500 bg-[#c0c0c0]">
                         Click to Play Again
                     </button>
-                    <div id="scoreBox">
+                    <div id="scoreBox" className="absolute top-[840px] left-[80px] border-t-[1px] border-black w-[320px] h-[24px] text-base text-white bg-[#208040]">
                         Score: 0; Lines: 0
                     </div>
-                <div id="playingAreaScreen"> </div>
+                <div id="playingAreaScreen" className="absolute top-[200px] left-[80px] border-t-[1px] border-black w-[320px] h-[640px] opacity-80 bg-[#080808]"> </div>
 
                 <div id="rightPanel">
-                    <div id="nextPieceHeader">Next Piece:</div>
-                    <div id="nextPieceBox"></div>
-                    <div id="highScoreHeader">High Scores:</div>
+                    <div id="nextPieceHeader" className="absolute top-[200px] left-[440px] w-[152px] center bold text-2xl">Next Piece:</div>
+                    <div id="nextPieceBox" className="absolute top-[230px] left-[440px] border-t-[1px] border-black w-[152px] h-[120px] bg-[#c0c0c0]"></div>
+                    <div id="highScoreHeader" className="absolute top-[365px] left-[440px] text-lg">High Scores:</div>
                 </div>
             </div>
+
+            <img src={tetris_block_blue} /> <img src={tetris_block_gray} /> <img src={tetris_block_green} /> <img src={tetris_block_orange} /> <img src={tetris_block_purple} /> <img src={tetris_block_yellow} /> 
         </div>
     );
 }
