@@ -3,7 +3,7 @@ import TetrisTest from '../htmlPages/TetrisTest.tsx';
 
 function TetrisPage() {
     return (
-        <div className="flex">
+        <div>
             <TetrisTest />
         </div>
     )
