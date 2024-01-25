@@ -275,8 +275,9 @@ class Piece {
             let highScoreDiv: HTMLDivElement = document.createElement('div');
             // TODO: Make sure the DIV elements don't already exist
             let top = (390 + (20) * i);
-            highScoreDiv.className = "absolute left-[440px] top-[" + top + "px] text-lg";
+            highScoreDiv.className = "absolute top-[" + top + "px] left-[440px] text-lg";
             highScoreDiv.id = "highScoreText" + (i + 1);
+            highScoreDiv.style.top = "" + top + "px";
             highScoreDiv.style.color = "rgb(0,0,0)";
 
             if (rightPanel !== null) {
