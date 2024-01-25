@@ -1904,7 +1904,7 @@ export default function TetrisTest() {
         */}
     return (
         <div>
-            <span className="italic">Press up arrow to rotate.<br/>Press ESC to pause.</span>
+            <span className="italic absolute top-[140px] left-[100px]">Press up arrow to rotate.<br/>Press ESC to pause.</span>
 
             <div id="fullArea">
                 <div id="playingArea" className="absolute top-[200px] left-[80px] border-t-[1px] w-[320px] h-[640px] bg-[#c0c0c0]">
