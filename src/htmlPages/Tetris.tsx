@@ -1895,7 +1895,7 @@ class Piece {
         }
     }
 
-export default function TetrisTest() {
+export default function Tetris() {
     useEffect(() => {
         init();
       }, []);
