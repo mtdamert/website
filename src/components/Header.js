@@ -3,7 +3,7 @@ import Link from './Link';
 function Header() {
     const links = [
         { label: 'Click here to see Test', path: '/test' },
-        { label: 'AnotherTest', path: '/another-test' },
+        { label: 'Another Test', path: '/another-test' },
         { label: 'Tetris', path: '/tetris' },
         {/*{ label: 'Graphs', path: '/graphs' },
         { label: '3D', path: '/3d_art' },
