@@ -10,6 +10,12 @@
 - Record + replay mode
 - Button to switch theme
 - Add sounds
+- Bug - when an L-block is upside down and along the right wall, trying to rotate crashes the program:
+    Cannot read properties of undefined (reading '10')
+    TypeError: Cannot read properties of undefined (reading '10')
+        at rotateLBlock (http://localhost:3000/static/js/bundle.js:1978:67)
+        at rotateCurrentPiece (http://localhost:3000/static/js/bundle.js:2266:9)
+        at http://localhost:3000/static/js/bundle.js:964:9
 
 
 DONE:
