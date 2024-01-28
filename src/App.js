@@ -5,11 +5,22 @@ import AnotherTestPage from './pages/AnotherTestPage';
 import TestPage from './pages/TestPage';
 import TetrisPage from './pages/TetrisPage';
 
+const headerText = [
+    "mtdamert.com",
+    "いらっしゃいませ！",
+    "Website!"
+];
+
 function App() {
+    const getHeaderText = () => {
+        const random = Math.floor(Math.random() * headerText.length);
+        return headerText[random];
+    }
+
     return (
         <div className="justify-center">
             <div className="text-4xl py-4 px-4 text-center">
-                mtdamert.com
+                {getHeaderText()}
             </div>
 
             <div className="container mx-auto gap-2 mt-4 ">
