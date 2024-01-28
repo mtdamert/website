@@ -351,7 +351,9 @@ const incrementSpeed = (): void => {
 const previewIBar = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block.gif';
+            //previewBlocks[i].image.src = 'tetris_block.gif';
+            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.style.backgroundColor = '#ff0000';
         }
     }
 
@@ -375,7 +377,9 @@ const previewIBar = (previewBlocks: Block[]): void => {
 const previewLBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_yellow.gif';
+            //previewBlocks[i].image.src = 'tetris_block_yellow.gif';
+            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.style.backgroundColor = '#ffff00';
         }
     }
     
@@ -399,7 +403,9 @@ const previewLBlock = (previewBlocks: Block[]): void => {
 const previewJBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_purple.gif';
+            //previewBlocks[i].image.src = 'tetris_block_purple.gif';
+            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.style.backgroundColor = "#c000ff";
         }
     }
 
@@ -423,7 +429,9 @@ const previewJBlock = (previewBlocks: Block[]): void => {
 const previewSBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_blue.gif';
+            //previewBlocks[i].image.src = 'tetris_block_blue.gif';
+            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.style.backgroundColor = '#0000ff';
         }
     }
 
@@ -447,7 +455,9 @@ const previewSBlock = (previewBlocks: Block[]): void => {
 const previewZBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_orange.gif';
+            //previewBlocks[i].image.src = 'tetris_block_orange.gif';
+            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.style.backgroundColor = '#ff8000';
         }
     }
 
@@ -471,7 +481,9 @@ const previewZBlock = (previewBlocks: Block[]): void => {
 const previewSquareBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_gray.gif';
+            //previewBlocks[i].image.src = 'tetris_block_gray.gif';
+            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.style.backgroundColor = '#606060';
         }
     }
 
@@ -495,7 +507,9 @@ const previewSquareBlock = (previewBlocks: Block[]): void => {
 const previewTBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_green.gif';
+            //previewBlocks[i].image.src = 'tetris_block_green.gif';
+            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.style.backgroundColor = '#00ff00';
         }
     }
 
@@ -656,7 +670,9 @@ const removeFromPlayingGrid = (x: number, y: number, block: Block): void => {
 function addIBar(blocks: Block[], centerPos: number) {
     for (let i: number = 0; i < 4; i++) {
         if (blocks[i] !== null && blocks[i].image !== null) {
-            blocks[i].image.src = 'tetris_block.gif';
+            //blocks[i].image.src = 'tetris_block.gif';
+            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.style.backgroundColor = '#ff0000';
             //blocks[i].image.style.left = PIECE_WIDTH * (i + centerPos) + "px";
         }
     }
@@ -687,8 +703,11 @@ function addIBar(blocks: Block[], centerPos: number) {
 
 const addLBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
-        if (blocks[i] !== null && blocks[i].image !== null)
-            blocks[i].image.src = 'tetris_block_yellow.gif';
+        if (blocks[i] !== null && blocks[i].image !== null) {
+            //blocks[i].image.src = 'tetris_block_yellow.gif';
+            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.style.backgroundColor = '#ffff00';
+        }
 
     // Set positions for the block graphics
     blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -718,8 +737,11 @@ const addLBlock = (blocks: Block[], centerPos: number): boolean => {
 }
 
 const addJBlock = (blocks: Block[], centerPos: number): boolean => {
-    for (let i: number = 0; i < 4; i++)
-        blocks[i].image.src = 'tetris_block_purple.gif';
+    for (let i: number = 0; i < 4; i++) {
+        //blocks[i].image.src = 'tetris_block_purple.gif';
+        blocks[i].image.src = 'tetris_block_base.png';
+        blocks[i].image.style.backgroundColor = "#c000ff";
+}
 
     // Set positions for the block graphics
     blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -749,8 +771,11 @@ const addJBlock = (blocks: Block[], centerPos: number): boolean => {
 }
 
 const addSBlock = (blocks: Block[], centerPos: number): boolean => {
-    for (let i: number = 0; i < 4; i++)
-        blocks[i].image.src = 'tetris_block_blue.gif';
+    for (let i: number = 0; i < 4; i++) {
+        //blocks[i].image.src = 'tetris_block_blue.gif';
+        blocks[i].image.src = 'tetris_block_base.png';
+        blocks[i].image.style.backgroundColor = '#0000ff';
+    }
 
     // Set positions for the block graphics
     blocks[0].image.style.left = PIECE_WIDTH * (1 + centerPos) + "px";
@@ -780,8 +805,11 @@ const addSBlock = (blocks: Block[], centerPos: number): boolean => {
 
 const addZBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
-        if (blocks[i] !== null && blocks[i].image !== null)
-            blocks[i].image.src = 'tetris_block_orange.gif';
+        if (blocks[i] !== null && blocks[i].image !== null) {
+            //blocks[i].image.src = 'tetris_block_orange.gif';
+            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.style.backgroundColor = '#ff8000';
+        }
 
     // Set positions for the block graphics
     blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -811,8 +839,11 @@ const addZBlock = (blocks: Block[], centerPos: number): boolean => {
 
 const addSquareBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
-        if (blocks[i] !== null && blocks[i].image !== null)
-            blocks[i].image.src = 'tetris_block_gray.gif';
+        if (blocks[i] !== null && blocks[i].image !== null) {
+            //blocks[i].image.src = 'tetris_block_gray.gif';
+            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.style.backgroundColor = '#606060';
+        }
 
     // Set positions for the block graphics
     blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -842,8 +873,11 @@ const addSquareBlock = (blocks: Block[], centerPos: number): boolean => {
 
 const addTBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
-        if (blocks[i] !== null && blocks[i].image !== null)
-            blocks[i].image.src = 'tetris_block_green.gif';
+        if (blocks[i] !== null && blocks[i].image !== null) {
+            //blocks[i].image.src = 'tetris_block_green.gif';
+            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.style.backgroundColor = '#00ff00';
+        }
 
     // Set positions for the block graphics
     blocks[0].image.style.left = PIECE_WIDTH * (1 + centerPos) + "px";
@@ -888,7 +922,9 @@ const addPiece = (pieceType: number): Piece => {
         //newPieceImages[i] = document.createElement('img');
         //newBlocks[i].image = newPieceImages[i];
         newBlocks[i].image = document.createElement('img');
-        newBlocks[i].image.src = 'tetris_block.gif';
+        //newBlocks[i].image.src = 'tetris_block.gif';
+        newBlocks[i].image.src = 'tetris_block_base.png';
+        newBlocks[i].image.style.backgroundColor = '#ff0000';
         newBlocks[i].div.appendChild(newBlocks[i].image);
         
         newBlocks[i].image.style.position = 'absolute';
