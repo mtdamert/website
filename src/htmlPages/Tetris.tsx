@@ -73,13 +73,13 @@ const STATE_GAME_PAUSED: number = 1;
 
 const NUM_HIGH_SCORES: number = 5;
 
-const IBarColor = '#ff0000';
-const LBlockColor = '#ffff00';
-const JBlockColor = '#c000ff';
-const SBlockColor = '#0000ff';
-const ZBlockColor = '#ff8000';
-const SquareBlockColor = '#606060';
-const TBlockColor = '#00ff00';
+let IBarColor: string = '#ff0000';
+let LBlockColor: string = '#ffff00';
+let JBlockColor: string = '#c000ff';
+let SBlockColor: string = '#0000ff';
+let ZBlockColor: string = '#ff8000';
+let SquareBlockColor: string = '#606060';
+let TBlockColor: string = '#00ff00';
 
 const gameLoop = (): void => {
     //game loop
@@ -221,6 +221,61 @@ const startNewGame = (): void => {
 
     // start the game loop
     gameLoop();
+}
+
+const setThemeToWinter = (): void => {
+    // snow theme
+    IBarColor = '#ea98dc';
+    LBlockColor = '#1d2b81';
+    JBlockColor = '#7daed7';
+    SBlockColor = '#0a9ef0';
+    ZBlockColor = '#43dcf0';
+    SquareBlockColor = '#cce7f5';
+    TBlockColor = '#d2bbf0';
+}
+
+const setThemeToNeutrals = (): void => {
+    // mild theme
+    IBarColor = '#797d62';
+    LBlockColor = '#9b9b7a';
+    JBlockColor = '#d9ae94';
+    SBlockColor = '#f1dca7';
+    ZBlockColor = '#ffcb69';
+    SquareBlockColor = '#d08c60';
+    TBlockColor = '#997b66';
+}
+
+const setThemeToPurpleMagenta = (): void => {
+    // purple-to-magenta theme
+    IBarColor = '#2d00f7';
+    LBlockColor = '#6a00f4';
+    JBlockColor = '#8900f2';
+    SBlockColor = '#bc00dd';
+    ZBlockColor = '#e500a4';
+    SquareBlockColor = '#f20089';
+    TBlockColor = '#ffb600';
+}
+
+const setThemeToBlueRetro = (): void => {
+    // gaudy blue theme, like in the game Fez
+    IBarColor = '#0ad2ff';
+    LBlockColor = '#2962ff';
+    JBlockColor = '#9500ff';
+    SBlockColor = '#ff0059';
+    ZBlockColor = '#ff8c00';
+    SquareBlockColor = '#b4e600';
+    TBlockColor = '#0fffdb';
+}
+
+const setThemeToSummer = (): void => {
+    // warm summer theme
+    IBarColor = '#e9d022';
+    LBlockColor = '#e9af1e';
+    JBlockColor = '#e88e1a';
+    SBlockColor = '#e86e16';
+    ZBlockColor = '#e74d11';
+    SquareBlockColor = '#e72c0d';
+    TBlockColor = '#e60b09';
 }
 
 const handleEscKeyPress = (): void => {
@@ -1957,7 +2012,7 @@ export default function Tetris() {
                     <div id="pausedBox" className="absolute top-[500px] left-[80px] border-t-[1px] border-black w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#08080]">
                         PAUSED
                     </div>
-                    <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[163px] text-xl center invisible z-10 text-green-500 bg-[#c0c0c0]">
+                    <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[147px] text-xl center invisible z-10 px-3 py-1 text-green-800 bg-[#c0c0c0]">
                         Click to Play Again
                     </button>
                     <div id="scoreBox" className="absolute top-[840px] left-[80px] border-t-[1px] border-black w-[320px] h-[24px] text-base text-white bg-[#208040]">
@@ -1969,6 +2024,12 @@ export default function Tetris() {
                     <div id="nextPieceHeader" className="absolute top-[200px] left-[440px] w-[152px] center bold text-2xl">Next Piece:</div>
                     <div id="nextPieceBox" className="absolute top-[230px] left-[440px] border-t-[1px] border-black w-[152px] h-[120px] bg-[#c0c0c0]"></div>
                     <div id="highScoreHeader" className="absolute top-[365px] left-[440px] text-lg">High Scores:</div>
+
+                    <button id="winterThemeButton" onClick={setThemeToWinter} className="absolute top-[500px] left-[440px] text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Winter Theme</button>
+                    <button id="neutralsThemeButton" onClick={setThemeToNeutrals} className="absolute top-[540px] left-[440px] text-[#de8a58] bg-[#c0c0c0] px-3 py-1 rounded-md">Neutrals Theme</button>
+                    <button id="purpleMagentaThemeButton" onClick={setThemeToPurpleMagenta} className="absolute top-[580px] left-[440px] text-[#bc00dd] bg-[#c0c0c0] px-3 py-1 rounded-md">Purple to Magenta Theme</button>
+                    <button id="blueRetroThemeButton" onClick={setThemeToBlueRetro} className="absolute top-[620px] left-[440px] text-[#2f899e] bg-[#c0c0c0] px-3 py-1 rounded-md">Retro Blue Theme</button>
+                    <button id="summerThemeButton" onClick={setThemeToSummer} className="absolute top-[660px] left-[440px] text-[#e60b09] bg-[#c0c0c0] px-3 py-1 rounded-md">Summer Theme</button>
                 </div>
             </div>
         </div>

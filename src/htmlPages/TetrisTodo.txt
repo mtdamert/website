@@ -8,7 +8,6 @@
 - Changing colors for screen -> make sure the screen is easy to make out
 - Better background colors & block colors
 - Record + replay mode
-- Button to switch theme
 - Add sounds
 - Bug - when an L-block is upside down and along the right wall, trying to rotate crashes the program:
     Cannot read properties of undefined (reading '10')
@@ -16,6 +15,8 @@
         at rotateLBlock (http://localhost:3000/static/js/bundle.js:1978:67)
         at rotateCurrentPiece (http://localhost:3000/static/js/bundle.js:2266:9)
         at http://localhost:3000/static/js/bundle.js:964:9
+- Update colors of existing pieces when choosing a color theme
+- Create cookie to save current theme
 
 
 DONE:
@@ -25,5 +26,6 @@ DONE:
 - Top 5 scores - use an array
 - If I play 3 games in a row, the scores from the 2 latest games will appear highlighted as if they're both the most recent game
 - Don't list 0s on the high score list
+- Button to switch theme
 
 
