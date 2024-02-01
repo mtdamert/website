@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Tetris from '../htmlPages/Tetris.tsx';
+import Tetris from '../components/Tetris.tsx';
 
 function TetrisPage() {
     return (
