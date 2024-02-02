@@ -5,9 +5,10 @@ function Header() {
         { label: 'Click here to see Test', path: '/test' },
         { label: 'Another Test', path: '/another-test' },
         { label: 'Tetris', path: '/tetris' },
-        {/*{ label: 'Graphs', path: '/graphs' },
-        { label: '3D', path: '/3d_art' },
-        { label: 'Days Since App', path: 'days_since' },*/},
+        { label: 'Graphs', path: '/graphs' },
+        { label: 'Retirement Calculator', path: '/retirement-calc' },
+        {/* label: '3D', path: '/3d_art' },
+        { label: 'Days Since App', path: 'days_since'*/},
     { label: 'About Me', path: '/about' },
     ];
 

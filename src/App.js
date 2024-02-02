@@ -4,6 +4,8 @@ import AboutPage from './pages/AboutPage'
 import AnotherTestPage from './pages/AnotherTestPage';
 import TestPage from './pages/TestPage';
 import TetrisPage from './pages/TetrisPage';
+import GraphsPage from './pages/GraphsPage';
+import RetirementCalcPage from './pages/RetirementCalcPage';
 
 const headerText = [
     "mtdamert.com",
@@ -40,6 +42,12 @@ function App() {
                 </Route>
                 <Route path="/tetris">
                     <TetrisPage />
+                </Route>
+                <Route path="/graphs">
+                    <GraphsPage />
+                </Route>
+                <Route path='/retirement-calc'>
+                    <RetirementCalcPage />
                 </Route>
                 <Route path="/about">
                     <AboutPage />

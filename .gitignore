@@ -25,3 +25,6 @@ yarn-error.log*
 
 # old website
 /old_website
+
+# personal data files
+/src/components/graph_history.json
