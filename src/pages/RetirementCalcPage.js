@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import RetirementCalc from '../components/RetirementCalc';
 
 function RetirementCalcPage() {
