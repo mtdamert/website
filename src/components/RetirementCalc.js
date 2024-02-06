@@ -3,9 +3,11 @@ import { useState } from 'react';
 function RetirementCalc() {
     const [savings, setSavings] = useState(0);
     const [income, setIncome] = useState(0);
-    const [livingExpenses, setLivingExpenses] = useState(35000);
+    const [livingExpenses, setLivingExpenses] = useState(0);
     const [currentAge, setCurrentAge] = useState(40);
     const [retirementAge, setRetirementAge] = useState(65);
+    const [startSocialSecurityAge, setStartSocialSecurityAge] = useState(0);
+    const [socialSecurityIncome, setSocialSecurityIncome] = useState(0);
     const [predictedYield, setPredictedYield] = useState(8);
 
     const handleSubmit = (event) => {
@@ -16,13 +18,20 @@ function RetirementCalc() {
         let ageCounter = currentAge;
         let remainingSavings = savings;
         let yearlyExpenses = livingExpenses;
+        let sSIncome = socialSecurityIncome;
+
+        {/* TODO: Cap gains tax */}
+        {/* TODO: Break savings into basic and retirement (and add fee for withdrawal before age 59.5) */}
 
         while (remainingSavings > 0 && ageCounter < 200) {
             remainingSavings -= yearlyExpenses;
             yearlyExpenses *= 1.03;
+            sSIncome *= 1.02;
             remainingSavings *= (1.0 + (predictedYield * 0.01));
             if (currentAge < retirementAge)
                 remainingSavings += Number(income);
+            if (currentAge >= startSocialSecurityAge)
+                remainingSavings += sSIncome;
 
             console.log("age: " + ageCounter);
             console.log("savings: " + remainingSavings);
@@ -90,10 +99,33 @@ function RetirementCalc() {
                 </label>
                 <input type="number"
                     value={retirementAge}
-                    onChange={(e) => setRetirementAge(e.target.value)}
+                    onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); }}
                     className="float-right border"
                 />
             </div>{/* todo: Use this value, and also add a 'yearly income' value */}
+
+            <div className="pt-2">
+                <label className="font-semibold">
+                    Age to Start Social Security:
+                </label>
+                <input type="number"
+                    value={startSocialSecurityAge}
+                    onChange={(e) => setStartSocialSecurityAge(e.target.value)}
+                    className="float-right border"
+                />
+            </div>{/* TODO: Create a tooltip that leads to: https://www.ssa.gov/OACT/quickcalc/ */}
+
+            <div className="pt-2">
+                <label className="font-semibold">
+                    Estimated Social Security Income (in today's dollars)
+                </label>
+                <input type="text"
+                    value={socialSecurityIncome}
+                    onChange={(e) => setSocialSecurityIncome(e.target.value)}
+                    className="float-right border"
+                />
+            </div>
+
 
             <div className="pt-2">
                 <label className="font-semibold">
