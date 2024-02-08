@@ -1,4 +1,5 @@
-import Link from './Link';
+//import Link from './Link';
+import { Outlet, Link } from "react-router-dom";
 
 function Header() {
     const links = [
@@ -13,17 +14,22 @@ function Header() {
     ];
 
     const renderedLinks = links.map((link) => {
-        return <Link
+        return <span><Link
             key={link.label}
             to={link.path}
             className="mb-3"
             activeClassName="font-bold h-full"
-        >{link.label}</Link>
+        >{link.label}</Link> | </span>
     })
 
     return (
-        <div className="top-0 text-center">
-            {renderedLinks}
+        <div className="container mx-auto gap-2 mt-4">
+            <div className="top-0 text-center">
+                {renderedLinks}
+            </div>
+            <div>
+                <Outlet />
+            </div>
         </div>
     );
 }
