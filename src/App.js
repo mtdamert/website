@@ -28,48 +28,16 @@ function App() {
             <div className="text-4xl py-4 px-4 text-center">
                 {getHeaderText()}
             </div>
-
-            {/* put the rest of the page here
-
-            <div className="container mx-auto gap-2 mt-4 ">
-                <Header />
-            </div>
-
-            
-            <div className="h-full py-6 px-6 fixed">
-            */}
-            <div>
-                {/* 
-                <Route path="/another-test">
-                    <AnotherTestPage />
-                </Route>
-                <Route path="/test">
-                    <TestPage />
-                </Route>
-                <Route path="/tetris">
-                    <TetrisPage />
-                </Route>
-                <Route path="/graphs">
-                    <GraphsPage />
-                </Route>
-                <Route path='/retirement-calc'>
-                    <RetirementCalcPage />
-                </Route>
-                <Route path="/about">
-                    <AboutPage />
-                </Route>
-                */}
-            </div>
             <div>
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Header />}>
-                            <Route path="another-test" element={<AnotherTestPage />} />
-                            <Route path="test" element={<TestPage />} />
-                            <Route path="tetris" element={<TetrisPage />} />
-                            <Route path="graphs" element={<GraphsPage />} />
-                            <Route path="retirement-calc" element={<RetirementCalcPage />} />
-                            <Route path="about" element={<AboutPage />} />
+                            <Route path="/another-test" element={<AnotherTestPage />} />
+                            <Route path="/test" element={<TestPage />} />
+                            <Route path="/tetris" element={<TetrisPage />} />
+                            <Route path="/graphs" element={<GraphsPage />} />
+                            <Route path="/retirement-calc" element={<RetirementCalcPage />} />
+                            <Route path="/about" element={<AboutPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
