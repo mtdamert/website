@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Tetris from '../components/Tetris.tsx';
 
 function TetrisPage() {
