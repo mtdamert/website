@@ -1,5 +1,5 @@
 import Header from './components/Header';
-//import Route from './components/Route';
+import { useEffect } from "react";
 import AboutPage from './pages/AboutPage'
 import AnotherTestPage from './pages/AnotherTestPage';
 import TestPage from './pages/TestPage';
@@ -22,6 +22,10 @@ function App() {
         return headerText[random];
     }
 
+    useEffect(() => {
+        document.title = 'mtdamert.com';
+        }, []);
+    
     return (
         <div className="justify-center">
 
