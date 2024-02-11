@@ -18,7 +18,6 @@ class Block {
 class Piece {
     type: number;
     blocks: Array<(Block | null)> = [null, null, null, null]; // DIV objects here
-    //images: Array<(HTMLImageElement | null)> = [null, null, null, null]; // IMG objects here 
     x: number;
     y: number;
     rotation: number;
@@ -414,7 +413,6 @@ const incrementSpeed = (): void => {
 const previewIBar = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            //previewBlocks[i].image.src = 'tetris_block.gif';
             previewBlocks[i].image.src = 'tetris_block_base.png';
             previewBlocks[i].image.style.backgroundColor = IBarColor;
         }
@@ -440,7 +438,6 @@ const previewIBar = (previewBlocks: Block[]): void => {
 const previewLBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            //previewBlocks[i].image.src = 'tetris_block_yellow.gif';
             previewBlocks[i].image.src = 'tetris_block_base.png';
             previewBlocks[i].image.style.backgroundColor = LBlockColor;
         }
@@ -466,7 +463,6 @@ const previewLBlock = (previewBlocks: Block[]): void => {
 const previewJBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            //previewBlocks[i].image.src = 'tetris_block_purple.gif';
             previewBlocks[i].image.src = 'tetris_block_base.png';
             previewBlocks[i].image.style.backgroundColor = JBlockColor;
         }
@@ -492,7 +488,6 @@ const previewJBlock = (previewBlocks: Block[]): void => {
 const previewSBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            //previewBlocks[i].image.src = 'tetris_block_blue.gif';
             previewBlocks[i].image.src = 'tetris_block_base.png';
             previewBlocks[i].image.style.backgroundColor = SBlockColor;
         }
@@ -518,7 +513,6 @@ const previewSBlock = (previewBlocks: Block[]): void => {
 const previewZBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            //previewBlocks[i].image.src = 'tetris_block_orange.gif';
             previewBlocks[i].image.src = 'tetris_block_base.png';
             previewBlocks[i].image.style.backgroundColor = ZBlockColor;
         }
@@ -544,7 +538,6 @@ const previewZBlock = (previewBlocks: Block[]): void => {
 const previewSquareBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            //previewBlocks[i].image.src = 'tetris_block_gray.gif';
             previewBlocks[i].image.src = 'tetris_block_base.png';
             previewBlocks[i].image.style.backgroundColor = SquareBlockColor;
         }
@@ -570,7 +563,6 @@ const previewSquareBlock = (previewBlocks: Block[]): void => {
 const previewTBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            //previewBlocks[i].image.src = 'tetris_block_green.gif';
             previewBlocks[i].image.src = 'tetris_block_base.png';
             previewBlocks[i].image.style.backgroundColor = TBlockColor;
         }
@@ -733,7 +725,6 @@ const removeFromPlayingGrid = (x: number, y: number, block: Block): void => {
 function addIBar(blocks: Block[], centerPos: number) {
     for (let i: number = 0; i < 4; i++) {
         if (blocks[i] !== null && blocks[i].image !== null) {
-            //blocks[i].image.src = 'tetris_block.gif';
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = IBarColor;
             //blocks[i].image.style.left = PIECE_WIDTH * (i + centerPos) + "px";
@@ -767,7 +758,6 @@ function addIBar(blocks: Block[], centerPos: number) {
 const addLBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
-            //blocks[i].image.src = 'tetris_block_yellow.gif';
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = LBlockColor;
         }
@@ -801,7 +791,6 @@ const addLBlock = (blocks: Block[], centerPos: number): boolean => {
 
 const addJBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++) {
-        //blocks[i].image.src = 'tetris_block_purple.gif';
         blocks[i].image.src = 'tetris_block_base.png';
         blocks[i].image.style.backgroundColor = JBlockColor;
 }
@@ -835,7 +824,6 @@ const addJBlock = (blocks: Block[], centerPos: number): boolean => {
 
 const addSBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++) {
-        //blocks[i].image.src = 'tetris_block_blue.gif';
         blocks[i].image.src = 'tetris_block_base.png';
         blocks[i].image.style.backgroundColor = SBlockColor;
     }
@@ -869,7 +857,6 @@ const addSBlock = (blocks: Block[], centerPos: number): boolean => {
 const addZBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
-            //blocks[i].image.src = 'tetris_block_orange.gif';
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = ZBlockColor;
         }
@@ -903,7 +890,6 @@ const addZBlock = (blocks: Block[], centerPos: number): boolean => {
 const addSquareBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
-            //blocks[i].image.src = 'tetris_block_gray.gif';
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = SquareBlockColor;
         }
@@ -937,7 +923,6 @@ const addSquareBlock = (blocks: Block[], centerPos: number): boolean => {
 const addTBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
-            //blocks[i].image.src = 'tetris_block_green.gif';
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = TBlockColor;
         }
@@ -975,17 +960,12 @@ const addPiece = (pieceType: number): Piece => {
     // Every piece has 4 segments
     let newBlocks: Block[] = new Array<Block>(4);
     piece.blocks = newBlocks;
-    //let newPieceImages: HTMLImageElement[] = new Array<HTMLImageElement>(4);
-    //piece.images = new Array<HTMLImageElement>(4);
     for (let i: number = 0; i < 4; i++) {
         let newBlock: Block = new Block();
         newBlocks[i] = newBlock;
 
         newBlocks[i].div = document.createElement('div');
-        //newPieceImages[i] = document.createElement('img');
-        //newBlocks[i].image = newPieceImages[i];
         newBlocks[i].image = document.createElement('img');
-        //newBlocks[i].image.src = 'tetris_block.gif';
         newBlocks[i].image.src = 'tetris_block_base.png';
         newBlocks[i].image.style.backgroundColor = '#ff0000';
         newBlocks[i].div.appendChild(newBlocks[i].image);
@@ -994,8 +974,6 @@ const addPiece = (pieceType: number): Piece => {
         newBlocks[i].image.style.top = "0px";
         newBlocks[i].image.style.left = "0px";
     }
-
-    //newBlocks[0].image.src = {tetris_block}; // TEST
 
     let screenCenter: number = 4;
     let collision: boolean = false;
@@ -1346,7 +1324,7 @@ const moveCurrentPieceDown = (): void => {
     currentPiece.y += 1;
 }
 
-const moveCurrentPiece = (direction): void => {
+const moveCurrentPiece = (direction: number): void => {
     if (direction === DIRECTION_RIGHT) {
         // Check whether the place we want to move the piece to is free
         let failed: boolean = false;
