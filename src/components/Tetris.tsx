@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 class Block {
     div: (HTMLDivElement | null);
     image: (HTMLImageElement | null);
+    pieceType: number;
     x: number;
     y: number;
 
@@ -15,6 +16,7 @@ class Block {
     };
 }
 
+// A set of 4 Blocks
 class Piece {
     type: number;
     blocks: Array<(Block | null)> = [null, null, null, null]; // DIV objects here
@@ -129,7 +131,7 @@ const startNewGame = (): void => {
 
     // Make all high scores black (which means they're not in the current game)
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
-        let highScoreDivName: string = "highScoreText" + (i + 1);
+        //let highScoreDivName: string = "highScoreText" + (i + 1);
         let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
         if (highScoreDiv !== null) {
             highScoreDiv.style.color = "rgb(0,0,0)";
@@ -343,7 +345,7 @@ const init = (): void => {
         highScoreDiv.style.color = "rgb(0,0,0)";
 
         if (rightPanel !== null) {
-            console.log("Adding to right panel: " + highScoreDiv.id);
+            //console.log("Adding to right panel: " + highScoreDiv.id);
             rightPanel.appendChild(highScoreDiv);
         }
     }
@@ -431,6 +433,7 @@ const previewIBar = (previewBlocks: Block[]): void => {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
             previewBlocks[i].image.style.top = PIECE_WIDTH * previewBlocks[i].y + 44 + "px";
             previewBlocks[i].image.style.left = PIECE_HEIGHT * previewBlocks[i].x + 12 + "px";
+            previewBlocks[i].pieceType = I_BAR_PIECE;
         }
     }
 }
@@ -456,6 +459,7 @@ const previewLBlock = (previewBlocks: Block[]): void => {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
             previewBlocks[i].image.style.top = PIECE_WIDTH * previewBlocks[i].y + 12 + "px";
             previewBlocks[i].image.style.left = PIECE_HEIGHT * previewBlocks[i].x + 44 + "px";
+            previewBlocks[i].pieceType = L_BLOCK_PIECE;
         }
     }
 }
@@ -481,6 +485,7 @@ const previewJBlock = (previewBlocks: Block[]): void => {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
             previewBlocks[i].image.style.top = PIECE_WIDTH * previewBlocks[i].y + 12 + "px";
             previewBlocks[i].image.style.left = PIECE_HEIGHT * previewBlocks[i].x + 44 + "px";
+            previewBlocks[i].pieceType = J_BLOCK_PIECE;
         }
     }
 }
@@ -506,6 +511,7 @@ const previewSBlock = (previewBlocks: Block[]): void => {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
             previewBlocks[i].image.style.top = PIECE_WIDTH * previewBlocks[i].y + 28 + "px";
             previewBlocks[i].image.style.left = PIECE_HEIGHT * previewBlocks[i].x + 28 + "px";
+            previewBlocks[i].pieceType = S_BLOCK_PIECE;
         }
     }
 }
@@ -531,6 +537,7 @@ const previewZBlock = (previewBlocks: Block[]): void => {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
             previewBlocks[i].image.style.top = PIECE_WIDTH * previewBlocks[i].y + 28 + "px";
             previewBlocks[i].image.style.left = PIECE_HEIGHT * previewBlocks[i].x + 28 + "px";
+            previewBlocks[i].pieceType = Z_BLOCK_PIECE;
         }
     }
 }
@@ -556,6 +563,7 @@ const previewSquareBlock = (previewBlocks: Block[]): void => {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
             previewBlocks[i].image.style.top = PIECE_WIDTH * previewBlocks[i].y + 28 + "px";
             previewBlocks[i].image.style.left = PIECE_HEIGHT * previewBlocks[i].x + 44 + "px";
+            previewBlocks[i].pieceType = SQUARE_PIECE;
         }
     }
 }
@@ -581,6 +589,7 @@ const previewTBlock = (previewBlocks: Block[]): void => {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
         previewBlocks[i].image.style.top = PIECE_WIDTH * previewBlocks[i].y + 28 + "px";
             previewBlocks[i].image.style.left = PIECE_HEIGHT * previewBlocks[i].x + 28 + "px";
+            previewBlocks[i].pieceType = T_BLOCK_PIECE;
         }
     }
 }
@@ -725,6 +734,7 @@ const removeFromPlayingGrid = (x: number, y: number, block: Block): void => {
 function addIBar(blocks: Block[], centerPos: number) {
     for (let i: number = 0; i < 4; i++) {
         if (blocks[i] !== null && blocks[i].image !== null) {
+            blocks[i].pieceType = I_BAR_PIECE;
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = IBarColor;
             //blocks[i].image.style.left = PIECE_WIDTH * (i + centerPos) + "px";
@@ -758,6 +768,7 @@ function addIBar(blocks: Block[], centerPos: number) {
 const addLBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
+            blocks[i].pieceType = L_BLOCK_PIECE;
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = LBlockColor;
         }
@@ -791,9 +802,10 @@ const addLBlock = (blocks: Block[], centerPos: number): boolean => {
 
 const addJBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++) {
+        blocks[i].pieceType = J_BLOCK_PIECE;
         blocks[i].image.src = 'tetris_block_base.png';
         blocks[i].image.style.backgroundColor = JBlockColor;
-}
+    }
 
     // Set positions for the block graphics
     blocks[0].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
@@ -824,6 +836,7 @@ const addJBlock = (blocks: Block[], centerPos: number): boolean => {
 
 const addSBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++) {
+        blocks[i].pieceType = S_BLOCK_PIECE;
         blocks[i].image.src = 'tetris_block_base.png';
         blocks[i].image.style.backgroundColor = SBlockColor;
     }
@@ -857,6 +870,7 @@ const addSBlock = (blocks: Block[], centerPos: number): boolean => {
 const addZBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
+            blocks[i].pieceType = Z_BLOCK_PIECE;
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = ZBlockColor;
         }
@@ -890,6 +904,7 @@ const addZBlock = (blocks: Block[], centerPos: number): boolean => {
 const addSquareBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
+            blocks[i].pieceType = SQUARE_PIECE;
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = SquareBlockColor;
         }
@@ -923,6 +938,7 @@ const addSquareBlock = (blocks: Block[], centerPos: number): boolean => {
 const addTBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
+            blocks[i].pieceType = T_BLOCK_PIECE;
             blocks[i].image.src = 'tetris_block_base.png';
             blocks[i].image.style.backgroundColor = TBlockColor;
         }
@@ -1312,14 +1328,16 @@ const moveCurrentPieceDown = (): void => {
     }
 
     // DEBUG - Print current playingGrid
+    /*
     for (let y: number = 0; y < BOARD_HEIGHT; y++) {
         let debugRowData = " ";
         for (let x: number = 0; x < BOARD_WIDTH; x++) {
             debugRowData += (playingGrid[x][y] === null) ? " " : "X";
         }
-        //console.log(debugRowData);
+        console.log(debugRowData);
     }
-    //console.log("============");
+    console.log("============");
+    */
 
     currentPiece.y += 1;
 }
@@ -1902,7 +1920,7 @@ const incrementScore = (amount: number): void => {
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
         let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
         if (highScoreDiv != null) {
-            console.log("found high score div " + (i + 1));
+            console.log("found high score div " + (i + 1) + ", value: " + Number(highScoreDiv.innerHTML));
             // current high score: "rgb(0,192,64)";
             // existing high score: "rgb(0,192,64)";
 
@@ -1914,14 +1932,21 @@ const incrementScore = (amount: number): void => {
                 // push all other scores down the list and make them "rgb(0,0,0)"
                 let updatedHighScore: number = prevHighScore;
                 for (i = i + 1; i < NUM_HIGH_SCORES; i++) {
+                //for (; i < NUM_HIGH_SCORES; i++) {
                     let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
                     if (highScoreDiv != null) {
                         prevHighScore = Number(highScoreDiv.innerHTML);
-                        if (prevHighScore !== 0)
-                            highScoreDiv.innerHTML = "" + prevHighScore;
+                        if (updatedHighScore !== 0)
+                            highScoreDiv.innerHTML = "" + updatedHighScore;
                         highScoreDiv.style.color = "rgb(0,0,0)";
-                                
-                        updatedHighScore = prevHighScore;
+                            
+                        // If the high score that was previously in this div wasn't the current score, bump it down
+                        console.log("color of high score div " + i + ": " + highScoreDiv.style.color);
+                        if (highScoreDiv.style.color === "rgb(0, 0, 0)")
+                            updatedHighScore = prevHighScore;
+                        else
+                            updatedHighScore = 0;
+                        console.log("Bumping high score down. Score = " + prevHighScore + ", new position will be " + i);
                     }
                 }
 
@@ -1977,9 +2002,8 @@ export default function Tetris() {
         init();
       }, []);
 
-      {/* the playing area is 22 * 10, except that the top 2 rows are hidden
-	    i.e. 320 x 704
-        */}
+      // the playing area is 22 * 10, except that the top 2 rows are hidden
+	  //  i.e. 320 x 704
     return (
         <div>
             <span className="italic absolute top-[140px] left-[100px]">Press up arrow to rotate.<br/>Press ESC to pause.</span>
