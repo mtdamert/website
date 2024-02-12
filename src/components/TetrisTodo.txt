@@ -1,7 +1,7 @@
 - Bug: when a block is rotated when you're at the lowest height, it clips through the final row
+- Bug: high score list isn't adding a new score to the list properly
 - Start game + enable cookies screen
 - Move high scores to back end
-- Move block generation to back end
 - Save top 5 scores
 - Fancy animation on tetris (4-rows cleared at once)
 - Inform player if they get a new high score
@@ -15,8 +15,8 @@
         at rotateLBlock (http://localhost:3000/static/js/bundle.js:1978:67)
         at rotateCurrentPiece (http://localhost:3000/static/js/bundle.js:2266:9)
         at http://localhost:3000/static/js/bundle.js:964:9
-- Update colors of existing pieces when choosing a color theme
 - Create cookie to save current theme
+- Start screen
 
 
 DONE:
@@ -27,5 +27,6 @@ DONE:
 - If I play 3 games in a row, the scores from the 2 latest games will appear highlighted as if they're both the most recent game
 - Don't list 0s on the high score list
 - Button to switch theme
+- Update colors of existing pieces when choosing a color theme
 
 

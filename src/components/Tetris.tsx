@@ -224,6 +224,26 @@ const startNewGame = (): void => {
     gameLoop();
 }
 
+const updatePreviewBlocks = (): void => {
+    for (let i: number = 0; i < 4; i++) {
+        if (previewBlocks[i] !== null && previewBlocks[i].image !== null && previewBlocks[i] !== null) {
+
+            let newPieceColor: string = null;
+            switch (previewBlocks[i].pieceType) {
+                case I_BAR_PIECE: newPieceColor = IBarColor; break;
+                case L_BLOCK_PIECE: newPieceColor = LBlockColor; break;
+                case J_BLOCK_PIECE: newPieceColor = JBlockColor; break;
+                case S_BLOCK_PIECE: newPieceColor = SBlockColor; break;
+                case Z_BLOCK_PIECE: newPieceColor = ZBlockColor; break;
+                case SQUARE_PIECE: newPieceColor = SquareBlockColor; break;
+                case T_BLOCK_PIECE: newPieceColor = TBlockColor; break;
+            }
+
+            previewBlocks[i].image.style.backgroundColor = newPieceColor;
+        }
+    }
+}
+
 const setThemeToWinter = (): void => {
     // snow theme
     IBarColor = '#ea98dc';
@@ -233,6 +253,8 @@ const setThemeToWinter = (): void => {
     ZBlockColor = '#43dcf0';
     SquareBlockColor = '#cce7f5';
     TBlockColor = '#d2bbf0';
+
+    updatePreviewBlocks();
 }
 
 const setThemeToNeutrals = (): void => {
@@ -244,6 +266,8 @@ const setThemeToNeutrals = (): void => {
     ZBlockColor = '#ffcb69';
     SquareBlockColor = '#d08c60';
     TBlockColor = '#997b66';
+
+    updatePreviewBlocks();
 }
 
 const setThemeToPurpleMagenta = (): void => {
@@ -255,6 +279,8 @@ const setThemeToPurpleMagenta = (): void => {
     ZBlockColor = '#e500a4';
     SquareBlockColor = '#f20089';
     TBlockColor = '#ffb600';
+
+    updatePreviewBlocks();
 }
 
 const setThemeToBlueRetro = (): void => {
@@ -266,6 +292,8 @@ const setThemeToBlueRetro = (): void => {
     ZBlockColor = '#ff8c00';
     SquareBlockColor = '#b4e600';
     TBlockColor = '#0fffdb';
+
+    updatePreviewBlocks();
 }
 
 const setThemeToSummer = (): void => {
@@ -277,6 +305,8 @@ const setThemeToSummer = (): void => {
     ZBlockColor = '#e74d11';
     SquareBlockColor = '#e72c0d';
     TBlockColor = '#e60b09';
+
+    updatePreviewBlocks();
 }
 
 const handleEscKeyPress = (): void => {
