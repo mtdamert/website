@@ -14,16 +14,15 @@ function Header() {
     ];
 
     const renderedLinks = links.map((link) => {
-        return <span><Link
+        return <span key={`${link.label} span`}><Link
             key={link.label}
             to={link.path}
-            className="mb-3"
-            activeClassName="font-bold h-full"
+            className="mb-3 font-bold h-full text-blue-500"
         >{link.label}</Link> | </span>
     })
 
     return (
-        <div className="container mx-auto gap-2 mt-4">
+        <div className="container mx-auto gap-2 mt-2 mb-8">
             <div className="top-0 text-center">
                 {renderedLinks}
             </div>
