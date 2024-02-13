@@ -1,5 +1,4 @@
 - Bug: when a block is rotated when you're at the lowest height, it clips through the final row
-- Bug: high score list isn't adding a new score to the list properly
 - Start game + enable cookies screen
 - Move high scores to back end
 - Save top 5 scores
@@ -28,5 +27,5 @@ DONE:
 - Don't list 0s on the high score list
 - Button to switch theme
 - Update colors of existing pieces when choosing a color theme
-
+- Bug: high score list isn't adding a new score to the list properly
 
