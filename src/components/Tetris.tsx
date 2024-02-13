@@ -1954,39 +1954,46 @@ const incrementScore = (amount: number): void => {
             // current high score: "rgb(0,192,64)";
             // existing high score: "rgb(0,192,64)";
 
-            if (currentScore > Number(highScoreDiv.innerHTML) /*&& highScoreDiv.style.color == "rgb(0, 0, 0)"*/) {
-                prevHighScore = Number(highScoreDiv.innerHTML);
-                highScoreDiv.innerHTML = "" + currentScore;
-                highScoreDiv.style.color = "rgb(0,192,64)";
+            if (currentScore > Number(highScoreDiv.innerHTML)) {
+                if (highScoreDiv.style.color === "rgb(0, 0, 0)") {
+                    console.log("REPLACING BLACK TEXT ON THE HIGH SCORES");
+                    prevHighScore = Number(highScoreDiv.innerHTML);
+                    highScoreDiv.innerHTML = "" + currentScore;
+                    highScoreDiv.style.color = "rgb(0,192,64)";
 
-                // push all other scores down the list and make them "rgb(0,0,0)"
-                let updatedHighScore: number = prevHighScore;
-                for (i = i + 1; i < NUM_HIGH_SCORES; i++) {
-                //for (; i < NUM_HIGH_SCORES; i++) {
-                    let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
-                    if (highScoreDiv != null) {
-                        prevHighScore = Number(highScoreDiv.innerHTML);
-                        if (updatedHighScore !== 0)
+                    // push all other scores down the list and make them "rgb(0,0,0)"
+                    let updatedHighScore: number = prevHighScore;
+                    console.log("Updated high score value: " + updatedHighScore);
+                    for (i = i + 1; i < NUM_HIGH_SCORES; i++) {
+                        highScoreDiv = document.getElementById("highScoreText" + (i + 1));
+                        if (highScoreDiv != null && updatedHighScore !== 0) {
+                            prevHighScore = Number(highScoreDiv.innerHTML);
                             highScoreDiv.innerHTML = "" + updatedHighScore;
-                        highScoreDiv.style.color = "rgb(0,0,0)";
-                            
-                        // If the high score that was previously in this div wasn't the current score, bump it down
-                        console.log("color of high score div " + i + ": " + highScoreDiv.style.color);
-                        if (highScoreDiv.style.color === "rgb(0, 0, 0)")
-                            updatedHighScore = prevHighScore;
-                        else
-                            updatedHighScore = 0;
-                        console.log("Bumping high score down. Score = " + prevHighScore + ", new position will be " + i);
+
+                            if (updatedHighScore !== 0 && highScoreDiv.style.color === "rgb(0, 0, 0)") { // If a black score is found (a score from another game), shift it down the list
+                                updatedHighScore = prevHighScore;
+                            }
+                            else { // If a colored score is found (an old score from the current game), replace it and stop shifting scores down
+                                updatedHighScore = 0;
+                            }
+                            highScoreDiv.style.color = "rgb(0,0,0)";
+                        }
                     }
+                }
+                else { // Found current game's previous score. Just replace it
+                    console.log("Found a high score to replace; score is " + highScoreDiv.innerText);
+                    highScoreDiv.innerHTML = "" + currentScore;
                 }
 
                 break;
             }
             else {
-                console.log("Found a high score div, but didn't replace it because its color was " + highScoreDiv.style.color);
+                //console.log("Found a high score div, but didn't replace it because its color was " + highScoreDiv.style.color);
             }
         }
     }
+
+    console.log("====================");
 
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
     if (scoreBox !== null) {
