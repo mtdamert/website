@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import tetris_block_base from './tetris_block_base.png';
 
 
 class Block {
@@ -445,7 +446,7 @@ const incrementSpeed = (): void => {
 const previewIBar = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.src = tetris_block_base;
             previewBlocks[i].image.style.backgroundColor = IBarColor;
         }
     }
@@ -471,7 +472,7 @@ const previewIBar = (previewBlocks: Block[]): void => {
 const previewLBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.src = tetris_block_base;
             previewBlocks[i].image.style.backgroundColor = LBlockColor;
         }
     }
@@ -497,7 +498,7 @@ const previewLBlock = (previewBlocks: Block[]): void => {
 const previewJBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.src = tetris_block_base;
             previewBlocks[i].image.style.backgroundColor = JBlockColor;
         }
     }
@@ -523,7 +524,7 @@ const previewJBlock = (previewBlocks: Block[]): void => {
 const previewSBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.src = tetris_block_base;
             previewBlocks[i].image.style.backgroundColor = SBlockColor;
         }
     }
@@ -549,7 +550,7 @@ const previewSBlock = (previewBlocks: Block[]): void => {
 const previewZBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.src = tetris_block_base;
             previewBlocks[i].image.style.backgroundColor = ZBlockColor;
         }
     }
@@ -575,7 +576,7 @@ const previewZBlock = (previewBlocks: Block[]): void => {
 const previewSquareBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.src = tetris_block_base;
             previewBlocks[i].image.style.backgroundColor = SquareBlockColor;
         }
     }
@@ -601,7 +602,7 @@ const previewSquareBlock = (previewBlocks: Block[]): void => {
 const previewTBlock = (previewBlocks: Block[]): void => {
     for (let i: number = 0; i < 4; i++) {
         if (previewBlocks[i] !== null && previewBlocks[i].image !== null) {
-            previewBlocks[i].image.src = 'tetris_block_base.png';
+            previewBlocks[i].image.src = tetris_block_base;
             previewBlocks[i].image.style.backgroundColor = TBlockColor;
         }
     }
@@ -765,7 +766,7 @@ function addIBar(blocks: Block[], centerPos: number) {
     for (let i: number = 0; i < 4; i++) {
         if (blocks[i] !== null && blocks[i].image !== null) {
             blocks[i].pieceType = I_BAR_PIECE;
-            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.src = tetris_block_base;
             blocks[i].image.style.backgroundColor = IBarColor;
             //blocks[i].image.style.left = PIECE_WIDTH * (i + centerPos) + "px";
         }
@@ -799,7 +800,7 @@ const addLBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
             blocks[i].pieceType = L_BLOCK_PIECE;
-            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.src = tetris_block_base;
             blocks[i].image.style.backgroundColor = LBlockColor;
         }
 
@@ -833,7 +834,7 @@ const addLBlock = (blocks: Block[], centerPos: number): boolean => {
 const addJBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++) {
         blocks[i].pieceType = J_BLOCK_PIECE;
-        blocks[i].image.src = 'tetris_block_base.png';
+        blocks[i].image.src = tetris_block_base;
         blocks[i].image.style.backgroundColor = JBlockColor;
     }
 
@@ -867,7 +868,7 @@ const addJBlock = (blocks: Block[], centerPos: number): boolean => {
 const addSBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++) {
         blocks[i].pieceType = S_BLOCK_PIECE;
-        blocks[i].image.src = 'tetris_block_base.png';
+        blocks[i].image.src = tetris_block_base;
         blocks[i].image.style.backgroundColor = SBlockColor;
     }
 
@@ -901,7 +902,7 @@ const addZBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
             blocks[i].pieceType = Z_BLOCK_PIECE;
-            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.src = tetris_block_base;
             blocks[i].image.style.backgroundColor = ZBlockColor;
         }
 
@@ -935,7 +936,7 @@ const addSquareBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
             blocks[i].pieceType = SQUARE_PIECE;
-            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.src = tetris_block_base;
             blocks[i].image.style.backgroundColor = SquareBlockColor;
         }
 
@@ -969,7 +970,7 @@ const addTBlock = (blocks: Block[], centerPos: number): boolean => {
     for (let i: number = 0; i < 4; i++)
         if (blocks[i] !== null && blocks[i].image !== null) {
             blocks[i].pieceType = T_BLOCK_PIECE;
-            blocks[i].image.src = 'tetris_block_base.png';
+            blocks[i].image.src = tetris_block_base;
             blocks[i].image.style.backgroundColor = TBlockColor;
         }
 
@@ -1012,7 +1013,7 @@ const addPiece = (pieceType: number): Piece => {
 
         newBlocks[i].div = document.createElement('div');
         newBlocks[i].image = document.createElement('img');
-        newBlocks[i].image.src = 'tetris_block_base.png';
+        newBlocks[i].image.src = tetris_block_base;
         newBlocks[i].image.style.backgroundColor = '#ff0000';
         newBlocks[i].div.appendChild(newBlocks[i].image);
         
