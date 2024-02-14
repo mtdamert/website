@@ -59,6 +59,12 @@ function RetirementCalc() {
     return (
         <div className="flex items-center px-3 py-1.5 border">
             <form onSubmit={handleSubmit}>
+            <div className="pt-2 pl-16">
+                <label className="italic">
+                    For use with US taxes
+                </label>
+            </div>
+
             <div className="pt-2">
                 <label className="font-semibold">
                     Current Age: 
@@ -66,7 +72,7 @@ function RetirementCalc() {
                     <input type="number"
                         value={currentAge}
                         onChange={(e) => setCurrentAge(e.target.value)}
-                        className="float-right border"
+                        className="float-right border text-right"
                     />
             </div>
 
@@ -77,7 +83,7 @@ function RetirementCalc() {
                 <input type="text"
                     value={savings}
                     onChange={(e) => setSavings(e.target.value)} 
-                    className="float-right border"
+                    className="float-right border text-right"
                 />
             </div>
 
@@ -88,7 +94,7 @@ function RetirementCalc() {
                 <input type="text"
                     value={income}
                     onChange={(e) => setIncome(e.target.value)}
-                    className="float-right border"
+                    className="float-right border text-right"
                 />
             </div>
 
@@ -99,7 +105,7 @@ function RetirementCalc() {
                 <input type="text"
                     value={livingExpenses}
                     onChange={(e) => setLivingExpenses(e.target.value)}
-                    className="float-right border"
+                    className="float-right border text-right"
                 />
             </div>
 
@@ -110,7 +116,7 @@ function RetirementCalc() {
                 <input type="number"
                     value={retirementAge}
                     onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); }}
-                    className="float-right border"
+                    className="float-right border text-right"
                 />
             </div>{/* todo: Use this value, and also add a 'yearly income' value */}
 
@@ -121,7 +127,7 @@ function RetirementCalc() {
                 <input type="number"
                     value={startSocialSecurityAge}
                     onChange={(e) => setStartSocialSecurityAge(e.target.value)}
-                    className="float-right border"
+                    className="float-right border text-right"
                 />
             </div>{/* TODO: Create a tooltip that leads to: https://www.ssa.gov/OACT/quickcalc/ */}
 
@@ -132,7 +138,7 @@ function RetirementCalc() {
                 <input type="text"
                     value={socialSecurityIncome}
                     onChange={(e) => setSocialSecurityIncome(e.target.value)}
-                    className="float-right border"
+                    className="float-right border text-right"
                 />
             </div>
 
@@ -145,7 +151,7 @@ function RetirementCalc() {
                 <input type="number"
                     value={predictedYield}
                     onChange={(e) => setPredictedYield(e.target.value)}
-                    className="float-right border"
+                    className="float-right border text-right"
                 />
             </div>
 
@@ -156,7 +162,7 @@ function RetirementCalc() {
                 <input type="checkbox"
                     value={extrapolateCapGains}
                     onChange={(e) => setExtrapolateCapGains(e.target.value)}
-                    className="float-right border"
+                    className="float-right border text-right"
                 />
             </div>
 
