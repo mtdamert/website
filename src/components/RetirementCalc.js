@@ -9,6 +9,7 @@ function RetirementCalc() {
     const [startSocialSecurityAge, setStartSocialSecurityAge] = useState(0);
     const [socialSecurityIncome, setSocialSecurityIncome] = useState(0);
     const [predictedYield, setPredictedYield] = useState(8);
+    const [deathAge, setDeathAge] = useState(80);
     const [extrapolateCapGains, setExtrapolateCapGains] = useState(false);
 
     const handleSubmit = (event) => {
@@ -55,6 +56,11 @@ function RetirementCalc() {
         else
             return ageCounter - 1;
     }
+
+    // If you can spend more than you're spending, calculate that difference
+    // const getExtraSpending() {
+
+    // }
 
     return (
         <div className="flex items-center px-3 py-1.5 border">
@@ -157,6 +163,17 @@ function RetirementCalc() {
 
             <div className="pt-2">
                 <label className="font-semibold">
+                    Death Age:
+                </label>
+                <input type="number"
+                    value={deathAge}
+                    onChange={(e) => setDeathAge(e.target.value)}
+                    className="float-right border text-right"
+                />
+            </div>
+
+            <div className="pt-2">
+                <label className="font-semibold">
                     Extrapolate Capital Gains based on 2024 Rate
                 </label>
                 <input type="checkbox"
@@ -169,6 +186,7 @@ function RetirementCalc() {
             <div className="italic pt-2 pl-4">Assuming 3% inflation</div>{/* todo: make this a variable */}
 
             <div className="pt-6"><span className="font-semibold">At the current rate, your savings will run out when you reach age:</span> {getSavingsZeroAge()}</div>
+            <div className="pt-6"><span className="font-semibold"></span></div>
 
             </form>
 
