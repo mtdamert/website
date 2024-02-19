@@ -2,6 +2,9 @@ import { useState } from 'react';
 
 function RetirementCalc() {
     const [savings, setSavings] = useState(0);
+    const [postTaxSavings, setPostTaxSavings] = useState(0);
+    const [retirementSavings, setRetirementSavings] = useState(0);
+
     const [income, setIncome] = useState(0);
     const [livingExpenses, setLivingExpenses] = useState(0);
     const [currentAge, setCurrentAge] = useState(40);
@@ -21,6 +24,7 @@ function RetirementCalc() {
         let remainingSavings = savings;
         let yearlyExpenses = livingExpenses;
         let sSIncome = socialSecurityIncome;
+        let ageOfDeath = deathAge;
 
         let capGainsLow = 44625;
         let capGainsHigh = 492300;
@@ -29,7 +33,10 @@ function RetirementCalc() {
         // TODO: Add cost basis
         // TODO: Break savings into basic and retirement (and add fee for withdrawal before age 59.5)
 
-        while (remainingSavings > 0 && ageCounter < 200) {
+        if (ageOfDeath < currentAge)
+            ageOfDeath = 200;
+
+        while (remainingSavings > 0 && ageCounter < ageOfDeath) {
             remainingSavings -= yearlyExpenses;
             yearlyExpenses *= 1.03;
             sSIncome *= 1.02;
@@ -44,17 +51,26 @@ function RetirementCalc() {
                 capGainsHigh *= 1.03;
             }
 
-            console.log("age: " + ageCounter);
-            console.log("savings: " + remainingSavings);
-            console.log("expenses: " + yearlyExpenses);
+            // console.log("age: " + ageCounter);
+            // console.log("savings: " + remainingSavings);
+            // console.log("expenses: " + yearlyExpenses);
 
             ageCounter += 1;
+        }
+
+        if (ageCounter === ageOfDeath && remainingSavings > 0) {
+            // ERROR: We can't set this, because it re-runs this loop             //setDeathAge(100); // TEST TEST TEST
+            // console.log("STILL SOME MONEY LEFT AT DEATH");
+            // console.log("ageCounter: " + ageCounter);
+            // console.log("ageOfDeath: " + ageOfDeath);
+            // console.log("remainingSavings: " + remainingSavings);
+            // console.log("============");
         }
 
         if (ageCounter === currentAge)
             return currentAge;
         else
-            return ageCounter - 1;
+            return ageCounter;
     }
 
     // If you can spend more than you're spending, calculate that difference
@@ -82,7 +98,8 @@ function RetirementCalc() {
                     />
             </div>
 
-            <div className="pt-2">
+
+            <div className="pt-4">
                 <label className="font-semibold">
                     Current Savings:
                 </label>{/* todo: sanitize input */}
@@ -91,6 +108,36 @@ function RetirementCalc() {
                     onChange={(e) => setSavings(e.target.value)} 
                     className="float-right border text-right"
                 />
+            </div>
+
+            <div className="border pt-2 px-2 py-1">
+
+                <div>
+                    <label className="font-semibold">
+                        Current Post-Tax Savings:
+                    </label>{/* todo: sanitize input */}
+                    <input type="text"
+                        value={[postTaxSavings]}
+                        onChange={
+                            (e) => { setPostTaxSavings(e.target.value); setSavings(Number(e.target.value) + Number(retirementSavings)); }
+                        } 
+                        className="float-right border text-right"
+                    />
+                </div>
+
+                <div className="pt-2">
+                    <label className="font-semibold">
+                        Current Retirement Savings:
+                    </label>{/* todo: sanitize input */}
+                    <input type="text"
+                        value={retirementSavings}
+                        onChange={
+                            (e) => { setRetirementSavings(e.target.value); setSavings(Number(e.target.value) + Number(postTaxSavings)); }
+                        } 
+                        className="float-right border text-right"
+                    />
+                </div>
+
             </div>
 
             <div className="pt-2">
@@ -163,7 +210,7 @@ function RetirementCalc() {
 
             <div className="pt-2">
                 <label className="font-semibold">
-                    Death Age:
+                    Age at Death:
                 </label>
                 <input type="number"
                     value={deathAge}
@@ -172,7 +219,7 @@ function RetirementCalc() {
                 />
             </div>
 
-            <div className="pt-2">
+            <div className="pt-8">
                 <label className="font-semibold">
                     Extrapolate Capital Gains based on 2024 Rate
                 </label>
