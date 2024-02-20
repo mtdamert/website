@@ -21,7 +21,8 @@ function RetirementCalc() {
 
     const getSavingsZeroAge = () => {
         let ageCounter = currentAge;
-        let remainingSavings = savings;
+        let remainingSavings = (postTaxSavings !== 0) ? postTaxSavings : savings;
+        let remainingPreTaxSavings = retirementSavings;
         let yearlyExpenses = livingExpenses;
         let sSIncome = socialSecurityIncome;
         let ageOfDeath = deathAge;
@@ -29,18 +30,30 @@ function RetirementCalc() {
         let capGainsLow = 44625;
         let capGainsHigh = 492300;
 
+        let earlyWithdrawalPenalty = 0;
+
         // TODO: Cap gains tax - this can also be married (joint filing), married (separate filing), or head of household
         // TODO: Add cost basis
         // TODO: Break savings into basic and retirement (and add fee for withdrawal before age 59.5)
 
+        // Cap simulation at age 200
         if (ageOfDeath < currentAge)
             ageOfDeath = 200;
 
-        while (remainingSavings > 0 && ageCounter < ageOfDeath) {
+        // Main simulation loop
+        while ((remainingSavings > 0 || remainingPreTaxSavings > 0) && ageCounter < ageOfDeath) {
             remainingSavings -= yearlyExpenses;
+            
+            // If post-tax savings run out, we have to take money from retirement accounts at a 10% penalty
+            if (remainingSavings < 0 && remainingPreTaxSavings > 0) {
+                remainingPreTaxSavings -= -(remainingSavings / 9 * 10);
+                earlyWithdrawalPenalty += (-remainingSavings / 9);
+            }
+
             yearlyExpenses *= 1.03;
             sSIncome *= 1.02;
             remainingSavings *= (1.0 + (predictedYield * 0.01));
+            remainingPreTaxSavings *= (1.0 + (predictedYield * 0.01));
             if (currentAge < retirementAge)
                 remainingSavings += Number(income);
             if (currentAge >= startSocialSecurityAge)
@@ -56,6 +69,12 @@ function RetirementCalc() {
             // console.log("expenses: " + yearlyExpenses);
 
             ageCounter += 1;
+
+            // At age 59.5, move retirement savings to regular savings bucket, because it's no longer taxed
+            if (ageCounter >= 60) {
+                remainingSavings += remainingPreTaxSavings;
+                remainingPreTaxSavings = 0;
+            }
         }
 
         if (ageCounter === ageOfDeath && remainingSavings > 0) {
@@ -66,6 +85,8 @@ function RetirementCalc() {
             // console.log("remainingSavings: " + remainingSavings);
             // console.log("============");
         }
+
+        console.log("Total earlyWithdrawalPenalty: " + earlyWithdrawalPenalty);
 
         if (ageCounter === currentAge)
             return currentAge;
@@ -105,7 +126,7 @@ function RetirementCalc() {
                 </label>{/* todo: sanitize input */}
                 <input type="text"
                     value={savings}
-                    onChange={(e) => setSavings(e.target.value)} 
+                    onChange={(e) => { setSavings(e.target.value); setPostTaxSavings(0); setRetirementSavings(0); } } 
                     className="float-right border text-right"
                 />
             </div>
