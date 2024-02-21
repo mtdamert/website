@@ -3,8 +3,7 @@ import { Outlet, Link } from "react-router-dom";
 
 function Header() {
     const links = [
-        { label: 'Click here to see Test', path: '/test' },
-        { label: 'Another Test', path: '/another-test' },
+        { label: 'Uninteresting Tests', path: '/test' },
         { label: 'Tetris', path: '/tetris' },
         { label: 'Graphs', path: '/graphs' },
         { label: 'Retirement Calculator', path: '/retirement-calc' },
