@@ -1,7 +1,6 @@
 import Header from './components/Header';
 import { useEffect } from "react";
 import AboutPage from './pages/AboutPage'
-import AnotherTestPage from './pages/AnotherTestPage';
 import TestPage from './pages/TestPage';
 import TetrisPage from './pages/TetrisPage';
 import GraphsPage from './pages/GraphsPage';
@@ -36,7 +35,6 @@ function App() {
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Header />}>
-                            <Route path="/another-test" element={<AnotherTestPage />} />
                             <Route path="/test" element={<TestPage />} />
                             <Route path="/tetris" element={<TetrisPage />} />
                             <Route path="/graphs" element={<GraphsPage />} />
