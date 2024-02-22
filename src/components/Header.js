@@ -7,9 +7,9 @@ function Header() {
         { label: 'Tetris', path: '/tetris' },
         { label: 'Graphs', path: '/graphs' },
         { label: 'Retirement Calculator', path: '/retirement-calc' },
-        {/* label: '3D', path: '/3d_art' },
-        { label: 'Days Since App', path: 'days_since'*/},
-    { label: 'About Me', path: '/about' },
+        {/* label: '3D', path: '/3d_art' */},
+        { label: 'Days Since App', path: 'days-since'},
+        { label: 'About Me', path: '/about' },
     ];
 
     const renderedLinks = links.map((link) => {

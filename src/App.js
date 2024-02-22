@@ -5,6 +5,7 @@ import TestPage from './pages/TestPage';
 import TetrisPage from './pages/TetrisPage';
 import GraphsPage from './pages/GraphsPage';
 import RetirementCalcPage from './pages/RetirementCalcPage';
+import DaysSincePage from './pages/DaysSincePage';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -39,6 +40,7 @@ function App() {
                             <Route path="/tetris" element={<TetrisPage />} />
                             <Route path="/graphs" element={<GraphsPage />} />
                             <Route path="/retirement-calc" element={<RetirementCalcPage />} />
+                            <Route path="/days-since" element={<DaysSincePage />} />
                             <Route path="/about" element={<AboutPage />} />
                         </Route>
                     </Routes>
