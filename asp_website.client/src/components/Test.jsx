@@ -1,6 +1,23 @@
+import { useEffect, useState } from 'react';
 import Tooltip from './Tooltip';
 
 function Test() {
+    const [testData, setTestData] = useState();
+
+    useEffect(() => {
+        populateTestData();
+    }, []);
+
+    const testDataContent = testData === undefined
+        ? <p><em>Loading test data... Please refresh once the ASP.NET backend has started.</em></p>
+        : <div>{testData}</div>
+
+    async function populateTestData() {
+        const response = await fetch('testdata');
+        const data = await response.text();
+        setTestData(data);
+    }
+
     const firstFunc = () => {
         return 'hello ';
     }
@@ -13,8 +30,9 @@ function Test() {
         <div className="flex items-center px-3 py-1.5 border">
             <div>
                 Test test test<Tooltip text="test tooltip" />
-            </div>
-            <div>{secondFunc()}</div>
+            </div><br />
+            <div>{secondFunc()}</div><br />
+            <div className="pt-2">{testDataContent}</div>
         </div>
     );
 }
