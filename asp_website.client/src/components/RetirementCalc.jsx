@@ -12,6 +12,7 @@ function RetirementCalc() {
     const [startSocialSecurityAge, setStartSocialSecurityAge] = useState(0);
     const [socialSecurityIncome, setSocialSecurityIncome] = useState(0);
     const [predictedYield, setPredictedYield] = useState(8);
+    const [cpi, setCpi] = useState(3);
     const [deathAge, setDeathAge] = useState(80);
     const [extrapolateCapGains, setExtrapolateCapGains] = useState(false);
 
@@ -50,7 +51,7 @@ function RetirementCalc() {
                 earlyWithdrawalPenalty += (-remainingSavings / 9);
             }
 
-            yearlyExpenses *= 1.03;
+            yearlyExpenses *= (1.0 + (cpi * 0.01));
             sSIncome *= 1.02;
             remainingSavings *= (1.0 + (predictedYield * 0.01));
             remainingPreTaxSavings *= (1.0 + (predictedYield * 0.01));
@@ -60,8 +61,8 @@ function RetirementCalc() {
                 remainingSavings += sSIncome;
 
             if (extrapolateCapGains === true) {
-                capGainsLow *= 1.03;
-                capGainsHigh *= 1.03;
+                capGainsLow *= yearlyExpenses;
+                capGainsHigh *= yearlyExpenses;
             }
 
             // console.log("age: " + ageCounter);
@@ -231,6 +232,19 @@ function RetirementCalc() {
 
             <div className="pt-2">
                 <label className="font-semibold">
+                    CPI:
+                </label>
+                <span className="float-right">%</span>
+                <input type="number"
+                    value={cpi}
+                    onChange={(e) => setCpi(e.target.value)}
+                    className="float-right border text-right"
+                />
+            </div>
+
+
+            <div className="pt-2">
+                <label className="font-semibold">
                     Age at Death:
                 </label>
                 <input type="number"
@@ -242,7 +256,7 @@ function RetirementCalc() {
 
             <div className="pt-8">
                 <label className="font-semibold">
-                    Extrapolate Capital Gains based on 2024 Rate
+                    Use CPI to Extrapolate Capital Gains based on 2024 Rate
                 </label>
                 <input type="checkbox"
                     value={extrapolateCapGains}
@@ -250,8 +264,6 @@ function RetirementCalc() {
                     className="float-right border text-right"
                 />
             </div>
-
-            <div className="italic pt-2 pl-4">Assuming 3% inflation</div>{/* todo: make this a variable */}
 
             <div className="pt-6"><span className="font-semibold">At the current rate, your savings will run out when you reach age:</span> {getSavingsZeroAge()}</div>
             <div className="pt-6"><span className="font-semibold"></span></div>
