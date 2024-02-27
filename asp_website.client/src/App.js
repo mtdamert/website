@@ -7,6 +7,7 @@ import GraphsPage from './pages/GraphsPage';
 import RetirementCalcPage from './pages/RetirementCalcPage';
 import DaysSincePage from './pages/DaysSincePage';
 
+import CookieConsent from "react-cookie-consent";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const headerText = [
@@ -28,6 +29,17 @@ function App() {
     
     return (
         <div className="justify-center">
+
+            <CookieConsent
+                location="bottom"
+                buttonText="I agree"
+                cookieName="myAppCookieConsent"
+                style={{ background: "#2B373B" }}
+                buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+                expires={150}
+            >
+                This website uses cookies to enhance the user experience.
+            </CookieConsent>
 
             <div className="text-4xl py-4 px-4 text-center">
                 {getHeaderText()}
