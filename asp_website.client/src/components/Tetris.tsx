@@ -33,6 +33,16 @@ class Piece {
     };
 }
 
+class HighScorer {
+    name: string;
+    score: number;
+
+    constructor() {
+        this.name = "";
+        this.score = 0;
+    }
+}
+
 
 // Initial speeds
 let msPerPieceDrop: number = 800;
@@ -99,6 +109,25 @@ const gameLoop = (): void => {
     }
 }
 
+const loadHighScores = async (): Promise<Response> => {
+    const response: Promise<Response> = await fetch('tetrishighscores');
+    const data: Array[] = await response.json();
+
+    console.log("loadHighScores data: " + data);
+
+    // Make all high scores black (which means they're not in the current game)
+    for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
+        //let highScoreDivName: string = "highScoreText" + (i + 1);
+        let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
+        if (highScoreDiv !== null) {
+            highScoreDiv.style.color = "rgb(0,0,0)";
+
+            highScoreDiv.innerText = data[i].testString + "   " + data[i].highScore;
+        }
+    }
+
+    return response;
+}
 
 const startNewGame = (): void => {
     currentScore = 0;
@@ -129,6 +158,8 @@ const startNewGame = (): void => {
         scoreBox.style.backgroundColor = "rgb(32, 128, 64)";
         scoreBox.innerHTML = 'Score: ' + currentScore + "; Lines: " + totalNumLines;
     }
+
+    loadHighScores();
 
     // Make all high scores black (which means they're not in the current game)
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
