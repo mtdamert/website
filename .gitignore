@@ -61,5 +61,4 @@ asp_website.Server/bin/
 asp_website.Server/obj/
 
 # deploy profiles
-asp_website.Server/Properties/PublishProfiles/IISProfile*
-
+/asp_website.Server/Properties/PublishProfiles/*
