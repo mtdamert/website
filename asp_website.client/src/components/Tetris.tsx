@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import tetris_block_base from './tetris_block_base.png';
+import { current } from '@reduxjs/toolkit';
 
 
 class Block {
@@ -33,13 +34,14 @@ class Piece {
     };
 }
 
-class HighScorer {
-    name: string;
-    score: number;
+class HighScore {
+    scorerName: string;
+    highScore: number;
+    isCurrentScore: boolean;
 
     constructor() {
-        this.name = "";
-        this.score = 0;
+        this.scorerName = "";
+        this.highScore = 0;
     }
 }
 
@@ -49,7 +51,7 @@ let msPerPieceDrop: number = 800;
 let lastPieceTime: number;
 let currentScore: number = 0;
 let totalNumLines: number = 0;
-let currentHighScores: number[];
+let currentHighScores: HighScore[];
 
 let currentPiece: Piece;
 let nextPieceType: number;
@@ -111,7 +113,7 @@ const gameLoop = (): void => {
 
 const loadHighScores = async (): Promise<Response> => {
     const response: Promise<Response> = await fetch('tetrishighscores');
-    const data: Array[] = await response.json();
+    const data: Array<HighScore> = await response.json();
 
     console.log("loadHighScores data: " + data);
 
@@ -121,12 +123,19 @@ const loadHighScores = async (): Promise<Response> => {
         let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
         if (highScoreDiv !== null) {
             highScoreDiv.style.color = "rgb(0,0,0)";
+            highScoreDiv.innerText = data[i].scorerName + " " + data[i].highScore;
 
-            highScoreDiv.innerText = data[i].testString + "   " + data[i].highScore;
+            currentHighScores[i].scorerName = data[i].scorerName;
+            currentHighScores[i].highScore = data[i].highScore;
+            currentHighScores[i].isCurrentScore = false;
         }
     }
 
     return response;
+}
+
+const saveHighScores = async (): Promise<Response> => {
+
 }
 
 const startNewGame = (): void => {
@@ -368,7 +377,9 @@ const handleEscKeyPress = (): void => {
 }
 
 const init = (): void => {
-    currentHighScores = new Array<number>(NUM_HIGH_SCORES);
+    currentHighScores = new Array<HighScore>(NUM_HIGH_SCORES);
+    for (let i: number = 0; i < NUM_HIGH_SCORES; i++)
+        currentHighScores[i] = new HighScore();
 
     let c: string = document.cookie; // get a semicolon-separated list of all cookies
     let cookies: (string[] | {});
@@ -739,13 +750,13 @@ const checkForLines = (): void => {
             levelUp(levelNumber);
 
     if (numLinesFound === 1)
-        incrementScore(40 * (levelNumber + 1));
+        newIncrementScore(40 * (levelNumber + 1));
     else if (numLinesFound === 2)
-        incrementScore(100 * (levelNumber + 1));
+        newIncrementScore(100 * (levelNumber + 1));
     else if (numLinesFound === 3)
-        incrementScore(300 * (levelNumber + 1));
+        newIncrementScore(300 * (levelNumber + 1));
     else if (numLinesFound === 4)
-        incrementScore(1200 * (levelNumber + 1));
+        newIncrementScore(1200 * (levelNumber + 1));
 }
 
 const createNewPiece = (): void => {
@@ -1974,6 +1985,71 @@ const setCookie = (cname: string, cvalue: number, exdays: number): void => {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+const newIncrementScore = (amount: number): void => {
+    currentScore += amount;
+    let currentScoreAdded: boolean = false;
+    let redrawScores: boolean = false;
+    let tempScore1: number = 0;
+    let tempScorerName1: string = "";
+    let tempScore2: number = 0;
+    let tempScorerName2: string = "";
+
+    // start at the top of the high score list and check whether the current score can fit anywhere in that list
+    for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
+        if (!currentScoreAdded && currentScore > currentHighScores[i].highScore) {
+            tempScore1 = currentHighScores[i].highScore;
+            tempScorerName1 = currentHighScores[i].scorerName;
+
+            currentHighScores[i].highScore = currentScore;
+            currentHighScores[i].scorerName = "(current)"; // TODO: Get user name
+            currentHighScores[i].isCurrentScore = true;
+
+            currentScoreAdded = true;
+            redrawScores = true;
+        }
+        else if (currentScoreAdded) { // shift scores down
+            if (currentHighScores[i].isCurrentScore) { // shift down 1 and overwrite previous (current) score
+                currentHighScores[i].highScore = tempScore1;
+                currentHighScores[i].scorerName = tempScorerName1;
+                currentHighScores[i].isCurrentScore = false;
+
+                currentScoreAdded = false;
+            }
+            else if (!currentHighScores[i].isCurrentScore) { // save this score; shift down 1
+                tempScore2 = currentHighScores[i].highScore;
+                tempScorerName2 = currentHighScores[i].scorerName;
+
+                currentHighScores[i].highScore = tempScore1;
+                currentHighScores[i].scorerName = tempScorerName1;
+                currentHighScores[i].isCurrentScore = false;
+
+                tempScore1 = tempScore2;
+                tempScorerName1 = tempScorerName2;
+            }
+        }
+    }
+
+    // TODO: Now draw score
+    if (redrawScores) {
+        for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
+            let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
+
+            highScoreDiv.innerHTML = currentHighScores[i].scorerName + " " + currentHighScores[i].highScore;
+            if (currentHighScores[i].isCurrentScore) {
+                highScoreDiv.style.color = "rgb(0,192,64)";
+            }
+            else {
+                highScoreDiv.style.color = "rgb(0,0,0)";
+            }
+        }
+    }
+
+    let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
+    if (scoreBox !== null) {
+        scoreBox.innerHTML = 'Score: ' + currentScore + "; Lines: " + totalNumLines;
+    }
+}
+
 const incrementScore = (amount: number): void => {
     currentScore += amount;
 
@@ -2094,7 +2170,7 @@ export default function Tetris() {
                 <div id="rightPanel">
                     <div id="nextPieceHeader" className="absolute top-[200px] left-[440px] w-[152px] center bold text-2xl">Next Piece:</div>
                     <div id="nextPieceBox" className="absolute top-[230px] left-[440px] border-t-[1px] border-black w-[152px] h-[120px] bg-[#c0c0c0]"></div>
-                    <div id="highScoreHeader" className="absolute top-[365px] left-[440px] text-lg">High Scores:</div>
+                    <div id="highScoreHeader" className="absolute top-[365px] left-[440px] bold text-lg">High Scores:</div>
 
                     <button id="winterThemeButton" onClick={setThemeToWinter} className="absolute top-[500px] left-[440px] text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Winter Theme</button>
                     <button id="neutralsThemeButton" onClick={setThemeToNeutrals} className="absolute top-[540px] left-[440px] text-[#de8a58] bg-[#c0c0c0] px-3 py-1 rounded-md">Neutrals Theme</button>

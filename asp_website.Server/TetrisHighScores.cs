@@ -4,6 +4,8 @@
     {
         public int HighScore { get; set; }
 
-        public string? TestString {  get; set; }
+        public string? ScorerName {  get; set; }
+
+        public Boolean IsCurrentScore { get; set; }
     }
 }
