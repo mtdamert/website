@@ -1,0 +1,16 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Name": "asp_website.Server\\asp_website.Server.csproj",
+        "Action": "Start",
+        "DebugTarget": ""
+      },
+      {
+        "Name": "asp_website.client\\asp_website.client.esproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
