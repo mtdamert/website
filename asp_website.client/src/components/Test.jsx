@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Tooltip from './Tooltip';
 import Popup from 'reactjs-popup';
 
 function Test() {
