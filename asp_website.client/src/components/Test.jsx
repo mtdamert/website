@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Popup from 'reactjs-popup';
+import Tooltip from './Tooltip';
 
 function Test() {
     const [testData, setTestData] = useState();
@@ -35,19 +36,7 @@ function Test() {
             <div>{secondFunc()}</div><br />
             <div className="pt-2">{testDataContent}</div>
             <div>
-                <Popup
-                    trigger={<div className="menu-item"> ? </div>}
-                    position="right top"
-                    on="hover"
-                    closeOnDocumentClick
-                    mouseLeaveDelay={300}
-                    mouseEnterDelay={0}
-                    contentStyle={{ padding: '0px', border: 'none' }}
-                    arrow={false}
-                >
-                    <span> Test tooltip </span>
-                </Popup>
-
+                <Tooltip altText="Test tooltip" />
             </div>
         </div>
     );
