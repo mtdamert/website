@@ -9,7 +9,7 @@ function RetirementCalc() {
     const [livingExpenses, setLivingExpenses] = useState(0);
     const [currentAge, setCurrentAge] = useState(40);
     const [retirementAge, setRetirementAge] = useState(65);
-    const [startSocialSecurityAge, setStartSocialSecurityAge] = useState(0);
+    const [startSocialSecurityAge, setStartSocialSecurityAge] = useState(70);
     const [socialSecurityIncome, setSocialSecurityIncome] = useState(0);
     const [predictedYield, setPredictedYield] = useState(8);
     const [cpi, setCpi] = useState(3);
@@ -28,8 +28,8 @@ function RetirementCalc() {
         let sSIncome = socialSecurityIncome;
         let ageOfDeath = deathAge;
 
-        let capGainsLow = 44625;
-        let capGainsHigh = 492300;
+        let capGainsLow = 44625; // below this point, no cap gains
+        let capGainsHigh = 492300; // below this point, 15%; above this point, 20% 
 
         let earlyWithdrawalPenalty = 0;
 
