@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import tetris_block_base from './tetris_block_base.png';
-import { current } from '@reduxjs/toolkit';
 
 
 class Block {
@@ -61,6 +60,7 @@ var previewBlocks: Block[];
 let playingGrid: Array<Array<(Block | null)>>; // array
 let isGameOver: boolean = false;
 let gameState: number;
+let userName: string;
 
 const BOARD_WIDTH: number = 10;
 const BOARD_HEIGHT: number = 22;
@@ -1997,23 +1997,32 @@ const newIncrementScore = (amount: number): void => {
     // start at the top of the high score list and check whether the current score can fit anywhere in that list
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
         if (!currentScoreAdded && currentScore > currentHighScores[i].highScore) {
-            tempScore1 = currentHighScores[i].highScore;
-            tempScorerName1 = currentHighScores[i].scorerName;
+            if (currentHighScores[i].isCurrentScore) {
+                currentHighScores[i].highScore = currentScore;
+                currentHighScores[i].scorerName = "(current)"; // TODO: Get user name
+                currentHighScores[i].isCurrentScore = true;
 
-            currentHighScores[i].highScore = currentScore;
-            currentHighScores[i].scorerName = "(current)"; // TODO: Get user name
-            currentHighScores[i].isCurrentScore = true;
+                tempScore1 = 0;
+            }
+            else {
+                tempScore1 = currentHighScores[i].highScore;
+                tempScorerName1 = currentHighScores[i].scorerName;
+
+                currentHighScores[i].highScore = currentScore;
+                currentHighScores[i].scorerName = "(current)"; // TODO: Get user name
+                currentHighScores[i].isCurrentScore = true;
+            }
 
             currentScoreAdded = true;
             redrawScores = true;
         }
-        else if (currentScoreAdded) { // shift scores down
+        else if (currentScoreAdded && tempScore1 > 0) { // shift scores down
             if (currentHighScores[i].isCurrentScore) { // shift down 1 and overwrite previous (current) score
                 currentHighScores[i].highScore = tempScore1;
                 currentHighScores[i].scorerName = tempScorerName1;
                 currentHighScores[i].isCurrentScore = false;
 
-                currentScoreAdded = false;
+                break;
             }
             else if (!currentHighScores[i].isCurrentScore) { // save this score; shift down 1
                 tempScore2 = currentHighScores[i].highScore;
@@ -2029,7 +2038,7 @@ const newIncrementScore = (amount: number): void => {
         }
     }
 
-    // TODO: Now draw score
+    // Now draw score to screen
     if (redrawScores) {
         for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
             let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
@@ -2114,7 +2123,6 @@ const gameOver = (): void => {
     isGameOver = true;
 
     // TODO: Cookies
-    // TODO: Only do this if there is an 'allowCookies' cookie 
     //     console.log("Setting cookie: " + currentScore);
     //     setCookie('score', currentScore, 10);
 
@@ -2178,6 +2186,7 @@ export default function Tetris() {
                     <button id="blueRetroThemeButton" onClick={setThemeToBlueRetro} className="absolute top-[620px] left-[440px] text-[#2f899e] bg-[#c0c0c0] px-3 py-1 rounded-md">Retro Blue Theme</button>
                     <button id="summerThemeButton" onClick={setThemeToSummer} className="absolute top-[660px] left-[440px] text-[#e60b09] bg-[#c0c0c0] px-3 py-1 rounded-md">Summer Theme</button>
                 </div>
+                
             </div>
         </div>
     );
