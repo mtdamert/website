@@ -9,7 +9,7 @@ function Header() {
         { label: 'Retirement Calculator', path: '/retirement-calc' },
         {/* label: '3D', path: '/3d_art' */},
         { label: 'Days Since App', path: 'days-since'},
-        { label: 'About Me', path: '/about' },
+        { label: 'About', path: '/about' },
     ];
 
     const renderedLinks = links.map((link) => {
