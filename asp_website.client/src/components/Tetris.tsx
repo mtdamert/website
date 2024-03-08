@@ -61,6 +61,7 @@ let playingGrid: Array<Array<(Block | null)>>; // array
 let isGameOver: boolean = false;
 let gameState: number;
 let highScoresLoaded = false;
+let currentUserName: string = "(current)";
 
 const BOARD_WIDTH: number = 10;
 const BOARD_HEIGHT: number = 22;
@@ -113,8 +114,10 @@ const gameLoop = (): void => {
 
 // Pull high scores from the server
 const loadHighScores = async (): Promise<Response> => {
-    if (highScoresLoaded)
+    if (highScoresLoaded) {
+        currentHighScores.forEach((highScore) => { highScore.isCurrentScore = false; });
         return null;
+    }
 
     const response: Promise<Response> = await fetch('tetrishighscores');
     const data: Array<HighScore> = await response.json();
@@ -2018,7 +2021,7 @@ const newIncrementScore = (amount: number): void => {
         if (!currentScoreAdded && currentScore > currentHighScores[i].highScore) {
             if (currentHighScores[i].isCurrentScore) {
                 currentHighScores[i].highScore = currentScore;
-                currentHighScores[i].scorerName = "(current)"; // TODO: Get user name
+                currentHighScores[i].scorerName = currentUserName;
                 currentHighScores[i].isCurrentScore = true;
 
                 tempScore1 = 0;
@@ -2028,7 +2031,7 @@ const newIncrementScore = (amount: number): void => {
                 tempScorerName1 = currentHighScores[i].scorerName;
 
                 currentHighScores[i].highScore = currentScore;
-                currentHighScores[i].scorerName = "(current)"; // TODO: Get user name
+                currentHighScores[i].scorerName = currentUserName;
                 currentHighScores[i].isCurrentScore = true;
             }
 
@@ -2036,7 +2039,7 @@ const newIncrementScore = (amount: number): void => {
             redrawScores = true;
         }
         else if (currentScoreAdded && tempScore1 > 0) { // shift scores down
-            if (currentHighScores[i].isCurrentScore) { // shift down 1 and overwrite previous (current) score
+            if (currentHighScores[i].isCurrentScore) { // shift down 1 and overwrite previous (currentUserName) score
                 currentHighScores[i].highScore = tempScore1;
                 currentHighScores[i].scorerName = tempScorerName1;
                 currentHighScores[i].isCurrentScore = false;
@@ -2166,11 +2169,11 @@ const gameOver = (): void => {
 }
 
 export default function Tetris() {
+    const [userName, setUserName] = useState('');
+
     useEffect(() => {
         init();
     }, []);
-
-    const [userName, setUserName] = useState('');
 
     const handleNameSubmit = (event: Event) => {
         event.preventDefault();
@@ -2178,6 +2181,7 @@ export default function Tetris() {
         let currentHighScore: HighScore = currentHighScores.find((highScore) => { return highScore.isCurrentScore === true });
         if (userName !== null && userName !== "") {
             currentHighScore.scorerName = userName;
+            currentUserName = userName;
 
             redrawHighScores();
         }
