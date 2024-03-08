@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import tetris_block_base from './tetris_block_base.png';
 
 
@@ -60,7 +60,7 @@ var previewBlocks: Block[];
 let playingGrid: Array<Array<(Block | null)>>; // array
 let isGameOver: boolean = false;
 let gameState: number;
-let userName: string;
+let highScoresLoaded = false;
 
 const BOARD_WIDTH: number = 10;
 const BOARD_HEIGHT: number = 22;
@@ -111,7 +111,11 @@ const gameLoop = (): void => {
     }
 }
 
+// Pull high scores from the server
 const loadHighScores = async (): Promise<Response> => {
+    if (highScoresLoaded)
+        return null;
+
     const response: Promise<Response> = await fetch('tetrishighscores');
     const data: Array<HighScore> = await response.json();
 
@@ -130,6 +134,8 @@ const loadHighScores = async (): Promise<Response> => {
             currentHighScores[i].isCurrentScore = false;
         }
     }
+
+    highScoresLoaded = true;
 
     return response;
 }
@@ -151,6 +157,11 @@ const startNewGame = (): void => {
     let playAgainButton: (HTMLElement | null) = document.getElementById("playAgainButton");
     if (playAgainButton !== null) {
         playAgainButton.style.visibility = 'hidden';
+    }
+
+    let enterName: (HTMLElement | null) = document.getElementById("enterName");
+    if (enterName !== null) {
+        enterName.style.visibility = 'hidden';
     }
     
     let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
@@ -177,12 +188,6 @@ const startNewGame = (): void => {
         if (highScoreDiv !== null) {
             highScoreDiv.style.color = "rgb(0,0,0)";
         }
-    }
-
-
-    let highScoreText1: (HTMLElement | null) = document.getElementById("highScoreText1");
-    if (highScoreText1 !== null) {
-        highScoreText1.style.color = "rgb(0,0,0)";
     }
     
     isGameOver = false;
@@ -1985,6 +1990,20 @@ const setCookie = (cname: string, cvalue: number, exdays: number): void => {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+const redrawHighScores = (): void => {
+    for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
+        let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
+
+        highScoreDiv.innerHTML = currentHighScores[i].scorerName + " " + currentHighScores[i].highScore;
+        if (currentHighScores[i].isCurrentScore) {
+            highScoreDiv.style.color = "rgb(0,192,64)";
+        }
+        else {
+            highScoreDiv.style.color = "rgb(0,0,0)";
+        }
+    }
+}
+
 const newIncrementScore = (amount: number): void => {
     currentScore += amount;
     let currentScoreAdded: boolean = false;
@@ -2040,17 +2059,7 @@ const newIncrementScore = (amount: number): void => {
 
     // Now draw score to screen
     if (redrawScores) {
-        for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
-            let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
-
-            highScoreDiv.innerHTML = currentHighScores[i].scorerName + " " + currentHighScores[i].highScore;
-            if (currentHighScores[i].isCurrentScore) {
-                highScoreDiv.style.color = "rgb(0,192,64)";
-            }
-            else {
-                highScoreDiv.style.color = "rgb(0,0,0)";
-            }
-        }
+        redrawHighScores();
     }
 
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
@@ -2125,6 +2134,12 @@ const gameOver = (): void => {
     // TODO: Cookies
     //     console.log("Setting cookie: " + currentScore);
     //     setCookie('score', currentScore, 10);
+    if (currentHighScores.some((highScore) => { return highScore.isCurrentScore === true })) {
+        let enterName: (HTMLElement | null) = document.getElementById("enterName");
+        if (enterName !== null) {
+            enterName.style.visibility = 'visible';
+        }
+    }
 
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
     if (scoreBox !== null) {
@@ -2153,7 +2168,20 @@ const gameOver = (): void => {
 export default function Tetris() {
     useEffect(() => {
         init();
-      }, []);
+    }, []);
+
+    const [userName, setUserName] = useState('');
+
+    const handleNameSubmit = (event: Event) => {
+        event.preventDefault();
+
+        let currentHighScore: HighScore = currentHighScores.find((highScore) => { return highScore.isCurrentScore === true });
+        if (userName !== null && userName !== "") {
+            currentHighScore.scorerName = userName;
+
+            redrawHighScores();
+        }
+    }
 
       // the playing area is 22 * 10, except that the top 2 rows are hidden
 	  //  i.e. 320 x 704
@@ -2162,17 +2190,27 @@ export default function Tetris() {
             <span className="italic absolute top-[140px] left-[100px]">Press up arrow to rotate.<br/>Press ESC to pause.</span>
 
             <div id="fullArea">
-                <div id="playingArea" className="absolute top-[200px] left-[80px] border-t-[1px] w-[320px] h-[640px] bg-[#c0c0c0]">
-                </div>
-                    <div id="pausedBox" className="absolute top-[500px] left-[80px] border-t-[1px] border-black w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#08080]">
+                <div id="playingArea" className="absolute top-[200px] left-[80px] border-t-[1px] w-[320px] h-[640px] bg-[#c0c0c0]" />
+                    <div id="pausedBox" className="absolute top-[500px] left-[80px] border-t-[1px] border-black w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]">
                         PAUSED
                     </div>
+                    <div id="enterName" className="absolute top-[400px] left-[80px] w-[320px] border-black bg-[#C0C0C0] text-center text-lg z-10">
+                        <div>New high score! Enter your name:</div>
+                        <div>
+                            <form onSubmit={handleNameSubmit}>
+                                <span><input type="text" value={userName} onChange={e => setUserName(e.target.value)} id="highScoreName" name="userName" /></span>
+                                <span><input type="submit" value="Enter" /></span>
+                            </form>
+                        </div>
+                    </div>
+
                     <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[147px] text-xl center invisible z-10 px-3 py-1 text-green-800 bg-[#c0c0c0]">
                         Click to Play Again
                     </button>
                     <div id="scoreBox" className="absolute top-[840px] left-[80px] border-t-[1px] border-black w-[320px] h-[24px] text-base text-white bg-[#208040]">
                         Score: 0; Lines: 0
                     </div>
+
                 <div id="playingAreaScreen" className="absolute top-[200px] left-[80px] border-t-[1px] border-black w-[320px] h-[640px] opacity-80 bg-[#080808]"> </div>
 
                 <div id="rightPanel">
@@ -2186,7 +2224,7 @@ export default function Tetris() {
                     <button id="blueRetroThemeButton" onClick={setThemeToBlueRetro} className="absolute top-[620px] left-[440px] text-[#2f899e] bg-[#c0c0c0] px-3 py-1 rounded-md">Retro Blue Theme</button>
                     <button id="summerThemeButton" onClick={setThemeToSummer} className="absolute top-[660px] left-[440px] text-[#e60b09] bg-[#c0c0c0] px-3 py-1 rounded-md">Summer Theme</button>
                 </div>
-                
+
             </div>
         </div>
     );
