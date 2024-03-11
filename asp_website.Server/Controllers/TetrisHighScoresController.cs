@@ -38,5 +38,11 @@ namespace asp_website.Server.Controllers
 
             return tetrisHighScores;
         }
+
+        [HttpPost(Name = "SetTetrisHighScores")]
+        public void Post([FromBody] TetrisHighScores[] tetrisHighScores)
+        {
+            // TODO: Save data to a file
+        }
     }
 }

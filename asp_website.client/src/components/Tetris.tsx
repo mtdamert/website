@@ -144,7 +144,16 @@ const loadHighScores = async (): Promise<Response> => {
 }
 
 const saveHighScores = async (): Promise<Response> => {
+    const fetchSendHighScores = fetch('tetrishighscores', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(currentHighScores)
+    })
 
+    return fetchSendHighScores;
 }
 
 const startNewGame = (): void => {
@@ -2142,6 +2151,8 @@ const gameOver = (): void => {
         if (enterName !== null) {
             enterName.style.visibility = 'visible';
         }
+
+        saveHighScores();
     }
 
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
