@@ -59,6 +59,7 @@ var previewBlocks: Block[];
 
 let playingGrid: Array<Array<(Block | null)>>; // array
 let isGameOver: boolean = false;
+let gameOverVarsSet: boolean = false;
 let gameState: number;
 let highScoresLoaded = false;
 let currentUserName: string = "(current)";
@@ -103,6 +104,7 @@ const gameLoop = (): void => {
     //end conditions
     if (isGameOver === false && gameState !== STATE_GAME_PAUSED) {
         //still in play - keep the loop going
+        gameOverVarsSet = false;
         setTimeout(gameLoop, 50);
     } else if (isGameOver === true) {
         gameOver();
@@ -2143,6 +2145,9 @@ const incrementScore = (amount: number): void => {
 const gameOver = (): void => {
     isGameOver = true;
 
+    if (gameOverVarsSet)
+        return;
+
     // TODO: Cookies
     //     console.log("Setting cookie: " + currentScore);
     //     setCookie('score', currentScore, 10);
@@ -2177,6 +2182,8 @@ const gameOver = (): void => {
     if (playAgainButton !== null) {
         playAgainButton.style.visibility = 'visible';
     }
+
+    gameOverVarsSet = true;
 }
 
 export default function Tetris() {
@@ -2195,6 +2202,7 @@ export default function Tetris() {
             currentUserName = userName;
 
             redrawHighScores();
+            saveHighScores();
         }
     }
 
