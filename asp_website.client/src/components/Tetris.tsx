@@ -132,7 +132,7 @@ const loadHighScores = async (): Promise<Response> => {
         let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
         if (highScoreDiv !== null) {
             highScoreDiv.style.color = "rgb(0,0,0)";
-            highScoreDiv.innerText = data[i].scorerName + " " + data[i].highScore;
+            highScoreDiv.innerHTML = "<div style='min-width: 180px;'><span style='font-weight: 500;'>" + data[i].scorerName + "</span> <span style='float: right;'>" + data[i].highScore + "</span></div>";
 
             currentHighScores[i].scorerName = data[i].scorerName;
             currentHighScores[i].highScore = data[i].highScore;
@@ -466,10 +466,13 @@ const incrementSpeed = (): void => {
     //    07            13 (0.22s)
     //    08             8 (0.13s)
     //    09             6 (0.1 s)
-    // 10-12             5 (0.08s)
-    // 13-15             4 (0.07s)
-    // 16-18             3 (0.05s)
-    // 19-28             2 (0.03s)
+    // 10-11             5 (0.08s)
+    // 12-13             4 (0.07s)
+    // 14-15               (0.06s)
+    // 16-17             3 (0.05s)
+    // 18-19               (0.04s)
+    // 20-23             2 (0.03s)
+    // 24-28               (0.035s)
     //   29+             1 (0.02s)
 
     if (totalNumLines < 10)
@@ -478,26 +481,42 @@ const incrementSpeed = (): void => {
         msPerPieceDrop = 720;
     else if (totalNumLines < 30)
         msPerPieceDrop = 630;
-    else if (totalNumLines < 40)
+    else if (totalNumLines < 40) {
         msPerPieceDrop = 550;
+        setThemeToNeutrals();
+    }
     else if (totalNumLines < 50)
         msPerPieceDrop = 470;
     else if (totalNumLines < 60)
         msPerPieceDrop = 380;
-    else if (totalNumLines < 70)
+    else if (totalNumLines < 70) {
         msPerPieceDrop = 300;
+        setThemeToWinter();
+    }
     else if (totalNumLines < 80)
         msPerPieceDrop = 220;
     else if (totalNumLines < 90)
         msPerPieceDrop = 130;
-    else if (totalNumLines < 100)
+    else if (totalNumLines < 100) {
         msPerPieceDrop = 100;
-    else if (totalNumLines < 130)
+        setThemeToPurpleMagenta();
+    }
+    else if (totalNumLines < 120)
         msPerPieceDrop = 80;
-    else if (totalNumLines < 160)
+    else if (totalNumLines < 130)
+        setThemeToBlueRetro();
+    else if (totalNumLines < 140)
+        msPerPieceDrop = 75;
+    else if (totalNumLines < 160) {
         msPerPieceDrop = 70;
-    else if (totalNumLines < 190)
+        setThemeToSummer();
+    }
+    else if (totalNumLines < 180)
+        msPerPieceDrop = 60;
+    else if (totalNumLines < 200)
         msPerPieceDrop = 50;
+    else if (totalNumLines < 240)
+        msPerPieceDrop = 40;
     else if (totalNumLines < 290)
         msPerPieceDrop = 30;
     else
@@ -2151,6 +2170,7 @@ const gameOver = (): void => {
     // TODO: Cookies
     //     console.log("Setting cookie: " + currentScore);
     //     setCookie('score', currentScore, 10);
+
     if (currentHighScores.some((highScore) => { return highScore.isCurrentScore === true })) {
         let enterName: (HTMLElement | null) = document.getElementById("enterName");
         if (enterName !== null) {
@@ -2237,15 +2257,15 @@ export default function Tetris() {
                 <div id="playingAreaScreen" className="absolute top-[200px] left-[80px] border-t-[1px] border-black w-[320px] h-[640px] opacity-80 bg-[#080808]"> </div>
 
                 <div id="rightPanel">
-                    <div id="nextPieceHeader" className="absolute top-[200px] left-[440px] w-[152px] center bold text-2xl">Next Piece:</div>
-                    <div id="nextPieceBox" className="absolute top-[230px] left-[440px] border-t-[1px] border-black w-[152px] h-[120px] bg-[#c0c0c0]"></div>
-                    <div id="highScoreHeader" className="absolute top-[365px] left-[440px] bold text-lg">High Scores:</div>
+                    <div id="nextPieceHeader" className="absolute top-[200px] left-[440px] w-[152px] center font-normal text-2xl">Next Piece:</div>
+                    <div id="nextPieceBox" className="absolute top-[230px] left-[440px] border-[1px] border-black w-[152px] h-[120px] bg-[#c0c0c0]"></div>
+                    <div id="highScoreHeader" className="absolute top-[365px] left-[440px] font-semibold text-lg underline">High Scores:</div>
 
-                    <button id="winterThemeButton" onClick={setThemeToWinter} className="absolute top-[500px] left-[440px] text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Winter Theme</button>
-                    <button id="neutralsThemeButton" onClick={setThemeToNeutrals} className="absolute top-[540px] left-[440px] text-[#de8a58] bg-[#c0c0c0] px-3 py-1 rounded-md">Neutrals Theme</button>
-                    <button id="purpleMagentaThemeButton" onClick={setThemeToPurpleMagenta} className="absolute top-[580px] left-[440px] text-[#bc00dd] bg-[#c0c0c0] px-3 py-1 rounded-md">Purple to Magenta Theme</button>
-                    <button id="blueRetroThemeButton" onClick={setThemeToBlueRetro} className="absolute top-[620px] left-[440px] text-[#2f899e] bg-[#c0c0c0] px-3 py-1 rounded-md">Retro Blue Theme</button>
-                    <button id="summerThemeButton" onClick={setThemeToSummer} className="absolute top-[660px] left-[440px] text-[#e60b09] bg-[#c0c0c0] px-3 py-1 rounded-md">Summer Theme</button>
+                    <button id="winterThemeButton" onClick={setThemeToWinter} className="absolute top-[500px] left-[440px] text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Winter Theme</button>
+                    <button id="neutralsThemeButton" onClick={setThemeToNeutrals} className="absolute top-[540px] left-[440px] text-[#de8a58] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Neutrals Theme</button>
+                    <button id="purpleMagentaThemeButton" onClick={setThemeToPurpleMagenta} className="absolute top-[580px] left-[440px] text-[#bc00dd] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Purple to Magenta Theme</button>
+                    <button id="blueRetroThemeButton" onClick={setThemeToBlueRetro} className="absolute top-[620px] left-[440px] text-[#2f899e] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Retro Blue Theme</button>
+                    <button id="summerThemeButton" onClick={setThemeToSummer} className="absolute top-[660px] left-[440px] text-[#e60b09] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Summer Theme</button>
                 </div>
 
             </div>
