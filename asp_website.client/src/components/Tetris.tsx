@@ -189,7 +189,7 @@ const startNewGame = (): void => {
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
     if (scoreBox !== null) {
         scoreBox.style.color = "white";
-        scoreBox.style.backgroundColor = "rgb(32, 128, 64)";
+        scoreBox.style.backgroundColor = "rgb(68, 148, 229)";
         scoreBox.innerHTML = 'Score: ' + currentScore + "; Lines: " + totalNumLines;
     }
 
@@ -2247,10 +2247,10 @@ export default function Tetris() {
                         </div>
                     </div>
 
-                    <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[147px] text-xl center invisible z-10 px-3 py-1 text-green-800 bg-[#c0c0c0]">
+                    <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[147px] text-xl center invisible z-10 px-3 py-1 text-[#256bb4] bg-[#c0c0c0]">
                         Click to Play Again
                     </button>
-                    <div id="scoreBox" className="absolute top-[840px] left-[80px] border-t-[1px] border-black w-[320px] h-[24px] text-base text-white bg-[#208040]">
+                        <div id="scoreBox" className="absolute top-[840px] left-[80px] border-t-[1px] border-black w-[320px] h-[24px] text-base text-white bg-[#007fff]">
                         Score: 0; Lines: 0
                     </div>
 
