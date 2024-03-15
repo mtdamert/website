@@ -182,7 +182,7 @@ const startNewGame = (): void => {
     if (pausedBox !== null) {
         pausedBox.style.visibility = 'hidden';
         pausedBox.innerHTML = "PAUSED";
-        pausedBox.style.color = "maroon";
+        pausedBox.style.color = "rgb(175, 58, 57)";
         pausedBox.style.backgroundColor = "rgb(192,192,192)";
     }
 
@@ -2190,7 +2190,7 @@ const gameOver = (): void => {
         pausedBox.style.visibility = 'visible';
         pausedBox.innerHTML = "GAME OVER";
         pausedBox.style.color = "rgb(224,224,224)";
-        pausedBox.style.backgroundColor = "red";
+        pausedBox.style.backgroundColor = "rgb(175, 58, 57)";
     }
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     if (playingAreaScreen !== null) {
