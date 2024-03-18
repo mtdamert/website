@@ -29,10 +29,10 @@ function Test() {
 
     return (
         <div className="flex items-center px-3 py-1.5 border">
-            <div>
+            <div className="w-full">
                 Test test test
-            </div><br />
-            <div>{secondFunc()}</div><br />
+            </div>
+            <div className="w-full">{secondFunc()}</div>
             <div className="pt-2">{testDataContent}</div>
             <div>
                 <Tooltip altText="Test tooltip" />
