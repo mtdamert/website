@@ -60,9 +60,13 @@ asp_website.client/.vscode/*
 asp_website.Server/bin/
 asp_website.Server/obj/
 
+asp_website.Server/.config/*
+
 # deploy profiles
 /asp_website.Server/Properties/PublishProfiles/*
 
 asp_website.Server/TetrisHighScores.txt
 
+# all backup files
+*.bak
 
