@@ -3,10 +3,13 @@
 // TODO: Color (green/red)
 // TODO: Name
 
-function DaysSinceItem({ name }) {
+function DaysSinceItem({ name, isFinished }) {
+    const itemColor = isFinished ? 'bg-rose-700' : 'bg-emerald-700';
+    const divClass = itemColor + " text-white w-4/5 h-1/6";
+
     return (
         <div
-            className="bg-rose-700 text-white w-4/5 h-1/6"> // bg-emerald-700
+            className={ divClass }>
             {name}
         </div>
     );
