@@ -9,11 +9,11 @@ function DaysSinceItem({ name, isFinished, id, deleteClick }) {
 
     return (
         <div
-            contentEditable={true}
+            
             className={divClass}
             id={id}
         >
-            <span>{name}foo</span>
+            <span contentEditable={true}>{name}</span>
             <span onClick={() => deleteClick(id)} className="float-right">X</span>
         </div>
     );

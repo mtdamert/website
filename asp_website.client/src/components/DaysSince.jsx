@@ -8,7 +8,7 @@ function DaysSince() {
     const addItem = (counter) => {
         setItems([
             ...items,
-            new DaysSinceItem("New Item", false, counter)
+            { name: "New Item", isFinished: false, id: counter, key: counter }
         ]);
 
         console.log("Adding new item to queue: " + counter);
@@ -16,18 +16,16 @@ function DaysSince() {
     }
 
     const deleteItem = (id) => {
-        console.log("Trying to delete item: " + id);
-        items.filter(a => a.id !== id);
+        setItems([ ...items.filter(item => item.id !== id) ]);
     }
 
     return (
         <div className="items-center border w-screen h-screen">
             {
                 items.map(
-                    (item) =>
-                    { return <DaysSinceItem name={item.name} isFinished={item.isFinished} id={item.itemCounter} deleteClick={deleteItem} />; }
+                    item => (<DaysSinceItem name={item.name + item.id} isFinished={item.isFinished} id={item.id} deleteClick={deleteItem} key={item.key} /> )
                 )}
-            <button id="addItemButton" onClick={() => addItem({ itemCounter })} className="text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Add Item</button>
+            <button id="addItemButton" onClick={() => addItem(itemCounter) } className="text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Add Item</button>
         </div>
         
     );
