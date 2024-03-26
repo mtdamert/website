@@ -1,5 +1,5 @@
 import graph_history from './graph_history.json';
-import { BarChart, Bar, Rectangle } from 'recharts';
+import { BarChart, Bar, Rectangle, XAxis } from 'recharts';
 
 function Graphs() {
     const myFile = graph_history;
@@ -48,12 +48,16 @@ function Graphs() {
         },
     ];
 
+    var el = { name: "Addition", uv: 3000, pv: 3000, amt: 2000 };
+    data.push(el);
+
     return (
         <div className="flex items-center px-3 py-1.5 border">
             (todo) {myFile.data[0].Date}
 
             <BarChart width={400} height={300} data={data}>
                 <Bar dataKey="pv" fill="#4494e5" activeBar={<Rectangle fill="red" stroke="red" />} />
+                <XAxis dataKey="name" />
             </BarChart>
         </div>
     );
