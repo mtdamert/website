@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BarChart, Bar, Rectangle, XAxis } from 'recharts';
 
 function RetirementCalc() {
     const [savings, setSavings] = useState(0);
@@ -15,6 +16,20 @@ function RetirementCalc() {
     const [cpi, setCpi] = useState(3);
     const [deathAge, setDeathAge] = useState(80);
     const [extrapolateCapGains, setExtrapolateCapGains] = useState(false);
+    const [zeroSavingsAge, setZeroSavingsAge] = useState(40);
+
+    //const [chartData, setChartData] = useState([]);
+    const [data, setData] = useState([]);
+
+    const updateChart = (chartData) => {
+        //setChartData([
+        //    ...chartData,
+        //    { name: "New Item", uv: 2000, pv: 2000, amt: 2000 }
+        //]);
+        //document.getElementById("barGraph").style.visibility = 'visible';
+
+        setData([...data, chartData]);
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -27,11 +42,14 @@ function RetirementCalc() {
         let yearlyExpenses = livingExpenses;
         let sSIncome = socialSecurityIncome;
         let ageOfDeath = deathAge;
+        let currentYear = new Date().getFullYear();
 
         let capGainsLow = 44625; // below this point, no cap gains
         let capGainsHigh = 492300; // below this point, 15%; above this point, 20% 
 
         let earlyWithdrawalPenalty = 0;
+
+        let chartData = [];
 
         // TODO: Cap gains tax - this can also be married (joint filing), married (separate filing), or head of household
         // TODO: Add cost basis
@@ -76,6 +94,15 @@ function RetirementCalc() {
                 remainingSavings += remainingPreTaxSavings;
                 remainingPreTaxSavings = 0;
             }
+
+            console.log("running sim for year " + currentYear);
+            //chartData.push({ name: "" + currentYear, uv: 2000, pv: 2000, amt: remainingSavings });
+            setData([
+                ...data,
+                { name: "" + currentYear, uv: 2000, pv: 2000, amt: remainingSavings }
+            ]);
+
+            currentYear += 1;
         }
 
         if (ageCounter === ageOfDeath && remainingSavings > 0) {
@@ -88,11 +115,12 @@ function RetirementCalc() {
         }
 
         console.log("Total earlyWithdrawalPenalty: " + earlyWithdrawalPenalty);
+        //updateChart(chartData);
 
         if (ageCounter === currentAge)
-            return currentAge;
+            setZeroSavingsAge(currentAge);
         else
-            return ageCounter;
+            setZeroSavingsAge(ageCounter);
     }
 
     // If you can spend more than you're spending, calculate that difference
@@ -115,7 +143,7 @@ function RetirementCalc() {
                     </label>
                     <input type="number"
                         value={currentAge}
-                        onChange={(e) => setCurrentAge(e.target.value)}
+                        onChange={(e) => { setCurrentAge(e.target.value); getSavingsZeroAge(); } }
                         className="float-right border text-right"
                     />
             </div>
@@ -127,7 +155,7 @@ function RetirementCalc() {
                 </label>{/* todo: sanitize input */}
                 <input type="text"
                     value={savings}
-                    onChange={(e) => { setSavings(e.target.value); setPostTaxSavings(0); setRetirementSavings(0); } } 
+                    onChange={(e) => { setSavings(e.target.value); setPostTaxSavings(0); setRetirementSavings(0); getSavingsZeroAge(); } } 
                     className="float-right border text-right"
                 />
             </div>
@@ -141,7 +169,7 @@ function RetirementCalc() {
                     <input type="text"
                         value={[postTaxSavings]}
                         onChange={
-                            (e) => { setPostTaxSavings(e.target.value); setSavings(Number(e.target.value) + Number(retirementSavings)); }
+                            (e) => { setPostTaxSavings(e.target.value); setSavings(Number(e.target.value) + Number(retirementSavings)); getSavingsZeroAge(); }
                         } 
                         className="float-right border text-right"
                     />
@@ -154,7 +182,7 @@ function RetirementCalc() {
                     <input type="text"
                         value={retirementSavings}
                         onChange={
-                            (e) => { setRetirementSavings(e.target.value); setSavings(Number(e.target.value) + Number(postTaxSavings)); }
+                            (e) => { setRetirementSavings(e.target.value); setSavings(Number(e.target.value) + Number(postTaxSavings)); getSavingsZeroAge(); }
                         } 
                         className="float-right border text-right"
                     />
@@ -168,7 +196,7 @@ function RetirementCalc() {
                 </label>
                 <input type="text"
                     value={income}
-                    onChange={(e) => setIncome(e.target.value)}
+                    onChange={(e) => { setIncome(e.target.value); getSavingsZeroAge(); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -179,7 +207,7 @@ function RetirementCalc() {
                 </label>{/* todo: sanitize input */}
                 <input type="text"
                     value={livingExpenses}
-                    onChange={(e) => setLivingExpenses(e.target.value)}
+                    onChange={(e) => { setLivingExpenses(e.target.value); getSavingsZeroAge(); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -190,7 +218,7 @@ function RetirementCalc() {
                 </label>
                 <input type="number"
                     value={retirementAge}
-                    onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); }}
+                    onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); getSavingsZeroAge(); }}
                     className="float-right border text-right"
                 />
             </div>{/* todo: Use this value, and also add a 'yearly income' value */}
@@ -201,7 +229,7 @@ function RetirementCalc() {
                 </label>
                 <input type="number"
                     value={startSocialSecurityAge}
-                    onChange={(e) => setStartSocialSecurityAge(e.target.value)}
+                    onChange={(e) => { setStartSocialSecurityAge(e.target.value); getSavingsZeroAge(); } }
                     className="float-right border text-right"
                 />
             </div>{/* TODO: Create a tooltip that leads to: https://www.ssa.gov/OACT/quickcalc/ */}
@@ -212,7 +240,7 @@ function RetirementCalc() {
                 </label>
                 <input type="text"
                     value={socialSecurityIncome}
-                    onChange={(e) => setSocialSecurityIncome(e.target.value)}
+                    onChange={(e) => { setSocialSecurityIncome(e.target.value); getSavingsZeroAge(); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -225,7 +253,7 @@ function RetirementCalc() {
                 <span className="float-right">%</span>
                 <input type="number"
                     value={predictedYield}
-                    onChange={(e) => setPredictedYield(e.target.value)}
+                    onChange={(e) => { setPredictedYield(e.target.value); getSavingsZeroAge(); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -237,7 +265,7 @@ function RetirementCalc() {
                 <span className="float-right">%</span>
                 <input type="number"
                     value={cpi}
-                    onChange={(e) => setCpi(e.target.value)}
+                    onChange={(e) => { setCpi(e.target.value); getSavingsZeroAge(); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -249,7 +277,7 @@ function RetirementCalc() {
                 </label>
                 <input type="number"
                     value={deathAge}
-                    onChange={(e) => setDeathAge(e.target.value)}
+                    onChange={(e) => { setDeathAge(e.target.value); getSavingsZeroAge(); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -260,16 +288,26 @@ function RetirementCalc() {
                 </label>
                 <input type="checkbox"
                     value={extrapolateCapGains}
-                    onChange={(e) => setExtrapolateCapGains(e.target.value)}
+                    onChange={(e) => { setExtrapolateCapGains(e.target.value); getSavingsZeroAge(); } }
                     className="float-right border text-right"
                 />
             </div>
 
-            <div className="pt-6"><span className="font-semibold">At the current rate, your savings will run out when you reach age:</span> {getSavingsZeroAge()}</div>
+            <div className="pt-6"><span className="font-semibold">At the current rate, your savings will run out when you reach age:</span> {zeroSavingsAge}</div>
             <div className="pt-6"><span className="font-semibold"></span></div>
 
             </form>
 
+            <div id="barChart">
+                <button onClick={updateChart} className="text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Show Graph</button>
+            </div>
+
+            <div>
+                <BarChart id="barGraph" width={400} height={300} data={data}>
+                    <Bar dataKey="pv" fill="#4494e5" activeBar={<Rectangle fill="red" stroke="red" />} />
+                    <XAxis dataKey="name" />
+                </BarChart>
+            </div>
 
         </div>
     );
