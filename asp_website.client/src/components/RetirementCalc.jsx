@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BarChart, Bar, Rectangle, XAxis } from 'recharts';
+import { BarChart, Bar, Rectangle, XAxis, Tooltip } from 'recharts';
 
 function RetirementCalc() {
     const [savings, setSavings] = useState(0);
@@ -35,7 +35,7 @@ function RetirementCalc() {
         event.preventDefault();
     }
 
-    const getSavingsZeroAge = () => {
+    async function getSavingsZeroAge() {
         let ageCounter = currentAge;
         let remainingSavings = (postTaxSavings !== 0) ? postTaxSavings : savings;
         let remainingPreTaxSavings = retirementSavings;
@@ -49,7 +49,7 @@ function RetirementCalc() {
 
         let earlyWithdrawalPenalty = 0;
 
-        let chartData = [];
+        setData([]);
 
         // TODO: Cap gains tax - this can also be married (joint filing), married (separate filing), or head of household
         // TODO: Add cost basis
@@ -95,12 +95,13 @@ function RetirementCalc() {
                 remainingPreTaxSavings = 0;
             }
 
-            console.log("running sim for year " + currentYear);
-            //chartData.push({ name: "" + currentYear, uv: 2000, pv: 2000, amt: remainingSavings });
-            setData([
+            setData(data => [
                 ...data,
-                { name: "" + currentYear, uv: 2000, pv: 2000, amt: remainingSavings }
+                { name: "" + currentYear, uv: 2000, pv: remainingSavings }
             ]);
+            console.log("running sim for year " + currentYear + ", remaining savings: " + remainingSavings + ", data length: " + data.length);
+
+            await new Promise(r => setTimeout(r, 100)); // wait for X ms before continuing processing
 
             currentYear += 1;
         }
@@ -306,6 +307,7 @@ function RetirementCalc() {
                 <BarChart id="barGraph" width={400} height={300} data={data}>
                     <Bar dataKey="pv" fill="#4494e5" activeBar={<Rectangle fill="red" stroke="red" />} />
                     <XAxis dataKey="name" />
+                    <Tooltip />
                 </BarChart>
             </div>
 
