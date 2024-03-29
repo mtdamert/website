@@ -17,19 +17,7 @@ function RetirementCalc() {
     const [deathAge, setDeathAge] = useState(80);
     const [extrapolateCapGains, setExtrapolateCapGains] = useState(false);
     const [zeroSavingsAge, setZeroSavingsAge] = useState(40);
-
-    //const [chartData, setChartData] = useState([]);
     const [data, setData] = useState([]);
-
-    const updateChart = (chartData) => {
-        //setChartData([
-        //    ...chartData,
-        //    { name: "New Item", uv: 2000, pv: 2000, amt: 2000 }
-        //]);
-        //document.getElementById("barGraph").style.visibility = 'visible';
-
-        setData([...data, chartData]);
-    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -116,7 +104,6 @@ function RetirementCalc() {
         }
 
         console.log("Total earlyWithdrawalPenalty: " + earlyWithdrawalPenalty);
-        //updateChart(chartData);
 
         if (ageCounter === currentAge)
             setZeroSavingsAge(currentAge);
@@ -298,10 +285,6 @@ function RetirementCalc() {
             <div className="pt-6"><span className="font-semibold"></span></div>
 
             </form>
-
-            <div id="barChart">
-                <button onClick={updateChart} className="text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Show Graph</button>
-            </div>
 
             <div>
                 <BarChart id="barGraph" width={400} height={300} data={data}>
