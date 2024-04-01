@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BarChart, Bar, Rectangle, XAxis, Tooltip } from 'recharts';
 
 function RetirementCalc() {
@@ -22,6 +22,22 @@ function RetirementCalc() {
     const handleSubmit = (event) => {
         event.preventDefault();
     }
+
+    useEffect(() => { getSavingsZeroAge(); }, [currentAge]);
+    useEffect(() => { getSavingsZeroAge(); }, [savings]);
+    useEffect(() => { getSavingsZeroAge(); }, [postTaxSavings]);
+    useEffect(() => { getSavingsZeroAge(); }, [retirementSavings]);
+    useEffect(() => { getSavingsZeroAge(); }, [income]);
+    useEffect(() => { getSavingsZeroAge(); }, [livingExpenses]);
+    useEffect(() => { getSavingsZeroAge(); }, [retirementAge]);
+    useEffect(() => { getSavingsZeroAge(); }, [startSocialSecurityAge]);
+    useEffect(() => { getSavingsZeroAge(); }, [socialSecurityIncome]);
+    useEffect(() => { getSavingsZeroAge(); }, [predictedYield]);
+    useEffect(() => { getSavingsZeroAge(); }, [cpi]);
+    useEffect(() => { getSavingsZeroAge(); }, [deathAge]);
+    useEffect(() => { getSavingsZeroAge(); }, [extrapolateCapGains]);
+
+
 
     async function getSavingsZeroAge() {
         let ageCounter = currentAge;
@@ -89,7 +105,7 @@ function RetirementCalc() {
             ]);
             console.log("running sim for year " + currentYear + ", remaining savings: " + remainingSavings + ", data length: " + data.length);
 
-            await new Promise(r => setTimeout(r, 100)); // wait for X ms before continuing processing
+            await new Promise(r => setTimeout(r, 10)); // wait for X ms before continuing processing
 
             currentYear += 1;
         }
@@ -104,6 +120,7 @@ function RetirementCalc() {
         }
 
         console.log("Total earlyWithdrawalPenalty: " + earlyWithdrawalPenalty);
+        console.log("==========================================");
 
         if (ageCounter === currentAge)
             setZeroSavingsAge(currentAge);
@@ -131,7 +148,7 @@ function RetirementCalc() {
                     </label>
                     <input type="number"
                         value={currentAge}
-                        onChange={(e) => { setCurrentAge(e.target.value); getSavingsZeroAge(); } }
+                        onChange={(e) => { setCurrentAge(e.target.value); } }
                         className="float-right border text-right"
                     />
             </div>
@@ -143,7 +160,7 @@ function RetirementCalc() {
                 </label>{/* todo: sanitize input */}
                 <input type="text"
                     value={savings}
-                    onChange={(e) => { setSavings(e.target.value); setPostTaxSavings(0); setRetirementSavings(0); getSavingsZeroAge(); } } 
+                    onChange={(e) => { setSavings(e.target.value); setPostTaxSavings(0); setRetirementSavings(0); } } 
                     className="float-right border text-right"
                 />
             </div>
@@ -157,7 +174,7 @@ function RetirementCalc() {
                     <input type="text"
                         value={[postTaxSavings]}
                         onChange={
-                            (e) => { setPostTaxSavings(e.target.value); setSavings(Number(e.target.value) + Number(retirementSavings)); getSavingsZeroAge(); }
+                            (e) => { setPostTaxSavings(e.target.value); setSavings(Number(e.target.value) + Number(retirementSavings)); }
                         } 
                         className="float-right border text-right"
                     />
@@ -170,7 +187,7 @@ function RetirementCalc() {
                     <input type="text"
                         value={retirementSavings}
                         onChange={
-                            (e) => { setRetirementSavings(e.target.value); setSavings(Number(e.target.value) + Number(postTaxSavings)); getSavingsZeroAge(); }
+                            (e) => { setRetirementSavings(e.target.value); setSavings(Number(e.target.value) + Number(postTaxSavings)); }
                         } 
                         className="float-right border text-right"
                     />
@@ -184,7 +201,7 @@ function RetirementCalc() {
                 </label>
                 <input type="text"
                     value={income}
-                    onChange={(e) => { setIncome(e.target.value); getSavingsZeroAge(); } }
+                    onChange={(e) => { setIncome(e.target.value); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -195,7 +212,7 @@ function RetirementCalc() {
                 </label>{/* todo: sanitize input */}
                 <input type="text"
                     value={livingExpenses}
-                    onChange={(e) => { setLivingExpenses(e.target.value); getSavingsZeroAge(); } }
+                        onChange={(e) => { console.log("living expenses - e.target.value: " + e.target.value); setLivingExpenses(e.target.value); }}
                     className="float-right border text-right"
                 />
             </div>
@@ -206,7 +223,7 @@ function RetirementCalc() {
                 </label>
                 <input type="number"
                     value={retirementAge}
-                    onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); getSavingsZeroAge(); }}
+                    onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); }}
                     className="float-right border text-right"
                 />
             </div>{/* todo: Use this value, and also add a 'yearly income' value */}
@@ -217,7 +234,7 @@ function RetirementCalc() {
                 </label>
                 <input type="number"
                     value={startSocialSecurityAge}
-                    onChange={(e) => { setStartSocialSecurityAge(e.target.value); getSavingsZeroAge(); } }
+                    onChange={(e) => { setStartSocialSecurityAge(e.target.value); } }
                     className="float-right border text-right"
                 />
             </div>{/* TODO: Create a tooltip that leads to: https://www.ssa.gov/OACT/quickcalc/ */}
@@ -228,7 +245,7 @@ function RetirementCalc() {
                 </label>
                 <input type="text"
                     value={socialSecurityIncome}
-                    onChange={(e) => { setSocialSecurityIncome(e.target.value); getSavingsZeroAge(); } }
+                    onChange={(e) => { setSocialSecurityIncome(e.target.value); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -241,7 +258,7 @@ function RetirementCalc() {
                 <span className="float-right">%</span>
                 <input type="number"
                     value={predictedYield}
-                    onChange={(e) => { setPredictedYield(e.target.value); getSavingsZeroAge(); } }
+                    onChange={(e) => { setPredictedYield(e.target.value); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -253,7 +270,7 @@ function RetirementCalc() {
                 <span className="float-right">%</span>
                 <input type="number"
                     value={cpi}
-                    onChange={(e) => { setCpi(e.target.value); getSavingsZeroAge(); } }
+                    onChange={(e) => { setCpi(e.target.value); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -265,7 +282,7 @@ function RetirementCalc() {
                 </label>
                 <input type="number"
                     value={deathAge}
-                    onChange={(e) => { setDeathAge(e.target.value); getSavingsZeroAge(); } }
+                    onChange={(e) => { setDeathAge(e.target.value); } }
                     className="float-right border text-right"
                 />
             </div>
@@ -276,7 +293,7 @@ function RetirementCalc() {
                 </label>
                 <input type="checkbox"
                     value={extrapolateCapGains}
-                    onChange={(e) => { setExtrapolateCapGains(e.target.value); getSavingsZeroAge(); } }
+                    onChange={(e) => { setExtrapolateCapGains(e.target.value); } }
                     className="float-right border text-right"
                 />
             </div>
