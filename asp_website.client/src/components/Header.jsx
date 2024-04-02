@@ -5,7 +5,6 @@ function Header() {
     const links = [
         { label: 'Uninteresting Tests', path: '/test' },
         { label: 'Tetris', path: '/tetris' },
-        { label: 'Graphs', path: '/graphs' },
         { label: 'Retirement Calculator', path: '/retirement-calc' },
         {/* label: '3D', path: '/3d_art' */},
         { label: 'Days Since App', path: 'days-since'},
