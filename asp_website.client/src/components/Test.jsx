@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import Tooltip from './Tooltip';
+import graph_history from './graph_history.json';
+import { BarChart, Bar, Rectangle, XAxis } from 'recharts';
 
 function Test() {
     const [testData, setTestData] = useState();
@@ -19,6 +21,33 @@ function Test() {
         setTestData(data);
     }
 
+
+    const myFile = graph_history;
+    const data = [
+        {
+            name: 'Page A',
+            uv: 4000,
+            pv: 2400,
+            amt: 2400,
+        },
+        {
+            name: 'Page B',
+            uv: 3000,
+            pv: 1398,
+            amt: 2210,
+        },
+        {
+            name: 'Page C',
+            uv: 2000,
+            pv: 9800,
+            amt: 2290,
+        },
+    ];
+
+    var el = { name: "Addition", uv: 3000, pv: 3000, amt: 2000 };
+    data.push(el);
+
+
     const firstFunc = () => {
         return 'hello ';
     }
@@ -36,6 +65,16 @@ function Test() {
             <div className="pt-2">{testDataContent}</div>
             <div>
                 <Tooltip altText="Test tooltip" />
+            </div>
+
+            <div className="w-full">
+                (graphs todo) {myFile.data[0].Date}
+            </div>
+            <div className="w-full">
+                <BarChart width={400} height={300} data={data}>
+                    <Bar dataKey="pv" fill="#4494e5" activeBar={<Rectangle fill="red" stroke="red" />} />
+                    <XAxis dataKey="name" />
+                </BarChart>
             </div>
         </div>
     );
