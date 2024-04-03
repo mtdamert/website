@@ -37,7 +37,7 @@ function RetirementCalc() {
     useEffect(() => { getSavingsZeroAge(); }, [deathAge]);
     useEffect(() => { getSavingsZeroAge(); }, [extrapolateCapGains]);
 
-
+    let calcIsRunning = false;
 
     async function getSavingsZeroAge() {
         let ageCounter = currentAge;
@@ -53,6 +53,8 @@ function RetirementCalc() {
 
         let earlyWithdrawalPenalty = 0;
 
+        calcIsRunning = true;
+
         setData([]);
 
         // TODO: Cap gains tax - this can also be married (joint filing), married (separate filing), or head of household
@@ -66,6 +68,11 @@ function RetirementCalc() {
         // Main simulation loop
         while ((remainingSavings > 0 || remainingPreTaxSavings > 0) && ageCounter < ageOfDeath) {
             remainingSavings -= yearlyExpenses;
+
+            // If this calculation gets re-started while running this version, stop this calc and only run the new calc
+            if (!calcIsRunning) {
+                return;
+            }
             
             // If post-tax savings run out, we have to take money from retirement accounts at a 10% penalty
             if (remainingSavings < 0 && remainingPreTaxSavings > 0) {
