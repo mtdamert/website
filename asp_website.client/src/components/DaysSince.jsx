@@ -11,7 +11,6 @@ function DaysSince() {
             { name: "New Item", isFinished: false, id: counter, key: counter }
         ]);
 
-        console.log("Adding new item to queue: " + counter);
         setItemCounter(counter + 1);
     }
 
