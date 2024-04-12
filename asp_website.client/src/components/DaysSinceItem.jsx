@@ -11,7 +11,7 @@ function DaysSinceItem({ name, isFinished, id, deleteClick }) {
 
     const [startDate, setStartDate] = useState(new Date());
     const [text, setText] = useState(name);
-    const [dateText, setDateText] = useState("hi");
+    const [dateText, setDateText] = useState("NOW");
 
     const getTimeDifference = (date) =>
     {
