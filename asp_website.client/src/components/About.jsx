@@ -5,7 +5,7 @@ function About() {
                 Hi, I'm Mike.
             </div>
             <div>
-                This website was created as an attempt to improve my coding skills. The back end, used to save data, is written in C# and ASP.NET Core 3.1.
+                This website was created as an attempt to improve my coding skills. The back end, used to save data, is written in C# and .NET 8.
                 The front end is HTML/JavaScript/TypeScript/Vite/ReactJS.
             </div>
         </div>
