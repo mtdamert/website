@@ -8,7 +8,7 @@ function DaysSinceItem({ name, isFinished, id, deleteClick }) {
     const [startDate, setStartDate] = useState(new Date());
     const [text, setText] = useState(name);
     const [dateText, setDateText] = useState("NOW");
-    const [itemStyle, setItemStyle] = useState(itemColor + " flex justify-between text-white w-4/5 h-1/6 mt-2 mb-2 text-xl");
+    const [itemStyle, setItemStyle] = useState(itemColor + " flex flex-wrap justify-between text-white w-4/5 h-1/6 mt-2 mb-2 text-xl");
 
     const getTimeDifference = (date) =>
     {
@@ -22,26 +22,27 @@ function DaysSinceItem({ name, isFinished, id, deleteClick }) {
         }
     }
 
-    const setColorRed = () => { setItemStyle("bg-rose-700 flex justify-between text-white w-4/5 h-1/6 mt-2 mb-2 text-xl"); }
-    const setColorGreen = () => { setItemStyle("bg-emerald-700 flex justify-between text-white w-4/5 h-1/6 mt-2 mb-2 text-xl"); }
+    const setColorRed = () => { setItemStyle("bg-rose-700 flex flex-wrap justify-between text-white w-4/5 h-1/6 mt-2 mb-2 text-xl"); }
+    const setColorGreen = () => { setItemStyle("bg-emerald-700 flex flex-wrap justify-between text-white w-4/5 h-1/6 mt-2 mb-2 text-xl"); }
 
     return (
         <div
             className={itemStyle}
             id={id}
         >
-            <div className="flex items-center justify-center" contentEditable={true} onChange={(newText) => setText(newText)} suppressContentEditableWarning={true}>
+            <div onClick={() => deleteClick(id)} className="justify-end w-full">
+                X
+            </div>
+            <div className="items-center justify-center grow" contentEditable={true} onChange={(newText) => setText(newText)} suppressContentEditableWarning={true}>
                 {text}
             </div>
-            <div className="flex items-end justify-end text-black">
+            <div className="basis-full h-0"></div>
+            <div className="items-end justify-end text-black grow">
                 <DatePicker onChange={(date) => { setStartDate(date); setDateText(getTimeDifference(date)); }} placeholderText={dateText} />
             </div>
-            <div className="flex">
+            <div className="w-1/2">
                 <span id="red" className="border-2 h-10 w-10 bg-rose-700" onClick={setColorRed}></span>
                 <span id="blue" className="border-2 h-10 w-10 bg-emerald-700" onClick={setColorGreen}></span>
-            </div>
-            <div onClick={() => deleteClick(id)} className="flex justify-end">
-                X
             </div>
         </div>
     );
