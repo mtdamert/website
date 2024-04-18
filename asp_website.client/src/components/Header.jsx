@@ -6,7 +6,7 @@ function Header() {
         { label: 'Uninteresting Tests', path: '/test' },
         { label: 'Tetris', path: '/tetris' },
         { label: 'Retirement Calculator', path: '/retirement-calc' },
-        {/* label: '3D', path: '/3d_art' */},
+        { label: 'Art', path: '/art' },
         { label: 'Days Since App', path: 'days-since'},
         { label: 'About', path: '/about' },
     ];

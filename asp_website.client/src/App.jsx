@@ -4,6 +4,7 @@ import AboutPage from './pages/AboutPage.jsx'
 import TestPage from './pages/TestPage.jsx';
 import TetrisPage from './pages/TetrisPage.jsx';
 import RetirementCalcPage from './pages/RetirementCalcPage.jsx';
+import ArtPage from './pages/ArtPage.jsx';
 import DaysSincePage from './pages/DaysSincePage.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CookieConsent from "react-cookie-consent";
@@ -53,6 +54,7 @@ function App() {
                             <Route path="/test" element={<TestPage />} />
                             <Route path="/tetris" element={<TetrisPage />} />
                             <Route path="/retirement-calc" element={<RetirementCalcPage />} />
+                            <Route path="/art" element={<ArtPage />} />
                             <Route path="/days-since" element={<DaysSincePage /> } />
                             <Route path="/about" element={<AboutPage />} />
                         </Route>
