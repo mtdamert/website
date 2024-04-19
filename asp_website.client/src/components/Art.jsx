@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useLoader } from '@react-three/fiber'
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 function Art(props) {
 
@@ -22,16 +23,19 @@ function Art(props) {
         )
     }
 
+    const Horse = () => {
+        const gltf = useLoader(GLTFLoader, "./horse.glb");
+        return <primitive object={gltf.scene} scale={1.0} />;
+    };
+
     return (
-        <div className="flex items-center px-3 py-1.5 border">
-            <div>
-                TEST
-            </div>
-            <div>
+        <div className="flex items-center px-3 py-1.5 border w-full h-1/2">
+            <div className="flex w-full h-1/2">
                 <Canvas>
                     <ambientLight intensity={Math.PI / 2} />
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
                     <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
+                    <Horse position={[0, 0, 0]} />
                     <Box position={[-1.2, 0, 0]} />
                     <Box position={[1.2, 0, 0]} />
                 </Canvas>
