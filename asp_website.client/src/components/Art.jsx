@@ -1,33 +1,46 @@
 import React, { useRef, useState } from 'react'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { BoxGeometry, MeshStandardMaterial, PlaneGeometry } from 'three';
+import Text3D from "./Text3D";
+
+const geom = new PlaneGeometry(1, 1);
 
 function Art(props) {
 
-    function Box(props) {
-        const mesh = useRef(null)
-        const [hovered, setHover] = useState(false)
-        const [active, setActive] = useState(false)
-        useFrame((state, delta) => (mesh.current.rotation.x += delta))
+    function Button3D(props) {
+        const mesh = useRef(null);
+        const textMesh = useRef(null);
+        const mat = useRef();
+        const [hovered, setHover] = useState(false);
+        const [active, setActive] = useState(false);
+
         return (
+            <>
             <mesh
                 {...props}
                 ref={mesh}
-                scale={active ? 1.5 : 1}
-                onClick={(event) => setActive(!active)}
+                scale={1}
+                onClick={(event) => setActive(true)}
                 onPointerOver={(event) => setHover(true)}
                 onPointerOut={(event) => setHover(false)}>
-                <boxGeometry args={[1, 1, 1]} />
-                <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-            </mesh>
-        )
+                <boxGeometry args={[4, 1, 0.1]} />
+                <meshStandardMaterial color={hovered ? '#ffffff' : '#c0c0c0' } />
+                </mesh>
+                { /*
+                <mesh {...props} geometry={geom}>
+                    <meshBasicMaterial ref={mat} />
+                    {'A' && <Text3D size={5}>{'A'}</Text3D>}
+                </mesh>
+                */ }
+            </>
+        );
     }
 
     const Horse = (props) => {
         const mesh = useRef(null);
         const [active, setActive] = useState(false);
         const [hovered, setHover] = useState(false);
-        //useFrame((state, delta) => ( mesh.current.rotation.y += delta ));
         useFrame((state, delta) => {
             ((active) ? mesh.current.rotation.y += delta : mesh.current.rotation.y -= delta);
         });
@@ -58,8 +71,7 @@ function Art(props) {
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
                     <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
                     <Horse />
-                    {/*<Box position={[-1.2, 0, 0]} />*/}
-                    {/*<Box position={[1.2, 0, 0]} />*/}
+                    {<Button3D position={[-12.0, 0, 0]} /> }
                 </Canvas>
             </div>
         </div>
@@ -67,4 +79,3 @@ function Art(props) {
 }
 
 export default Art;
-
