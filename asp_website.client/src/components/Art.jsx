@@ -17,22 +17,22 @@ function Art(props) {
 
         return (
             <>
-            <mesh
-                {...props}
-                ref={mesh}
-                scale={1}
-                onClick={(event) => setActive(true)}
-                onPointerOver={(event) => setHover(true)}
-                onPointerOut={(event) => setHover(false)}>
-                <boxGeometry args={[4, 1, 0.1]} />
-                <meshStandardMaterial color={hovered ? '#ffffff' : '#c0c0c0' } />
+                <mesh
+                    {...props}
+                    ref={mesh}
+                    scale={1}
+                    onClick={(event) => setActive(true)}
+                    onPointerOver={(event) => setHover(true)}
+                    onPointerOut={(event) => setHover(false)}>
+                    <boxGeometry args={[4, 1, 0.1]} />
+                    <meshStandardMaterial color={hovered ? '#ffffff' : '#c0c0c0' } />
                 </mesh>
-                { /*
+                
                 <mesh {...props} geometry={geom}>
                     <meshBasicMaterial ref={mat} />
-                    {'A' && <Text3D size={5}>{'A'}</Text3D>}
+                    {/*'A' && <Text3D size={5}>{'A'}</Text3D>*/}
                 </mesh>
-                */ }
+                
             </>
         );
     }
@@ -64,14 +64,14 @@ function Art(props) {
     };
 
     return (
-        <div className="flex items-center px-3 py-1.5 border w-full h-full">
-            <div className="flex w-full h-96">
+        <div className="items-center border w-full h-screen">
+            <div className="flex w-full h-screen">
                 <Canvas>
                     <ambientLight intensity={Math.PI / 2} />
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
                     <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
                     <Horse />
-                    {<Button3D position={[-12.0, 0, 0]} /> }
+                    {<Button3D position={[-4.0, 0, 0]} /> }
                 </Canvas>
             </div>
         </div>
