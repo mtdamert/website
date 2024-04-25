@@ -18,13 +18,19 @@ function DaysSince() {
         setItems([ ...items.filter(item => item.id !== id) ]);
     }
 
+    const saveItems = () => {
+        // TODO: Save items
+        console.log("TODO: Save items to cookies? Or to database?");
+    }
+
     return (
-        <div className="items-center border w-screen h-screen">
+        <div className="border w-screen h-screen content-normal grid grid-cols-1">
             {
                 items.map(
                     item => (<DaysSinceItem name={item.name + item.id} isFinished={item.isFinished} id={item.id} deleteClick={deleteItem} key={item.key} /> )
                 )}
-            <button id="addItemButton" onClick={() => addItem(itemCounter) } className="text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Add Item</button>
+            <button id="addItemButton" onClick={() => addItem(itemCounter)} className="w-1/6 h-10 text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Add Item</button>
+            <button id="saveItemsButton" onClick={() => saveItems()} className="w-1/6 h-10 text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md justify-end">Save Items</button>
         </div>
         
     );

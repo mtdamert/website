@@ -4,11 +4,12 @@ import "react-datepicker/dist/react-datepicker.css";
 
 function DaysSinceItem({ name, isFinished, id, deleteClick }) {
     const itemColor = isFinished ? 'bg-rose-700' : 'bg-emerald-700';
+    const itemStyleMinusColor = " flex flex-wrap justify-between text-white w-4/5 h-2/6 mt-2 mb-2 text-xl rounded-md";
 
     const [startDate, setStartDate] = useState(new Date());
     const [text, setText] = useState(name);
     const [dateText, setDateText] = useState("NOW");
-    const [itemStyle, setItemStyle] = useState(itemColor + " flex flex-wrap justify-between text-white w-4/5 h-1/6 mt-2 mb-2 text-xl");
+    const [itemStyle, setItemStyle] = useState(itemColor + itemStyleMinusColor);
 
     const getTimeDifference = (date) =>
     {
@@ -22,8 +23,8 @@ function DaysSinceItem({ name, isFinished, id, deleteClick }) {
         }
     }
 
-    const setColorRed = () => { setItemStyle("bg-rose-700 flex flex-wrap justify-between text-white w-4/5 h-1/6 mt-2 mb-2 text-xl"); }
-    const setColorGreen = () => { setItemStyle("bg-emerald-700 flex flex-wrap justify-between text-white w-4/5 h-1/6 mt-2 mb-2 text-xl"); }
+    const setColorRed = () => { setItemStyle("bg-rose-700 " + itemStyleMinusColor); }
+    const setColorGreen = () => { setItemStyle("bg-emerald-700 " + itemStyleMinusColor); }
 
     return (
         <div
