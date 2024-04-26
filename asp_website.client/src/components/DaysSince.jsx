@@ -24,13 +24,13 @@ function DaysSince() {
     }
 
     return (
-        <div className="border w-screen h-screen content-normal grid grid-cols-1">
+        <div className="border w-screen h-screen content-normal grid justify-between grid-cols-4 grid-rows-6">
             {
                 items.map(
                     item => (<DaysSinceItem name={item.name + item.id} isFinished={item.isFinished} id={item.id} deleteClick={deleteItem} key={item.key} /> )
                 )}
-            <button id="addItemButton" onClick={() => addItem(itemCounter)} className="w-1/6 h-10 text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md">Add Item</button>
-            <button id="saveItemsButton" onClick={() => saveItems()} className="w-1/6 h-10 text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md justify-end">Save Items</button>
+            <button id="addItemButton" onClick={() => addItem(itemCounter)} className="w-1/6 h-10 col-span-3 text-blue-500 bg-[#c0c0c0] px-3 py-1 rounded-md">Add Item</button>
+            <button id="saveItemsButton" onClick={() => saveItems()} className="w-1/2 h-10 text-blue-500 bg-[#c0c0c0] px-3 py-1 rounded-md justify-end">Save Items</button>
         </div>
         
     );

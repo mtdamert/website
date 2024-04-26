@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 function DaysSinceItem({ name, isFinished, id, deleteClick }) {
     const itemColor = isFinished ? 'bg-rose-700' : 'bg-emerald-700';
-    const itemStyleMinusColor = " flex flex-wrap justify-between text-white w-4/5 h-2/6 mt-2 mb-2 text-xl rounded-md";
+    const itemStyleMinusColor = " col-span-4 justify-between text-white grid w-full mt-2 mb-2 text-xl rounded-md";
 
     const [startDate, setStartDate] = useState(new Date());
     const [text, setText] = useState(name);
@@ -31,14 +31,14 @@ function DaysSinceItem({ name, isFinished, id, deleteClick }) {
             className={itemStyle}
             id={id}
         >
-            <div onClick={() => deleteClick(id)} className="justify-end w-full">
+            <div onClick={() => deleteClick(id)} className="col-start-2 w-full">
                 X
             </div>
             <div className="items-center justify-center grow" contentEditable={true} onChange={(newText) => setText(newText)} suppressContentEditableWarning={true}>
                 {text}
             </div>
             <div className="basis-full h-0"></div>
-            <div className="items-end justify-end text-black grow">
+            <div className="items-end justify-end text-black grow col-start-2">
                 <DatePicker onChange={(date) => { setStartDate(date); setDateText(getTimeDifference(date)); }} placeholderText={dateText} />
             </div>
             <div className="w-1/2">
