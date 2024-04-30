@@ -31,18 +31,18 @@ function DaysSinceItem({ name, isFinished, id, deleteClick }) {
             className={itemStyle}
             id={id}
         >
-            <div onClick={() => deleteClick(id)} className="col-start-2 w-full">
+            <div onClick={() => deleteClick(id)} className="grid col-start-2 justify-end">
                 X
             </div>
             <div className="items-center justify-center grow" contentEditable={true} onChange={(newText) => setText(newText)} suppressContentEditableWarning={true}>
                 {text}
             </div>
             <div className="basis-full h-0"></div>
-            <div className="items-end justify-end grow col-start-2">
+            <div className="justify-center grow col-start-2">
                 <span>when: </span>
                 <span className="text-black font-bold"><DatePicker onChange={(date) => { setStartDate(date); setDateText(getTimeDifference(date)); }} placeholderText={dateText} /></span>
             </div>
-            <div className="w-24 h-10 inline-block">
+            <div className="w-24 h-10 col-start-2 inline-block">
                 <span id="red" className="border-2 h-10 w-10 bg-rose-700 inline-block" onClick={setColorRed}></span>
                 <span id="blue" className="border-2 h-10 w-10 bg-emerald-700 inline-block" onClick={setColorGreen}></span>
             </div>
