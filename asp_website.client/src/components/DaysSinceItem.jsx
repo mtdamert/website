@@ -2,7 +2,7 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function DaysSinceItem({ name, isFinished, id, deleteClick }) {
+function DaysSinceItem({ name, setName, isFinished, id, deleteClick }) {
     const itemColor = isFinished ? 'bg-rose-700' : 'bg-emerald-700';
     const itemStyleMinusColor = " col-span-4 justify-between text-white grid w-full mt-2 mb-2 text-xl rounded-md";
 
@@ -34,7 +34,7 @@ function DaysSinceItem({ name, isFinished, id, deleteClick }) {
             <div onClick={() => deleteClick(id)} className="grid col-start-2 justify-end">
                 X
             </div>
-            <div className="items-center justify-center grow" contentEditable={true} onChange={(newText) => setText(newText)} suppressContentEditableWarning={true}>
+            <div className="items-center justify-center grow" contentEditable={true} onChange={(newText) => { setText(newText); name = newText; setName(newText); console.log("name from child: " + newText); } } suppressContentEditableWarning={true}>
                 {text}
             </div>
             <div className="basis-full h-0"></div>
