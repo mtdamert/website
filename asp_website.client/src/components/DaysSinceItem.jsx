@@ -34,7 +34,7 @@ function DaysSinceItem({ name, setName, isFinished, id, deleteClick }) {
             <div onClick={() => deleteClick(id)} className="grid col-start-2 justify-end">
                 X
             </div>
-            <div className="items-center justify-center grow" contentEditable={true} onChange={(newText) => { setText(newText); name = newText; setName(newText); console.log("name from child: " + newText); } } suppressContentEditableWarning={true}>
+            <div className="items-center justify-center grow" contentEditable={true} onInput={e => { console.log('Text inside div', e.currentTarget.textContent); setText(e.currentTarget.textContent); setName(e.currentTarget.textContent); } } suppressContentEditableWarning={true}>
                 {text}
             </div>
             <div className="basis-full h-0"></div>
