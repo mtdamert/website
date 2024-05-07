@@ -11,12 +11,34 @@ function DaysSince() {
             ...items,
             { name: name, setName: setName, isFinished: false, id: counter, key: counter }
         ]);
+    }
 
-        setItemCounter(counter + 1);
+    const addItemWithInfo = (counter, itemName, isItemFinished) => {
+        setItems([
+            ...items,
+            { name: itemName, setName: setName, isFinished: isItemFinished, id: counter, key: counter }
+        ]);
     }
 
     const deleteItem = (id) => {
         setItems([ ...items.filter(item => item.id !== id) ]);
+    }
+
+    const loadItems = async () => {
+        const response = await fetch('dayssinceevents');
+        const data = await response.json();
+
+        console.log("loadItems data: " + data);
+
+        data.map(
+            item => {
+                addItemWithInfo(itemCounter, item.eventName, item.isFinished);
+                setItemCounter(itemCounter + 1);
+                return itemCounter;
+            }
+        );
+
+        return response;
     }
 
     const saveItems = (items) => {
@@ -34,7 +56,7 @@ function DaysSince() {
                         <DaysSinceItem name={item.name + item.id} setName={setName} isFinished={item.isFinished} id={item.id} deleteClick={deleteItem} key={item.key} />
                             )
                 )}
-            <button id="addItemButton" onClick={() => addItem(itemCounter)} className="w-1/6 h-10 col-span-3 text-blue-500 font-bold bg-[#c0c0c0] px-3 py-1 rounded-md">Add Item</button>
+            <button id="addItemButton" onClick={() => { addItem(itemCounter); setItemCounter(itemCounter + 1); }} className="w-1/6 h-10 col-span-3 text-blue-500 font-bold bg-[#c0c0c0] px-3 py-1 rounded-md">Add Item</button>
             <button id="saveItemsButton" onClick={() => saveItems(items)} className="w-1/2 h-10 text-blue-500 font-bold bg-[#c0c0c0] px-3 py-1 rounded-md">Save Items</button>
         </div>
         

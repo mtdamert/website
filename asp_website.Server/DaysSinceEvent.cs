@@ -6,6 +6,6 @@
 
         public DateTime? EventWhen { get; set; }
 
-        public string? ItemColor { get; set; }
+        public bool IsFinished { get; set; }
     }
 }
