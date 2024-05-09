@@ -65,7 +65,9 @@ asp_website.Server/.config/*
 # deploy profiles
 /asp_website.Server/Properties/PublishProfiles/*
 
+# save files
 asp_website.Server/TetrisHighScores.txt
+asp_website.Server/DaysSinceEvents.txt
 
 # all backup files
 *.bak
