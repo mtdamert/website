@@ -18,9 +18,12 @@ namespace asp_website.Server.Controllers
         {
             // Load high scores from file 
             string json = System.IO.File.ReadAllText(highScoresPath);
-            TetrisHighScores[]? items = JsonSerializer.Deserialize<TetrisHighScores[]>(json);
-            if (items != null && items.Length > 0)
-                highScores = items;
+            if (!string.IsNullOrEmpty(json))
+            {
+                TetrisHighScores[]? items = JsonSerializer.Deserialize<TetrisHighScores[]>(json);
+                if (items != null && items.Length > 0)
+                    highScores = items;
+            }
         }
 
         [HttpGet(Name = "GetTetrisHighScores")]
