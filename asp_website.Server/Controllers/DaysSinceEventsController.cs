@@ -5,18 +5,21 @@ namespace asp_website.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class DaysSinceEventController : ControllerBase
+    public class DaysSinceEventsController : ControllerBase
     {
         DaysSinceEvent[]? daysSinceEvents;
         const string daysSinceEventsPath = "DaysSinceEvents.txt";
 
-        public DaysSinceEventController()
+        public DaysSinceEventsController()
         {
             // Load days since events from file 
             string json = System.IO.File.ReadAllText(daysSinceEventsPath);
-            DaysSinceEvent[]? items = JsonSerializer.Deserialize<DaysSinceEvent[]>(json);
-            if (items != null && items.Length > 0)
-                daysSinceEvents = items;
+            if (!string.IsNullOrEmpty(json))
+            {
+                DaysSinceEvent[]? items = JsonSerializer.Deserialize<DaysSinceEvent[]>(json);
+                if (items != null && items.Length > 0)
+                    daysSinceEvents = items;
+            }
         }
 
         [HttpGet(Name = "GetDaysSinceEvents")]
