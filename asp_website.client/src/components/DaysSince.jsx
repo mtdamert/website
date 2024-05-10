@@ -41,12 +41,21 @@ function DaysSince() {
         return response;
     }
 
-    const saveItems = (items) => {
-        // TODO: Save items to database
-        items.map(
-            item => (console.log(name + ", is finished: " + item.isFinished))
-            );
+    const saveItems = async (items) => {
+        console.log("trying to save data to server: " + JSON.stringify(items));
+
+        const fetchSendDaysSinceEvents = fetch('dayssinceevents', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(items)
+        })
+
+        return fetchSendDaysSinceEvents;
     }
+
 
     return (
         <div className="border w-screen h-screen content-normal grid justify-between grid-cols-4 grid-rows-6">

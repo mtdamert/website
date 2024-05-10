@@ -47,6 +47,10 @@ export default defineConfig({
                 target,
                 secure: false
             },
+            '^/dayssinceevents': {
+                target,
+                secure: false
+            },
             '^/testdata': {
                 target,
                 secure: false

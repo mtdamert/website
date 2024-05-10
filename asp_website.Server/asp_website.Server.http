@@ -5,6 +5,11 @@ Accept: application/json
 
 ###
 
+GET {{asp_website.Server_HostAddress}}/dayssinceevents/
+Accept: application/json
+
+###
+
 GET {{asp_website.Server_HostAddress}}/testdata/
 Accept: application/json
 
