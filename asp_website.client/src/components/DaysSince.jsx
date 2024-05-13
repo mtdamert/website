@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DaysSinceItem from "./DaysSinceItem";
 
 function DaysSince() {
@@ -11,6 +11,8 @@ function DaysSince() {
             ...items,
             { name: name, setName: setName, isFinished: false, id: counter, key: counter }
         ]);
+
+        console.log("Added a new item. Name: " + name + ", id: " + counter);
     }
 
     const addItemWithInfo = (counter, itemName, isItemFinished) => {
@@ -18,6 +20,8 @@ function DaysSince() {
             ...items,
             { name: itemName, setName: setName, isFinished: isItemFinished, id: counter, key: counter }
         ]);
+
+        console.log("Added a new item. Name: " + itemName + ", id: " + counter);
     }
 
     const deleteItem = (id) => {
@@ -40,6 +44,10 @@ function DaysSince() {
 
         return response;
     }
+
+    useEffect(() => {
+        loadItems();
+    }, []);
 
     const saveItems = async (items) => {
         console.log("trying to save data to server: " + JSON.stringify(items));
