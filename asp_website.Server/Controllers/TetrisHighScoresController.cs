@@ -11,7 +11,7 @@ namespace asp_website.Server.Controllers
         const int NUM_HIGH_SCORES = 5;
 
         int revisionNumber;
-        TetrisHighScores[]? highScores;
+        HighScores[]? highScores;
         const string highScoresPath = "TetrisHighScores.txt";
 
         public TetrisHighScoresController()
@@ -20,17 +20,17 @@ namespace asp_website.Server.Controllers
             string json = System.IO.File.ReadAllText(highScoresPath);
             if (!string.IsNullOrEmpty(json))
             {
-                TetrisHighScores[]? items = JsonSerializer.Deserialize<TetrisHighScores[]>(json);
+                HighScores[]? items = JsonSerializer.Deserialize<HighScores[]>(json);
                 if (items != null && items.Length > 0)
                     highScores = items;
             }
         }
 
         [HttpGet(Name = "GetTetrisHighScores")]
-        public TetrisHighScores[] Get()
+        public HighScores[] Get()
         {
             if (highScores == null) {
-                highScores = new TetrisHighScores[NUM_HIGH_SCORES];
+                highScores = new HighScores[NUM_HIGH_SCORES];
                 for (int i=0; i< NUM_HIGH_SCORES; i++) {
                     highScores[i].HighScore = 0;
                     highScores[i].ScorerName = "";
@@ -42,7 +42,7 @@ namespace asp_website.Server.Controllers
         }
 
         [HttpPost(Name = "SetTetrisHighScores")]
-        public void Post([FromBody] TetrisHighScores[] tetrisHighScores)
+        public void Post([FromBody] HighScores[] tetrisHighScores)
         {
             // Save data to a file
             highScores = tetrisHighScores;

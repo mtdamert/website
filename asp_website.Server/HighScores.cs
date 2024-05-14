@@ -1,6 +1,6 @@
 ﻿namespace asp_website.Server
 {
-    public class TetrisHighScores
+    public class HighScores
     {
         public int HighScore { get; set; }
 
