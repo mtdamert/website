@@ -16,13 +16,16 @@ namespace asp_website.Server.Controllers
 
         public TetrisHighScoresController()
         {
-            // Load high scores from file 
-            string json = System.IO.File.ReadAllText(highScoresPath);
-            if (!string.IsNullOrEmpty(json))
+            if (System.IO.File.Exists(highScoresPath))
             {
-                HighScores[]? items = JsonSerializer.Deserialize<HighScores[]>(json);
-                if (items != null && items.Length > 0)
-                    highScores = items;
+                // Load high scores from file 
+                string json = System.IO.File.ReadAllText(highScoresPath);
+                if (!string.IsNullOrEmpty(json))
+                {
+                    HighScores[]? items = JsonSerializer.Deserialize<HighScores[]>(json);
+                    if (items != null && items.Length > 0)
+                        highScores = items;
+                }
             }
         }
 
