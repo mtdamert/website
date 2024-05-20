@@ -2260,12 +2260,6 @@ export default function Tetris() {
                     <div id="nextPieceHeader" className="absolute top-[200px] left-[440px] w-[152px] center font-normal text-2xl">Next Piece:</div>
                     <div id="nextPieceBox" className="absolute top-[230px] left-[440px] border-[1px] border-black w-[152px] h-[120px] bg-[#c0c0c0]"></div>
                     <div id="highScoreHeader" className="absolute top-[365px] left-[440px] font-semibold text-lg underline">High Scores:</div>
-
-                    <button id="winterThemeButton" onClick={setThemeToWinter} className="absolute top-[500px] left-[440px] text-[#0a9ef0] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Winter Theme</button>
-                    <button id="neutralsThemeButton" onClick={setThemeToNeutrals} className="absolute top-[540px] left-[440px] text-[#de8a58] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Neutrals Theme</button>
-                    <button id="purpleMagentaThemeButton" onClick={setThemeToPurpleMagenta} className="absolute top-[580px] left-[440px] text-[#bc00dd] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Purple to Magenta Theme</button>
-                    <button id="blueRetroThemeButton" onClick={setThemeToBlueRetro} className="absolute top-[620px] left-[440px] text-[#2f899e] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Retro Blue Theme</button>
-                    <button id="summerThemeButton" onClick={setThemeToSummer} className="absolute top-[660px] left-[440px] text-[#e60b09] bg-[#c0c0c0] px-3 py-1 rounded-md hidden">Summer Theme</button>
                 </div>
 
             </div>
