@@ -32,9 +32,12 @@ namespace asp_website.Server.Controllers
         [HttpGet(Name = "GetTetrisHighScores")]
         public HighScores[] Get()
         {
-            if (highScores == null) {
+            if (highScores == null)
+            {
                 highScores = new HighScores[NUM_HIGH_SCORES];
-                for (int i=0; i< NUM_HIGH_SCORES; i++) {
+                for (int i=0; i< NUM_HIGH_SCORES; i++)
+                {
+                    highScores[i] = new HighScores();
                     highScores[i].HighScore = 0;
                     highScores[i].ScorerName = "";
                     highScores[i].IsCurrentScore = false;
