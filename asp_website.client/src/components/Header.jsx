@@ -1,10 +1,10 @@
-//import Link from './Link';
 import { Outlet, Link } from "react-router-dom";
 
 function Header() {
     const links = [
         { label: 'Uninteresting Tests', path: '/test' },
         { label: 'Tetris', path: '/tetris' },
+        { label: 'Arkanoid', path: '/arkanoid' },
         { label: 'Retirement Calculator', path: '/retirement-calc' },
         { label: 'Art', path: '/art' },
         { label: 'Days Since App', path: 'days-since'},
