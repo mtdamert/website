@@ -51,6 +51,7 @@ const DIRECTION_UP_LEFT: number = 0;
 const DIRECTION_UP_RIGHT: number = 1;
 const DIRECTION_DOWN_LEFT: number = 2;
 const DIRECTION_DOWN_RIGHT: number = 3;
+let ballDirection: number = 0;
 
 const STATE_GAME_RUNNING: number = 0;
 const STATE_GAME_PAUSED: number = 1;
@@ -317,6 +318,7 @@ const removePiece = (y: number): void => {
             if ((blockImages[i].firstChild as HTMLImageElement).style.top === ((y - 2) * PIECE_HEIGHT + "px")) {
                 (blockImages[i].firstChild as HTMLImageElement).style.visibility = 'hidden';
             }
+    }
 
     // Update collision grid
     for (let x: number = 0; x < BOARD_WIDTH; x++) {
@@ -486,7 +488,7 @@ const movePaddleLeft = (): void => {
 }
 
 const moveBall = (direction: number): void => {
-    if (direction === DIRECTION_RIGHT) {
+    if (direction === DIRECTION_UP_RIGHT) {
         // Check whether the place we want to move the piece to is free
         let failed: boolean = false;
 
@@ -503,7 +505,7 @@ const moveBall = (direction: number): void => {
                 moveCurrentPieceRight();
     }
 
-    if (direction === DIRECTION_LEFT) {
+    if (direction === DIRECTION_UP_LEFT) {
         // Check whether the place we want to move the piece to is free
         let failed: boolean = false;
 
@@ -520,7 +522,7 @@ const moveBall = (direction: number): void => {
                 moveCurrentPieceLeft();
     }
 
-    if (direction === DIRECTION_DOWN) {
+    if (direction === DIRECTION_DOWN_RIGHT) {
         moveCurrentPieceDown();
     }
 }
@@ -658,7 +660,7 @@ const incrementScore = (amount: number): void => {
 
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
     if (scoreBox !== null) {
-        scoreBox.innerHTML = 'Score: ' + currentScore + "; Lines: " + totalNumLines;
+        scoreBox.innerHTML = 'Score: ' + currentScore + "; Blocks Destroyed: " + numBlocksDestroyed;
     }
 
 }
@@ -668,10 +670,6 @@ const gameOver = (): void => {
 
     if (gameOverVarsSet)
         return;
-
-    // TODO: Cookies
-    //     console.log("Setting cookie: " + currentScore);
-    //     setCookie('score', currentScore, 10);
 
     if (currentHighScores.some((highScore) => { return highScore.isCurrentScore === true })) {
         let enterName: (HTMLElement | null) = document.getElementById("enterName");
@@ -728,8 +726,8 @@ export default function Arkanoid() {
         }
     }
 
-      // the playing area is 22 * 10, except that the top 2 rows are hidden
-	  //  i.e. 320 x 704
+      // the playing area is 20 * 20
+	  //  i.e. 640 x 640
     return (
         <div>
             <span className="italic absolute top-[140px] left-[100px]">Press up arrow to rotate.<br/>Press ESC to pause.</span>
