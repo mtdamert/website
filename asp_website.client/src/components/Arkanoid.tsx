@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ark_block_base from './ark_block_base.png';
+import ark_paddle from './ark_paddle.png';
+import ark_ball from './ark_ball.png';
 
 
 class Block {
@@ -52,6 +54,13 @@ const DIRECTION_UP_RIGHT: number = 1;
 const DIRECTION_DOWN_LEFT: number = 2;
 const DIRECTION_DOWN_RIGHT: number = 3;
 let ballDirection: number = 0;
+
+const DIRECTION_LEFT: number = 0;
+const DIRECTION_RIGHT: number = 0;
+let paddleXPos: number = 200;
+const paddleYPos: number = 200;
+let paddleDiv: (HTMLDivElement | null) = null;
+let paddleImage: (HTMLImageElement | null) = null;
 
 const STATE_GAME_RUNNING: number = 0;
 const STATE_GAME_PAUSED: number = 1;
@@ -179,6 +188,21 @@ const startNewGame = (): void => {
         while (playingArea.hasChildNodes()) {
             playingArea.removeChild(playingArea.firstChild);
         }
+    }
+
+    // create the paddle
+    paddleDiv = document.createElement('div');
+    paddleDiv.style.visibility = 'visible';
+    paddleImage = document.createElement('img');
+    paddleImage.src = ark_paddle;
+    paddleImage.style.position = 'absolute';
+    paddleImage.style.top = '590px';
+    paddleImage.style.left = '280px';
+    paddleDiv.appendChild(paddleImage);
+    // Add the paddle to the onscreen DIV
+    if (playingArea !== null) {
+        console.log("found the playing area");
+        playingArea.appendChild(paddleDiv);
     }
 
     // create a new, empty board
