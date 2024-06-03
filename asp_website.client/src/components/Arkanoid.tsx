@@ -44,8 +44,8 @@ let gameState: number;
 let highScoresLoaded = false;
 let currentUserName: string = "(current)";
 
-const BOARD_WIDTH: number = 22;
-const BOARD_HEIGHT: number = 22;
+const BOARD_WIDTH: number = 640;
+const BOARD_HEIGHT: number = 640;
 const PIECE_WIDTH: number = 64;
 const PIECE_HEIGHT: number = 32;
 
@@ -56,9 +56,9 @@ const DIRECTION_DOWN_RIGHT: number = 3;
 let ballDirection: number = 0;
 
 const DIRECTION_LEFT: number = 0;
-const DIRECTION_RIGHT: number = 0;
-let paddleXPos: number = 200;
-const paddleYPos: number = 200;
+const DIRECTION_RIGHT: number = 1;
+let paddleXPos: number = 280;
+const paddleYPos: number = 590;
 let paddleDiv: (HTMLDivElement | null) = null;
 let paddleImage: (HTMLImageElement | null) = null;
 
@@ -131,7 +131,19 @@ const saveHighScores = async (): Promise<Response> => {
 }
 
 const movePaddle = (direction) => {
-    // todo
+    if (direction === DIRECTION_LEFT) {
+        paddleXPos -= 5;
+        if (paddleXPos < 0) {
+            paddleXPos = 0;
+        }
+        paddleImage.style.left = paddleXPos + 'px';
+    } else if (direction === DIRECTION_RIGHT) {
+        paddleXPos += 5;
+        if (paddleXPos > (BOARD_WIDTH - paddleImage.width)) {
+            paddleXPos = (BOARD_WIDTH - paddleImage.width);
+        }
+        paddleImage.style.left = paddleXPos + 'px';
+    }
 }
 
 const startNewGame = (): void => {
@@ -196,8 +208,8 @@ const startNewGame = (): void => {
     paddleImage = document.createElement('img');
     paddleImage.src = ark_paddle;
     paddleImage.style.position = 'absolute';
-    paddleImage.style.top = '590px';
-    paddleImage.style.left = '280px';
+    paddleImage.style.top = paddleYPos + 'px';
+    paddleImage.style.left = paddleXPos + 'px';
     paddleDiv.appendChild(paddleImage);
     // Add the paddle to the onscreen DIV
     if (playingArea !== null) {
@@ -471,46 +483,6 @@ const didBlockCollideWithBlocksAbove = (): boolean => {
     return false;
 }
 
-const movePaddleRight = (): void => {
-    // Update internal playing grid array
-    for (let i: number = 0; i < 4; i++) {
-        removeFromPlayingGrid(currentPiece.blocks[i].x, currentPiece.blocks[i].y, currentPiece.blocks[i]);
-
-        currentPiece.blocks[i].x = currentPiece.blocks[i].x + 1;
-    }
-    for (let i: number = 0; i < 4; i++) {
-        addToPlayingGrid(currentPiece.blocks[i]);
-    }
-
-    // Update graphics
-    for (let i: number = 0; i < 4; i++) {
-        currentPiece.blocks[i].image.style.left = PIECE_WIDTH * currentPiece.blocks[i].x + "px";
-        currentPiece.blocks[i].image.style.top = PIECE_HEIGHT * currentPiece.blocks[i].y  - (2 * PIECE_HEIGHT) + "px";
-    }
-
-    currentPiece.x += 1;
-}
-
-const movePaddleLeft = (): void => {
-    // Update internal playing grid array
-    for (let i: number = 0; i < 4; i++) {
-        removeFromPlayingGrid(currentPiece.blocks[i].x, currentPiece.blocks[i].y, currentPiece.blocks[i]);
-
-        currentPiece.blocks[i].x = currentPiece.blocks[i].x - 1;
-    }
-    for (let i: number = 0; i < 4; i++) {
-        addToPlayingGrid(currentPiece.blocks[i]);
-    }
-
-    // Update graphics
-    for (let i: number = 0; i < 4; i++) {
-        currentPiece.blocks[i].image.style.left = PIECE_WIDTH * currentPiece.blocks[i].x + "px";
-        currentPiece.blocks[i].image.style.top = PIECE_HEIGHT * currentPiece.blocks[i].y - (2 * PIECE_HEIGHT) + "px";
-    }
-
-    currentPiece.x -= 1;
-}
-
 const moveBall = (direction: number): void => {
     if (direction === DIRECTION_UP_RIGHT) {
         // Check whether the place we want to move the piece to is free
@@ -750,18 +722,17 @@ export default function Arkanoid() {
         }
     }
 
-      // the playing area is 20 * 20
-	  //  i.e. 640 x 640
+      // the playing area is 640 x 640 (BOARD_WIDTH x BOARD_HEIGHT)
     return (
         <div>
             <span className="italic absolute top-[140px] left-[100px]">Press up arrow to rotate.<br/>Press ESC to pause.</span>
 
             <div id="fullArea">
-                <div id="playingArea" className="absolute top-[200px] left-[80px] border-t-[1px] w-[640px] h-[640px] bg-[#c0c0c0]" />
-                    <div id="pausedBox" className="absolute top-[500px] left-[80px] border-t-[1px] border-black w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]">
+                <div id="playingArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[${BOARD_WIDTH}px] h-[${BOARD_HEIGHT}px] bg-[#c0c0c0]`} />
+                    <div id="pausedBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
                         PAUSED
                     </div>
-                    <div id="enterName" className="absolute top-[400px] left-[80px] w-[320px] border-black bg-[#C0C0C0] text-center text-lg z-10">
+                    <div id="enterName" className={`absolute top-[400px] left-[80px] w-[${BOARD_WIDTH}px] border-black bg-[#C0C0C0] text-center text-lg z-10`}>
                         <div>New high score! Enter your name:</div>
                         <div>
                             <form onSubmit={handleNameSubmit}>
@@ -774,11 +745,11 @@ export default function Arkanoid() {
                     <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[147px] text-xl center invisible z-10 px-3 py-1 text-[#256bb4] bg-[#c0c0c0]">
                         Click to Play Again
                     </button>
-                        <div id="scoreBox" className="absolute top-[840px] left-[80px] border-t-[1px] border-black w-[640px] h-[24px] text-base text-white bg-[#007fff]">
+                        <div id="scoreBox" className={`absolute top-[840px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[24px] text-base text-white bg-[#007fff]`}>
                         Score: 0; Lines: 0
                     </div>
 
-                <div id="playingAreaScreen" className="absolute top-[200px] left-[80px] border-t-[1px] border-black w-[640px] h-[640px] opacity-80 bg-[#080808]"> </div>
+                <div id="playingAreaScreen" className={`absolute top-[200px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[${BOARD_HEIGHT}px] opacity-80 bg-[#080808]`}> </div>
 
                 <div id="rightPanel">
                     <div id="highScoreHeader" className="absolute top-[365px] left-[760px] font-semibold text-lg underline">High Scores:</div>
