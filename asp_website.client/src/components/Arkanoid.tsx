@@ -33,6 +33,7 @@ class HighScore {
 
 // Initial speeds
 let ballSpeed: number = 10;
+let paddleSpeed: number = 10;
 let lastFrameTime: number;
 let currentScore: number = 0;
 let numBlocksDestroyed: number = 0;
@@ -133,16 +134,16 @@ const saveHighScores = async (): Promise<Response> => {
 }
 
 const movePaddle = (direction) => {
-    let paddleSpeed: number = (new Date().getTime() - lastFrameTime) / 10;
+    let movePaddleDistance: number = (new Date().getTime() - lastFrameTime) / paddleSpeed;
 
     if (direction === DIRECTION_LEFT) {
-        paddleXPos -= paddleSpeed;
+        paddleXPos -= movePaddleDistance;
         if (paddleXPos < 0) {
             paddleXPos = 0;
         }
         paddleImage.style.left = paddleXPos + 'px';
     } else if (direction === DIRECTION_RIGHT) {
-        paddleXPos += paddleSpeed;
+        paddleXPos += movePaddleDistance;
         if (paddleXPos > (BOARD_WIDTH - paddleImage.width)) {
             paddleXPos = (BOARD_WIDTH - paddleImage.width);
         }
