@@ -36,6 +36,7 @@ let ballSpeed: number = 10;
 let paddleSpeed: number = 10;
 let lastFrameTime: number;
 let currentScore: number = 0;
+let currentLevel: number = 1;
 let numBlocksDestroyed: number = 0;
 let currentHighScores: HighScore[];
 
@@ -153,6 +154,7 @@ const movePaddle = (direction) => {
 
 const startNewGame = (): void => {
     currentScore = 0;
+    currentLevel = 1;
     numBlocksDestroyed = 0;
     ballSpeed = 10;
 
@@ -183,7 +185,7 @@ const startNewGame = (): void => {
     if (scoreBox !== null) {
         scoreBox.style.color = "white";
         scoreBox.style.backgroundColor = "rgb(68, 148, 229)";
-        scoreBox.innerHTML = 'Score: ' + currentScore + "; Blocks Destroyed: " + numBlocksDestroyed;
+        scoreBox.innerHTML = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
     }
 
     loadHighScores();
@@ -661,7 +663,7 @@ const incrementScore = (amount: number): void => {
 
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
     if (scoreBox !== null) {
-        scoreBox.innerHTML = 'Score: ' + currentScore + "; Blocks Destroyed: " + numBlocksDestroyed;
+        scoreBox.innerHTML = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
     }
 
 }
