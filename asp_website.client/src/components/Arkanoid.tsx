@@ -32,15 +32,14 @@ class HighScore {
 
 
 // Initial speeds
-let ballSpeed: number = 10;
-let paddleSpeed: number = 10;
-let lastFrameTime: number;
+let paddleSpeed: number = 100;
+let lastFrameTime: number = new Date().getTime();
 let currentScore: number = 0;
 let currentLevel: number = 1;
 let numBlocksDestroyed: number = 0;
 let currentHighScores: HighScore[];
 
-let playingGrid: Array<Array<(Block | null)>>; // array
+let playingGrid: Array<Array<(Block | null)>>;
 let isGameOver: boolean = false;
 let gameOverVarsSet: boolean = false;
 let gameState: number;
@@ -52,11 +51,12 @@ const BOARD_HEIGHT: number = 640;
 const PIECE_WIDTH: number = 64;
 const PIECE_HEIGHT: number = 32;
 
-const DIRECTION_UP_LEFT: number = 0;
-const DIRECTION_UP_RIGHT: number = 1;
-const DIRECTION_DOWN_LEFT: number = 2;
-const DIRECTION_DOWN_RIGHT: number = 3;
-let ballDirection: number = 0;
+let ballXPos: number = 280;
+let ballYPos: number = 300;
+let ballXVelocity: number = 60;
+let ballYVelocity: number = 60;
+let ballDiv: (HTMLDivElement | null) = null;
+let ballImage: (HTMLImageElement | null) = null;
 
 const DIRECTION_LEFT: number = 0;
 const DIRECTION_RIGHT: number = 1;
@@ -135,7 +135,7 @@ const saveHighScores = async (): Promise<Response> => {
 }
 
 const movePaddle = (direction) => {
-    let movePaddleDistance: number = (new Date().getTime() - lastFrameTime) / paddleSpeed;
+    let movePaddleDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * paddleSpeed;
 
     if (direction === DIRECTION_LEFT) {
         paddleXPos -= movePaddleDistance;
@@ -156,7 +156,6 @@ const startNewGame = (): void => {
     currentScore = 0;
     currentLevel = 1;
     numBlocksDestroyed = 0;
-    ballSpeed = 10;
 
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     if (playingAreaScreen !== null) {
@@ -172,7 +171,7 @@ const startNewGame = (): void => {
     if (enterName !== null) {
         enterName.style.visibility = 'hidden';
     }
-    
+
     let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
     if (pausedBox !== null) {
         pausedBox.style.visibility = 'hidden';
@@ -198,7 +197,7 @@ const startNewGame = (): void => {
             highScoreDiv.style.color = "rgb(0,0,0)";
         }
     }
-    
+
     isGameOver = false;
 
     // Clear out the playing area
@@ -220,8 +219,20 @@ const startNewGame = (): void => {
     paddleDiv.appendChild(paddleImage);
     // Add the paddle to the onscreen DIV
     if (playingArea !== null) {
-        console.log("found the playing area");
         playingArea.appendChild(paddleDiv);
+    }
+
+    // Create the ball
+    ballDiv = document.createElement('div');
+    ballDiv.style.visibility = 'visible';
+    ballImage = document.createElement('img');
+    ballImage.src = ark_ball;
+    ballImage.style.position = 'absolute';
+    ballImage.style.top = ballYPos + 'px';
+    ballImage.style.left = ballXPos + 'px';
+    ballDiv.appendChild(ballImage);
+    if (playingArea !== null) {
+        playingArea.appendChild(ballDiv);
     }
 
     // create a new, empty board
@@ -490,44 +501,76 @@ const didBlockCollideWithBlocksAbove = (): boolean => {
     return false;
 }
 
-const moveBall = (direction: number): void => {
-    if (direction === DIRECTION_UP_RIGHT) {
+const moveBall = (): void => {
+    let moveBallXDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballXVelocity;
+    let moveBallYDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballYVelocity;
+
+    // TODO: First go through a series of IF statements to check for collisions with blocks and the paddle
+    ballXPos += moveBallXDistance;
+    ballYPos += moveBallYDistance;
+
+    console.log("ball x: " + ballXPos);
+    console.log("ball y: " + ballYPos);
+
+    //console.log("last frame time: " + lastFrameTime);
+    //console.log("ball x move: " + moveBallXDistance);
+    //console.log("ball y move: " + moveBallYDistance);
+
+
+    // Handle bounces against walls
+    if (ballXPos < 0) {
+        ballXPos = -ballXPos;
+        ballXVelocity = -ballXVelocity;
+    }
+    if (ballYPos < 0) {
+        ballYPos = -ballYPos;
+        ballYVelocity = -ballYVelocity;
+    }
+    if (ballXPos > (BOARD_WIDTH - ballImage.width)) {
+        ballXPos = (BOARD_WIDTH - ballImage.width) - (ballXPos - (BOARD_WIDTH - ballImage.width));
+        ballXVelocity = -ballXVelocity;
+    }
+    if (ballYPos > (BOARD_HEIGHT - ballImage.height)) {
+        ballYPos = (BOARD_HEIGHT - ballImage.height) - (ballYPos - (BOARD_HEIGHT - ballImage.height));
+        ballYVelocity = -ballYVelocity;
+    }
+
+    if (ballYVelocity >= 0 && ballXVelocity >= 0) { // up & right
         // Check whether the place we want to move the piece to is free
         let failed: boolean = false;
 
         // Check for wall collisions
         for (let i: number = 0; i < 4; i++) {
-            if ((currentPiece.blocks[i].x + 1) >= BOARD_WIDTH) {
-                failed = true;
-                break;
-            }
+        //    if ((currentPiece.blocks[i].x + 1) >= BOARD_WIDTH) {
+        //        failed = true;
+        //        break;
+        //    }
         }
 
-        if (failed === false)
-            if (doesPieceCollideWithBlocksOnRight() === false)
-                moveCurrentPieceRight();
+    //    if (failed === false)
+    //        if (doesPieceCollideWithBlocksOnRight() === false)
+    //            moveCurrentPieceRight();
     }
 
-    if (direction === DIRECTION_UP_LEFT) {
+    if (ballYVelocity >= 0 && ballXVelocity <= 0) { // up & left
         // Check whether the place we want to move the piece to is free
         let failed: boolean = false;
 
         // Check for wall collisions
         for (let i: number = 0; i < 4; i++) {
-            if (currentPiece.blocks[i].x <= 0) {
-                failed = true;
-                break;
-            }
+        //    if (currentPiece.blocks[i].x <= 0) {
+        //        failed = true;
+        //        break;
+        //    }
         }
 
-        if (failed === false)
-            if (doesPieceCollideWithBlocksOnLeft() === false)
-                moveCurrentPieceLeft();
+    //    if (failed === false)
+    //        if (doesPieceCollideWithBlocksOnLeft() === false)
+    //            moveCurrentPieceLeft();
     }
 
-    if (direction === DIRECTION_DOWN_RIGHT) {
-        moveCurrentPieceDown();
-    }
+    ballImage.style.left = ballXPos + 'px';
+    ballImage.style.top = ballYPos + 'px';
 }
 
 const redrawHighScores = (): void => {
