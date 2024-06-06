@@ -506,34 +506,69 @@ const moveBall = (): void => {
     let moveBallYDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballYVelocity;
 
     // TODO: First go through a series of IF statements to check for collisions with blocks and the paddle
+    let oldBallXPos = ballXPos;
+    let oldBallYPos = ballYPos;
     ballXPos += moveBallXDistance;
     ballYPos += moveBallYDistance;
 
-    console.log("ball x: " + ballXPos);
-    console.log("ball y: " + ballYPos);
+    //console.log("ball x: " + ballXPos);
+    //console.log("ball y: " + ballYPos);
 
     //console.log("last frame time: " + lastFrameTime);
     //console.log("ball x move: " + moveBallXDistance);
     //console.log("ball y move: " + moveBallYDistance);
 
+    let changedXDirection: boolean = false;
+    let changedYDirection: boolean = false;
 
     // Handle bounces against walls
     if (ballXPos < 0) {
         ballXPos = -ballXPos;
         ballXVelocity = -ballXVelocity;
+        changedXDirection = true;
     }
     if (ballYPos < 0) {
         ballYPos = -ballYPos;
         ballYVelocity = -ballYVelocity;
+        changedYDirection = true;
     }
     if (ballXPos > (BOARD_WIDTH - ballImage.width)) {
         ballXPos = (BOARD_WIDTH - ballImage.width) - (ballXPos - (BOARD_WIDTH - ballImage.width));
         ballXVelocity = -ballXVelocity;
+        changedXDirection = true;
     }
     if (ballYPos > (BOARD_HEIGHT - ballImage.height)) {
         ballYPos = (BOARD_HEIGHT - ballImage.height) - (ballYPos - (BOARD_HEIGHT - ballImage.height));
         ballYVelocity = -ballYVelocity;
+        changedYDirection = true;
     }
+
+    // Handle bounces against the paddle
+    // we assume the paddle is a static line across its top and check whether the ball's change in position intersected with the ball
+
+    if (oldBallYPos < paddleYPos && ballYPos >= paddleYPos) {
+        if (!changedYDirection) {
+            let initialBallY: number = oldBallYPos + ballImage.height;
+            let finalBallY: number = ballYPos + ballImage.height;
+            let collisionTime: number = (paddleYPos - initialBallY) / (finalBallY - initialBallY); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
+
+            // Figure out what the ball's X pos was when it intersected with the top surface of the paddle
+            let ballXAtCollisionTime: number = ((ballXPos - oldBallXPos) * collisionTime) + ballXPos;
+
+            if (ballXAtCollisionTime < (paddleXPos + paddleImage.width) && (ballXAtCollisionTime + ballImage.width) > paddleXPos) {
+                console.log("COLLISION!");
+                console.log("ball y: " + ballYPos);
+                console.log("ball height: " + ballImage.height);
+                console.log("paddle y: " + paddleYPos);
+                console.log("new ball y: " + (2 * ((ballYPos + ballImage.height) - paddleYPos)));
+                ballYPos = ballYPos - (2 * ((ballYPos + ballImage.height) - paddleYPos));
+                ballYVelocity = -ballYVelocity;
+            }
+        } else {
+            // TODO
+        }
+    }
+
 
     if (ballYVelocity >= 0 && ballXVelocity >= 0) { // up & right
         // Check whether the place we want to move the piece to is free
