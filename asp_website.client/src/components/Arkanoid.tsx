@@ -32,7 +32,7 @@ class HighScore {
 
 
 // Initial speeds
-let paddleSpeed: number = 100;
+let paddleSpeed: number = 200;
 let lastFrameTime: number = new Date().getTime();
 let currentScore: number = 0;
 let currentLevel: number = 1;
@@ -51,10 +51,10 @@ const BOARD_HEIGHT: number = 640;
 const PIECE_WIDTH: number = 64;
 const PIECE_HEIGHT: number = 32;
 
-let ballXPos: number = 280;
-let ballYPos: number = 300;
-let ballXVelocity: number = 60;
-let ballYVelocity: number = 60;
+let ballXPos: number = 80;
+let ballYPos: number = 200;
+let ballXVelocity: number = 120;
+let ballYVelocity: number = 120;
 let ballDiv: (HTMLDivElement | null) = null;
 let ballImage: (HTMLImageElement | null) = null;
 
@@ -546,7 +546,7 @@ const moveBall = (): void => {
     // Handle bounces against the paddle
     // we assume the paddle is a static line across its top and check whether the ball's change in position intersected with the ball
 
-    if (oldBallYPos < paddleYPos && ballYPos >= paddleYPos) {
+    if ((oldBallYPos + ballImage.height) < paddleYPos && (ballYPos + ballImage.height) >= paddleYPos) {
         if (!changedYDirection) {
             let initialBallY: number = oldBallYPos + ballImage.height;
             let finalBallY: number = ballYPos + ballImage.height;
