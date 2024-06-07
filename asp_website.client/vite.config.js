@@ -47,6 +47,10 @@ export default defineConfig({
                 target,
                 secure: false
             },
+            '^/arkanoidhighscores': {
+                target,
+                secure: false
+            },
             '^/dayssinceevents': {
                 target,
                 secure: false
