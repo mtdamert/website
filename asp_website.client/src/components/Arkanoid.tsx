@@ -39,7 +39,7 @@ let currentLevel: number = 1;
 let numBlocksDestroyed: number = 0;
 let currentHighScores: HighScore[];
 
-let playingGrid: Array<Array<(Block | null)>>;
+let blocks: Array<(Block | null)>;
 let isGameOver: boolean = false;
 let gameOverVarsSet: boolean = false;
 let gameState: number;
@@ -100,7 +100,7 @@ const loadHighScores = async (): Promise<Response> => {
     const response: Promise<Response> = await fetch('arkanoidhighscores');
     const data: Array<HighScore> = await response.json();
 
-    console.log("loadHighScores data: " + data);
+    //console.log("loadHighScores data: " + data);
 
     // Make all high scores black (which means they're not in the current game)
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
@@ -236,13 +236,8 @@ const startNewGame = (): void => {
     }
 
     // create a new, empty board
-    playingGrid = new Array<Array<(Block | null)>>(BOARD_WIDTH);
-    for (let i: number = 0; i < BOARD_WIDTH; i++) {
-        playingGrid[i] = new Array<(Block | null)>(BOARD_HEIGHT);
-        for (let j: number = 0; j < BOARD_HEIGHT; j++) {
-            playingGrid[i][j] = null;
-        }
-    }
+    blocks = new Array<Array<(Block | null)>>(BOARD_WIDTH);
+    loadBlocks(1);
 
     window.addEventListener(
         "keydown",
@@ -284,6 +279,26 @@ const startNewGame = (): void => {
 
     // start the game loop
     gameLoop();
+}
+
+const loadBlocks = (level: number): void => {
+    let newBlock: Block = new Block();
+    newBlock.div = document.createElement('div');
+    newBlock.div.style.visibility = 'visible';
+    newBlock.image = document.createElement('img');
+    newBlock.image.src = ark_block_base;
+    newBlock.image.style.backgroundColor = '#ff0000';
+    newBlock.image.style.position = 'absolute';
+    newBlock.image.style.top = '100px';
+    newBlock.image.style.left = ballXPos + '100px';
+    newBlock.div.appendChild(newBlock.image);
+
+    let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
+    if (playingArea !== null) {
+        playingArea.appendChild(newBlock.div);
+    }
+
+    blocks.push(newBlock);
 }
 
 const handleEscKeyPress = (): void => {
@@ -362,7 +377,7 @@ const incrementSpeed = (): void => {
     // TODO
 }
 
-const removePiece = (y: number): void => {
+const removeBlock = (y: number): void => {
     // Check all playingArea's children - they should all be of type 'block'
     let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
 
@@ -374,15 +389,15 @@ const removePiece = (y: number): void => {
             }
     }
 
-    // Update collision grid
+    // Update blocks array
     for (let x: number = 0; x < BOARD_WIDTH; x++) {
-        playingGrid[x][y] = null;
+        blocks[x][y] = null;
     }
 
-    // Update the collision grid to shift down every row above this line
+    // Update the blocks array to shift down every row above this line
     for (; y > 0; y--)
         for (let x: number = 0; x < BOARD_WIDTH; x++)
-            playingGrid[x][y] = playingGrid[x][y - 1];
+            blocks[x][y] = blocks[x][y - 1];
 
     numBlocksDestroyed++;
     if (numBlocksDestroyed % 10 === 0) {
@@ -396,9 +411,9 @@ const levelUp = (newLevel: number): void => {
 
 // Return true if we find a collision here
 const addToPlayingGrid = (block: Block): boolean => {
-    let collision: boolean = (playingGrid[block.x][block.y] !== null);
+    let collision: boolean = (blocks[block.x][block.y] !== null);
     
-    playingGrid[block.x][block.y] = block;
+    blocks[block.x][block.y] = block;
 
     // Update graphics
     if (block !== null && block.image !== null) {
@@ -415,7 +430,7 @@ const addToPlayingGrid = (block: Block): boolean => {
 }
 
 const removeFromPlayingGrid = (x: number, y: number, block: Block): void => {
-    playingGrid[x][y] = null;
+    blocks[x][y] = null;
 
     // Update graphics
     if (block !== null && block.image !== null) {
@@ -423,45 +438,10 @@ const removeFromPlayingGrid = (x: number, y: number, block: Block): void => {
     }
 }
 
-//const addTBlock = (blocks: Block[], centerPos: number): boolean => {
-//    for (let i: number = 0; i < 4; i++)
-//        if (blocks[i] !== null && blocks[i].image !== null) {
-//            blocks[i].pieceType = T_BLOCK_PIECE;
-//            blocks[i].image.src = tetris_block_base;
-//            blocks[i].image.style.backgroundColor = TBlockColor;
-//        }
-
-//    // Set positions for the block graphics
-//    blocks[0].image.style.left = PIECE_WIDTH * (1 + centerPos) + "px";
-//    blocks[1].image.style.left = PIECE_WIDTH * (0 + centerPos) + "px";
-//    blocks[1].image.style.top = PIECE_HEIGHT * 1 + "px";
-//    blocks[2].image.style.top = PIECE_HEIGHT * 1 + "px";
-//    blocks[2].image.style.left = PIECE_WIDTH * (1 + centerPos) + "px";
-//    blocks[3].image.style.top = PIECE_HEIGHT * 1 + "px";
-//    blocks[3].image.style.left = PIECE_WIDTH * (2 + centerPos) + "px";
-
-//    // Fill in spots in our tetris grid
-//    let collision: boolean = false;
-//    blocks[0].x = 1 + centerPos;
-//    blocks[0].y = 0;
-//    collision = addToPlayingGrid(blocks[0]);
-//    blocks[1].x = 0 + centerPos;
-//    blocks[1].y = 1;
-//    collision = addToPlayingGrid(blocks[1]) || collision;
-//    blocks[2].x = 1 + centerPos;
-//    blocks[2].y = 1;
-//    collision = addToPlayingGrid(blocks[2]) || collision;
-//    blocks[3].x = 2 + centerPos;
-//    blocks[3].y = 1;
-//    collision = addToPlayingGrid(blocks[3]) || collision;
-
-//    return collision;
-//}
-
 const didBlockCollideWithBlocksOnLeft = (): boolean => {
     let numCollisionsWithBlocksOnLeft: number = 0;
     for (let i: number = 0; i < 4; i++) {
-        if (playingGrid[(currentPiece.blocks[i].x - 1)][currentPiece.blocks[i].y] !== null)
+        if (blocks[(currentPiece.blocks[i].x - 1)][currentPiece.blocks[i].y] !== null)
             numCollisionsWithBlocksOnLeft++;
     }
 
@@ -471,7 +451,7 @@ const didBlockCollideWithBlocksOnLeft = (): boolean => {
 const didBlockCollideWithBlocksOnRight = (): boolean => {
     let numCollisionsWithBlocksOnRight: number = 0;
     for (let i: number = 0; i < 4; i++) {
-        if (playingGrid[(currentPiece.blocks[i].x + 1)][currentPiece.blocks[i].y] !== null)
+        if (blocks[(currentPiece.blocks[i].x + 1)][currentPiece.blocks[i].y] !== null)
             numCollisionsWithBlocksOnRight++;
     }
 
@@ -481,7 +461,7 @@ const didBlockCollideWithBlocksOnRight = (): boolean => {
 const didBlockCollideWithBlocksBelow = (): boolean => {
     let numCollisionsWithBlocksBelow: number = 0;
     for (let i: number = 0; i < 4; i++) {
-        if (playingGrid[(currentPiece.blocks[i].x)][currentPiece.blocks[i].y + 1] !== null) {
+        if (blocks[(currentPiece.blocks[i].x)][currentPiece.blocks[i].y + 1] !== null) {
             numCollisionsWithBlocksBelow++;
         }
     }
