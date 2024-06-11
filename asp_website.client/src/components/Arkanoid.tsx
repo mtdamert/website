@@ -19,6 +19,30 @@ class Block {
     };
 }
 
+class DistanceFromPoint {
+    xPos: number;
+    yPos: number;
+    pointXPos: number;
+    pointYPos: number;
+
+    constructor(x: number, y: number, x0: number, y0: number) {
+        this.xPos = x;
+        this.yPos = y;
+        this.pointXPos = x0;
+        this.pointYPos = y0;
+    }
+
+    getDistance = (): number => {
+        let xDistanceSquared: number = Math.pow((this.xPos - this.pointXPos), 2);
+        let yDistanceSquared: number = Math.pow((this.yPos - this.pointYPos), 2);
+        return Math.sqrt(xDistanceSquared  + yDistanceSquared);
+    }
+
+    hasValue = (): boolean => {
+        return (this.xPos !== 0 || this.yPos !== 0 || this.pointXPos !== 0 || this.pointYPos !== 0);
+    }
+}
+
 class HighScore {
     scorerName: string;
     highScore: number;
@@ -501,6 +525,12 @@ const moveBall = (): void => {
     let changedXDirection: boolean = false;
     let changedYDirection: boolean = false;
 
+    // TODO: Check for nearest wall collision - get distance
+    // TODO: Check for nearest paddle collision - get distance
+    // TODO: Check for nearest block collision - get distance
+    // while there are collisions, run a loop of these. each should be its own function and return...? the distance from the prev position to the collision point?
+    // >> an object containing { distance, x, y } ?
+
     // Handle bounces against walls
     if (ballXPos < 0) {
         ballXPos = -ballXPos;
@@ -545,9 +575,12 @@ const moveBall = (): void => {
                 ballYVelocity = -ballYVelocity;
             }
         } else {
-            // TODO
+            // TODO (changedYDirection === true)
         }
     }
+
+    // We want to check for all possible collisions and check in them in order, because there may be multiple collisions per frame
+    checkForBlockCollisions(oldBallXPos, oldBallYPos);
 
 
     if (ballYVelocity >= 0 && ballXVelocity >= 0) { // up & right
@@ -586,6 +619,76 @@ const moveBall = (): void => {
 
     ballImage.style.left = ballXPos + 'px';
     ballImage.style.top = ballYPos + 'px';
+}
+
+const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (DistanceFromPoint | null) => {
+    // Find and return the nearest wall collision
+    let collision1: DistanceFromPoint = new DistanceFromPoint(0, 0, 0, 0);
+    let collision2: DistanceFromPoint = new DistanceFromPoint(0, 0, 0, 0);
+    let collision3: DistanceFromPoint = new DistanceFromPoint(0, 0, 0, 0);
+    let collision4: DistanceFromPoint = new DistanceFromPoint(0, 0, 0, 0);
+
+    if (ballXPos < 0) {
+        collision1.pointXPos = oldBallXPos;
+        collision1.pointYPos = oldBallYPos;
+
+        collision1.xPos = 0;
+        let collisionTime: number = oldBallXPos / (oldBallXPos - ballXPos); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
+        collision1.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
+    }
+    if (ballYPos < 0) {
+        collision2.pointXPos = oldBallXPos;
+        collision2.pointYPos = oldBallYPos;
+
+        collision2.yPos = 0;
+        let collisionTime: number = oldBallYPos / (oldBallYPos - ballYPos); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
+        collision2.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
+    }
+    if (ballXPos > (BOARD_WIDTH - ballImage.width)) {
+        //ballXPos = (BOARD_WIDTH - ballImage.width) - (ballXPos - (BOARD_WIDTH - ballImage.width));
+
+        // TODO
+    }
+    if (ballYPos > (BOARD_HEIGHT - ballImage.height)) {
+        //ballYPos = (BOARD_HEIGHT - ballImage.height) - (ballYPos - (BOARD_HEIGHT - ballImage.height));
+
+        //TODO
+    }
+
+    // If there are multiple collisions against the walls, figure out which is the nearest and return it
+    // TODO: We need a way of recording which collision this is -> maybe have a constant for each collision type here, and the DistanceFromPoint has a variable that stores that value
+    let nearestCollision: (DistanceFromPoint | null) = null;
+    if (collision1.hasValue())
+        nearestCollision = collision1;
+    if (collision2.hasValue()) {
+        if (nearestCollision === null || (collision2.getDistance() < nearestCollision.getDistance()))
+            nearestCollision = collision2;
+    }
+    if (collision3.hasValue()) {
+        if (nearestCollision === null || (collision3.getDistance() < nearestCollision.getDistance()))
+            nearestCollision = collision3;
+    }
+    if (collision4.hasValue()) {
+        if (nearestCollision === null || (collision4.getDistance() < nearestCollision.getDistance()))
+            nearestCollision = collision4;
+    }
+
+    return nearestCollision;
+}
+
+const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): void => {
+    for (let i: number = 0; i < blocks.length; i++) {
+        // Check for left collision
+        if (ballXPos < oldBallXPos) {
+
+        } else if (ballXPos > oldBallXPos) {
+
+        } else if (ballYPos < oldBallYPos) {
+
+        } else if (ballYPos > oldBallYPos) {
+
+        }
+    }
 }
 
 const redrawHighScores = (): void => {
