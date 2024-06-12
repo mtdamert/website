@@ -24,12 +24,15 @@ class DistanceFromPoint {
     yPos: number;
     pointXPos: number;
     pointYPos: number;
+    collisionType: number;
 
+    // Set x and y to -100 if they have no value yet
     constructor(x: number, y: number, x0: number, y0: number) {
         this.xPos = x;
         this.yPos = y;
         this.pointXPos = x0;
         this.pointYPos = y0;
+        this.collisionType = COLLISION_NONE;
     }
 
     getDistance = (): number => {
@@ -39,7 +42,7 @@ class DistanceFromPoint {
     }
 
     hasValue = (): boolean => {
-        return (this.xPos !== 0 || this.yPos !== 0 || this.pointXPos !== 0 || this.pointYPos !== 0);
+        return (this.xPos !== -100 || this.yPos !== -100);
     }
 }
 
@@ -93,6 +96,12 @@ const STATE_GAME_RUNNING: number = 0;
 const STATE_GAME_PAUSED: number = 1;
 
 const NUM_HIGH_SCORES: number = 5;
+
+const COLLISION_NONE: number = -1;
+const COLLISION_WITH_LEFT_WALL: number = 1;
+const COLLISION_WITH_TOP_WALL: number = 2;
+const COLLISION_WITH_RIGHT_WALL: number = 3;
+const COLLISION_WITH_BOTTOM_WALL: number = 4;
 
 let Level1Color: string = '#00ff00';
 
@@ -525,11 +534,13 @@ const moveBall = (): void => {
     let changedXDirection: boolean = false;
     let changedYDirection: boolean = false;
 
-    // TODO: Check for nearest wall collision - get distance
     // TODO: Check for nearest paddle collision - get distance
     // TODO: Check for nearest block collision - get distance
     // while there are collisions, run a loop of these. each should be its own function and return...? the distance from the prev position to the collision point?
     // >> an object containing { distance, x, y } ?
+
+    // Check for nearest wall collision - get distance
+    let wallCollision: (DistanceFromPoint | null) = checkForWallCollisions(oldBallXPos, oldBallYPos);
 
     // Handle bounces against walls
     if (ballXPos < 0) {
@@ -623,40 +634,41 @@ const moveBall = (): void => {
 
 const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (DistanceFromPoint | null) => {
     // Find and return the nearest wall collision
-    let collision1: DistanceFromPoint = new DistanceFromPoint(0, 0, 0, 0);
-    let collision2: DistanceFromPoint = new DistanceFromPoint(0, 0, 0, 0);
-    let collision3: DistanceFromPoint = new DistanceFromPoint(0, 0, 0, 0);
-    let collision4: DistanceFromPoint = new DistanceFromPoint(0, 0, 0, 0);
+    let collision1: DistanceFromPoint = new DistanceFromPoint(-100, -100, oldBallXPos, oldBallYPos);
+    let collision2: DistanceFromPoint = new DistanceFromPoint(-100, -100, oldBallXPos, oldBallYPos);
+    let collision3: DistanceFromPoint = new DistanceFromPoint(-100, -100, oldBallXPos, oldBallYPos);
+    let collision4: DistanceFromPoint = new DistanceFromPoint(-100, -100, oldBallXPos, oldBallYPos);
 
     if (ballXPos < 0) {
-        collision1.pointXPos = oldBallXPos;
-        collision1.pointYPos = oldBallYPos;
-
         collision1.xPos = 0;
         let collisionTime: number = oldBallXPos / (oldBallXPos - ballXPos); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
         collision1.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
+
+        collision1.collisionType = COLLISION_WITH_LEFT_WALL;
     }
     if (ballYPos < 0) {
-        collision2.pointXPos = oldBallXPos;
-        collision2.pointYPos = oldBallYPos;
-
         collision2.yPos = 0;
-        let collisionTime: number = oldBallYPos / (oldBallYPos - ballYPos); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
+        let collisionTime: number = oldBallYPos / (oldBallYPos - ballYPos);
         collision2.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
+
+        collision2.collisionType = COLLISION_WITH_TOP_WALL;
     }
     if (ballXPos > (BOARD_WIDTH - ballImage.width)) {
-        //ballXPos = (BOARD_WIDTH - ballImage.width) - (ballXPos - (BOARD_WIDTH - ballImage.width));
+        ballXPos = BOARD_WIDTH - ballImage.width;
+        let collisionTime: number = oldBallXPos / (oldBallXPos - ballXPos);
+        collision3.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
 
-        // TODO
+        collision3.collisionType = COLLISION_WITH_RIGHT_WALL;
     }
     if (ballYPos > (BOARD_HEIGHT - ballImage.height)) {
-        //ballYPos = (BOARD_HEIGHT - ballImage.height) - (ballYPos - (BOARD_HEIGHT - ballImage.height));
+        ballYPos = BOARD_HEIGHT - ballImage.height;
+        let collisionTime: number = oldBallYPos / (oldBallYPos - ballYPos);
+        collision4.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
 
-        //TODO
+        collision4.collisionType = COLLISION_WITH_BOTTOM_WALL;
     }
 
     // If there are multiple collisions against the walls, figure out which is the nearest and return it
-    // TODO: We need a way of recording which collision this is -> maybe have a constant for each collision type here, and the DistanceFromPoint has a variable that stores that value
     let nearestCollision: (DistanceFromPoint | null) = null;
     if (collision1.hasValue())
         nearestCollision = collision1;
