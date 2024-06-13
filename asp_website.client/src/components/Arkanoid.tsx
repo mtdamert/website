@@ -25,6 +25,7 @@ class DistanceFromPoint {
     pointXPos: number;
     pointYPos: number;
     collisionType: number;
+    blockNumberCollision: number;
 
     // Set x and y to -100 if they have no value yet
     constructor(x: number, y: number, x0: number, y0: number) {
@@ -33,6 +34,7 @@ class DistanceFromPoint {
         this.pointXPos = x0;
         this.pointYPos = y0;
         this.collisionType = COLLISION_NONE;
+        this.blockNumberCollision = -1;
     }
 
     getDistance = (): number => {
@@ -78,7 +80,7 @@ const BOARD_HEIGHT: number = 640;
 const PIECE_WIDTH: number = 64;
 const PIECE_HEIGHT: number = 32;
 
-let ballXPos: number = 80;
+let ballXPos: number = 400;
 let ballYPos: number = 200;
 let ballXVelocity: number = 120;
 let ballYVelocity: number = 120;
@@ -102,6 +104,8 @@ const COLLISION_WITH_LEFT_WALL: number = 1;
 const COLLISION_WITH_TOP_WALL: number = 2;
 const COLLISION_WITH_RIGHT_WALL: number = 3;
 const COLLISION_WITH_BOTTOM_WALL: number = 4;
+const COLLISION_WITH_PADDLE: number = 5;
+const COLLISION_WITH_BLOCK: number = 6;
 
 let Level1Color: string = '#00ff00';
 
@@ -269,7 +273,7 @@ const startNewGame = (): void => {
     }
 
     // create a new, empty board
-    blocks = new Array<Array<(Block | null)>>(BOARD_WIDTH);
+    blocks = new Array<(Block | null)>(0);
     loadBlocks(1);
 
     window.addEventListener(
@@ -318,12 +322,14 @@ const loadBlocks = (level: number): void => {
     let newBlock: Block = new Block();
     newBlock.div = document.createElement('div');
     newBlock.div.style.visibility = 'visible';
+    newBlock.x = 400;
+    newBlock.y = 100;
     newBlock.image = document.createElement('img');
     newBlock.image.src = ark_block_base;
     newBlock.image.style.backgroundColor = '#ff0000';
     newBlock.image.style.position = 'absolute';
-    newBlock.image.style.top = '100px';
-    newBlock.image.style.left = ballXPos + '100px';
+    newBlock.image.style.top = newBlock.y + 'px';
+    newBlock.image.style.left = newBlock.x + 'px';
     newBlock.div.appendChild(newBlock.image);
 
     let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
@@ -577,11 +583,11 @@ const moveBall = (): void => {
             let ballXAtCollisionTime: number = ((ballXPos - oldBallXPos) * collisionTime) + ballXPos;
 
             if (ballXAtCollisionTime < (paddleXPos + paddleImage.width) && (ballXAtCollisionTime + ballImage.width) > paddleXPos) {
-                console.log("COLLISION!");
-                console.log("ball y: " + ballYPos);
-                console.log("ball height: " + ballImage.height);
-                console.log("paddle y: " + paddleYPos);
-                console.log("new ball y: " + (2 * ((ballYPos + ballImage.height) - paddleYPos)));
+                //console.log("PADDLE COLLISION");
+                //console.log("ball y: " + ballYPos);
+                //console.log("ball height: " + ballImage.height);
+                //console.log("paddle y: " + paddleYPos);
+                //console.log("new ball y: " + (2 * ((ballYPos + ballImage.height) - paddleYPos)));
                 ballYPos = ballYPos - (2 * ((ballYPos + ballImage.height) - paddleYPos));
                 ballYVelocity = -ballYVelocity;
             }
@@ -591,41 +597,17 @@ const moveBall = (): void => {
     }
 
     // We want to check for all possible collisions and check in them in order, because there may be multiple collisions per frame
-    checkForBlockCollisions(oldBallXPos, oldBallYPos);
+    let blockCollision: (DistanceFromPoint | null) = checkForBlockCollisions(oldBallXPos, oldBallYPos);
 
 
     if (ballYVelocity >= 0 && ballXVelocity >= 0) { // up & right
         // Check whether the place we want to move the piece to is free
         let failed: boolean = false;
-
-        // Check for wall collisions
-        for (let i: number = 0; i < 4; i++) {
-        //    if ((currentPiece.blocks[i].x + 1) >= BOARD_WIDTH) {
-        //        failed = true;
-        //        break;
-        //    }
-        }
-
-    //    if (failed === false)
-    //        if (doesPieceCollideWithBlocksOnRight() === false)
-    //            moveCurrentPieceRight();
     }
 
     if (ballYVelocity >= 0 && ballXVelocity <= 0) { // up & left
         // Check whether the place we want to move the piece to is free
         let failed: boolean = false;
-
-        // Check for wall collisions
-        for (let i: number = 0; i < 4; i++) {
-        //    if (currentPiece.blocks[i].x <= 0) {
-        //        failed = true;
-        //        break;
-        //    }
-        }
-
-    //    if (failed === false)
-    //        if (doesPieceCollideWithBlocksOnLeft() === false)
-    //            moveCurrentPieceLeft();
     }
 
     ballImage.style.left = ballXPos + 'px';
@@ -642,8 +624,9 @@ const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (Dist
     if (ballXPos < 0) {
         collision1.xPos = 0;
         let collisionTime: number = oldBallXPos / (oldBallXPos - ballXPos); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
-        collision1.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
+        collision1.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime); // TODO: collisionTime in this function's equations doesn't feel right
 
+        //console.log("Found left wall collision: " + ballXPos + ", " + ballYPos);
         collision1.collisionType = COLLISION_WITH_LEFT_WALL;
     }
     if (ballYPos < 0) {
@@ -651,20 +634,23 @@ const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (Dist
         let collisionTime: number = oldBallYPos / (oldBallYPos - ballYPos);
         collision2.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
 
+        //console.log("Found top wall collision: " + ballXPos + ", " + ballYPos);
         collision2.collisionType = COLLISION_WITH_TOP_WALL;
     }
     if (ballXPos > (BOARD_WIDTH - ballImage.width)) {
-        ballXPos = BOARD_WIDTH - ballImage.width;
+        collision3.xPos = BOARD_WIDTH - ballImage.width;
         let collisionTime: number = oldBallXPos / (oldBallXPos - ballXPos);
         collision3.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
 
+        //console.log("Found right wall collision: " + ballXPos + ", " + ballYPos);
         collision3.collisionType = COLLISION_WITH_RIGHT_WALL;
     }
     if (ballYPos > (BOARD_HEIGHT - ballImage.height)) {
-        ballYPos = BOARD_HEIGHT - ballImage.height;
+        collision4.yPos = BOARD_HEIGHT - ballImage.height;
         let collisionTime: number = oldBallYPos / (oldBallYPos - ballYPos);
         collision4.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
 
+        //console.log("Found bottom wall collision: " + ballXPos + ", " + ballYPos);
         collision4.collisionType = COLLISION_WITH_BOTTOM_WALL;
     }
 
@@ -688,19 +674,122 @@ const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (Dist
     return nearestCollision;
 }
 
-const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): void => {
+const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (DistanceFromPoint | null) => {
+    let nearestCollision: (DistanceFromPoint | null) = null;
+
+    let rightCollision: DistanceFromPoint = new DistanceFromPoint(-100, -100, oldBallXPos, oldBallYPos);
+    rightCollision.collisionType = COLLISION_WITH_BLOCK;
+    let leftCollision: DistanceFromPoint = new DistanceFromPoint(-100, -100, oldBallXPos, oldBallYPos);
+    leftCollision.collisionType = COLLISION_WITH_BLOCK;
+    let bottomCollision: DistanceFromPoint = new DistanceFromPoint(-100, -100, oldBallXPos, oldBallYPos);
+    bottomCollision.collisionType = COLLISION_WITH_BLOCK;
+    let topCollision: DistanceFromPoint = new DistanceFromPoint(-100, -100, oldBallXPos, oldBallYPos);
+    topCollision.collisionType = COLLISION_WITH_BLOCK;
+
     for (let i: number = 0; i < blocks.length; i++) {
-        // Check for left collision
-        if (ballXPos < oldBallXPos) {
+        let blockRightXPos: number = blocks[i].x + blocks[i].image.width;
+        let blockBottomYPos: number = blocks[i].y + blocks[i].image.height;
 
-        } else if (ballXPos > oldBallXPos) {
+        if (ballXPos < oldBallXPos) { // Check for right collision
+            if (ballXPos <= blockRightXPos && oldBallXPos > blockRightXPos) {
+                // Ball passed the block's right plane since last frame. But did it collide with the ball then?
+                //console.log("Ball passed block's right plane");
 
-        } else if (ballYPos < oldBallYPos) {
+                // find the point where the line hits the plane
+                // if that point intersects with the block's line segment, fill in data in the rightCollision object
+                let collisionTime: number = (blockRightXPos - ballXPos) / (oldBallXPos - ballXPos); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
+                let collisionY: number = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
+                if (collisionY >= blocks[i].y && collisionY <= blockBottomYPos) {
+                    rightCollision.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
+                    rightCollision.yPos = collisionY;
+                    rightCollision.collisionType = COLLISION_WITH_BLOCK;
+                    rightCollision.blockNumberCollision = i;
 
-        } else if (ballYPos > oldBallYPos) {
+                    console.log("Block right collision detected");
+                }
+            }
+        }
+        if (ballXPos > oldBallXPos) { // Check for left collision
+            if (ballXPos >= blocks[i].x && oldBallXPos < blocks[i].x) {
+                //console.log("Ball passed block's left plane");
 
+                let collisionTime: number = blocks[i].x / (ballXPos - oldBallXPos);
+                let collisionY: number = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
+                console.log("collision time: " + collisionTime + ", collisionY: " + collisionY + ", blocks[i].y: " + blocks[i].y + ", blockBottomYPos: " + blockBottomYPos);
+                if (collisionY >= blocks[i].y && collisionY <= blockBottomYPos) {
+                    leftCollision.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
+                    leftCollision.yPos = collisionY;
+                    leftCollision.collisionType = COLLISION_WITH_BLOCK;
+                    leftCollision.blockNumberCollision = i;
+
+                    console.log("Block left collision detected");
+                }
+
+            }
+        }
+        if (ballYPos < oldBallYPos) { // Check for bottom collision - TESTED
+            if (ballYPos <= blockBottomYPos && oldBallYPos > blockBottomYPos) {
+                //console.log("Ball passed block's bottom plane");
+
+                let collisionTime: number = (blockBottomYPos - oldBallYPos) / (ballYPos - oldBallYPos);
+                let collisionX: number = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
+                //console.log("collision time: " + collisionTime + ", collisionX: " + collisionX + ", blocks[i].x: " + blocks[i].x + ", blockRightXPos: " + blockRightXPos);
+                if (collisionX >= blocks[i].x && collisionX <= blockRightXPos) {
+                    bottomCollision.xPos = collisionX;
+                    bottomCollision.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
+                    bottomCollision.collisionType = COLLISION_WITH_BLOCK;
+                    bottomCollision.blockNumberCollision = i;
+
+                    console.log("Block bottom collision detected");
+                }
+
+            }
+        }
+        if (ballYPos > oldBallYPos) { // Check for top collision - TESTED
+            if (ballYPos >= blocks[i].y && oldBallYPos < blocks[i].y) {
+                //console.log("Ball passed block's top plane");
+
+                let collisionTime: number = (blocks[i].y - oldBallYPos) / (oldBallYPos - ballYPos);
+                let collisionX: number = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
+                //console.log("collision time: " + collisionTime + ", collisionX: " + collisionX + ", blocks[i].x: " + blocks[i].x + ", blockRightXPos: " + blockRightXPos);
+                if (collisionX >= blocks[i].x && collisionX <= blockRightXPos) {
+                    topCollision.xPos = collisionX;
+                    topCollision.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
+                    topCollision.collisionType = COLLISION_WITH_BLOCK;
+                    topCollision.blockNumberCollision = i;
+
+                    console.log("Block top collision detected");
+                }
+
+            }
+        }
+
+        if (rightCollision.hasValue() && nearestCollision === null) {
+            nearestCollision = rightCollision;
+        } else if (rightCollision.hasValue() && rightCollision.getDistance() < nearestCollision.getDistance()) {
+            nearestCollision = rightCollision;
+        }
+
+        if (leftCollision.hasValue() && nearestCollision === null) {
+            nearestCollision = leftCollision;
+        } else if (leftCollision.hasValue() && leftCollision.getDistance() < nearestCollision.getDistance()) {
+            nearestCollision = leftCollision;
+        }
+
+        if (bottomCollision.hasValue() && nearestCollision === null) {
+            nearestCollision = bottomCollision;
+        } else if (bottomCollision.hasValue() && bottomCollision.getDistance() < nearestCollision.getDistance()) {
+            nearestCollision = bottomCollision;
+        }
+
+        if (topCollision.hasValue() && nearestCollision === null) {
+            nearestCollision = topCollision;
+        } else if (topCollision.hasValue() && topCollision.getDistance() < nearestCollision.getDistance()) {
+            nearestCollision = topCollision;
         }
     }
+
+    return nearestCollision;
 }
 
 const redrawHighScores = (): void => {
