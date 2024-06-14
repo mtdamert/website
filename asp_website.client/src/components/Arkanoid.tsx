@@ -80,8 +80,8 @@ const BOARD_HEIGHT: number = 640;
 const PIECE_WIDTH: number = 64;
 const PIECE_HEIGHT: number = 32;
 
-let ballXPos: number = 400;
-let ballYPos: number = 200;
+let ballXPos: number = 450;
+let ballYPos: number = 30;
 let ballXVelocity: number = 120;
 let ballYVelocity: number = 120;
 let ballDiv: (HTMLDivElement | null) = null;
@@ -323,7 +323,7 @@ const loadBlocks = (level: number): void => {
     newBlock.div = document.createElement('div');
     newBlock.div.style.visibility = 'visible';
     newBlock.x = 400;
-    newBlock.y = 100;
+    newBlock.y = 370;
     newBlock.image = document.createElement('img');
     newBlock.image.src = ark_block_base;
     newBlock.image.style.backgroundColor = '#ff0000';
@@ -477,48 +477,6 @@ const removeFromPlayingGrid = (x: number, y: number, block: Block): void => {
     }
 }
 
-const didBlockCollideWithBlocksOnLeft = (): boolean => {
-    let numCollisionsWithBlocksOnLeft: number = 0;
-    for (let i: number = 0; i < 4; i++) {
-        if (blocks[(currentPiece.blocks[i].x - 1)][currentPiece.blocks[i].y] !== null)
-            numCollisionsWithBlocksOnLeft++;
-    }
-
-    return numCollisionsWithBlocksOnLeft > 0;
-}
-
-const didBlockCollideWithBlocksOnRight = (): boolean => {
-    let numCollisionsWithBlocksOnRight: number = 0;
-    for (let i: number = 0; i < 4; i++) {
-        if (blocks[(currentPiece.blocks[i].x + 1)][currentPiece.blocks[i].y] !== null)
-            numCollisionsWithBlocksOnRight++;
-    }
-
-    return numCollisionsWithBlocksOnRight > 0;
-}
-
-const didBlockCollideWithBlocksBelow = (): boolean => {
-    let numCollisionsWithBlocksBelow: number = 0;
-    for (let i: number = 0; i < 4; i++) {
-        if (blocks[(currentPiece.blocks[i].x)][currentPiece.blocks[i].y + 1] !== null) {
-            numCollisionsWithBlocksBelow++;
-        }
-    }
-
-    // Check if the piece hit the floor of the board
-    let collided: boolean = false;
-    if (collided === false) {
-        for (let i: number = 0; i < 4; i++)
-            if ((currentPiece.blocks[i].y + 1) >= BOARD_HEIGHT)
-                return true;
-    }
-
-    return collided;
-}
-
-const didBlockCollideWithBlocksAbove = (): boolean => {
-    return false;
-}
 
 const moveBall = (): void => {
     let moveBallXDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballXVelocity;
@@ -690,6 +648,9 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
         let blockRightXPos: number = blocks[i].x + blocks[i].image.width;
         let blockBottomYPos: number = blocks[i].y + blocks[i].image.height;
 
+        // TODO: Collisions should happen if the bottom of the ball hits the top of the block;
+        //       and if the top of the ball hits the bottom of the block
+
         if (ballXPos < oldBallXPos) { // Check for right collision
             if (ballXPos <= blockRightXPos && oldBallXPos > blockRightXPos) {
                 // Ball passed the block's right plane since last frame. But did it collide with the ball then?
@@ -699,6 +660,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                 // if that point intersects with the block's line segment, fill in data in the rightCollision object
                 let collisionTime: number = (blockRightXPos - ballXPos) / (oldBallXPos - ballXPos); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
                 let collisionY: number = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
+                console.log("collision time: " + collisionTime + ", collisionY: " + collisionY + ", blocks[i].y: " + blocks[i].y + ", blockBottomYPos: " + blockBottomYPos);
                 if (collisionY >= blocks[i].y && collisionY <= blockBottomYPos) {
                     rightCollision.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
                     rightCollision.yPos = collisionY;
@@ -713,9 +675,9 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
             if (ballXPos >= blocks[i].x && oldBallXPos < blocks[i].x) {
                 //console.log("Ball passed block's left plane");
 
-                let collisionTime: number = blocks[i].x / (ballXPos - oldBallXPos);
+                let collisionTime: number = (blocks[i].x - oldBallXPos) / (ballXPos - oldBallXPos);
                 let collisionY: number = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
-                console.log("collision time: " + collisionTime + ", collisionY: " + collisionY + ", blocks[i].y: " + blocks[i].y + ", blockBottomYPos: " + blockBottomYPos);
+                //console.log("collision time: " + collisionTime + ", collisionY: " + collisionY + ", blocks[i].y: " + blocks[i].y + ", blockBottomYPos: " + blockBottomYPos);
                 if (collisionY >= blocks[i].y && collisionY <= blockBottomYPos) {
                     leftCollision.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
                     leftCollision.yPos = collisionY;
@@ -997,7 +959,7 @@ export default function Arkanoid() {
             <span className="italic absolute top-[140px] left-[100px]">Press up arrow to rotate.<br/>Press ESC to pause.</span>
 
             <div id="fullArea">
-                <div id="playingArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[${BOARD_WIDTH}px] h-[${BOARD_HEIGHT}px] bg-[#c0c0c0]`} />
+                <div id="playingArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[640px] h-[${BOARD_HEIGHT}px] bg-[#c0c0c0]`} />
                     <div id="pausedBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
                         PAUSED
                     </div>
