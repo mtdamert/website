@@ -93,6 +93,7 @@ let paddleXPos: number = 280;
 const paddleYPos: number = 590;
 let paddleDiv: (HTMLDivElement | null) = null;
 let paddleImage: (HTMLImageElement | null) = null;
+const PADDLE_SIDE_WIDTH = 10;
 
 const STATE_GAME_RUNNING: number = 0;
 const STATE_GAME_PAUSED: number = 1;
@@ -104,8 +105,10 @@ const COLLISION_WITH_LEFT_WALL: number = 1;
 const COLLISION_WITH_TOP_WALL: number = 2;
 const COLLISION_WITH_RIGHT_WALL: number = 3;
 const COLLISION_WITH_BOTTOM_WALL: number = 4;
-const COLLISION_WITH_PADDLE: number = 5;
-const COLLISION_WITH_BLOCK: number = 6;
+const COLLISION_WITH_PADDLE_LEFT: number = 5;
+const COLLISION_WITH_PADDLE_MIDDLE: number = 6;
+const COLLISION_WITH_PADDLE_RIGHT: number = 7;
+const COLLISION_WITH_BLOCK: number = 8;
 
 let Level1Color: string = '#00ff00';
 
@@ -557,6 +560,8 @@ const moveBall = (): void => {
     // We want to check for all possible collisions and check in them in order, because there may be multiple collisions per frame
     let blockCollision: (DistanceFromPoint | null) = checkForBlockCollisions(oldBallXPos, oldBallYPos);
 
+    let paddleCollision: (DistanceFromPoint | null) = checkForPaddleCollisions(oldBallXPos, oldBallYPos);
+
 
     if (ballYVelocity >= 0 && ballXVelocity >= 0) { // up & right
         // Check whether the place we want to move the piece to is free
@@ -630,6 +635,34 @@ const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (Dist
     }
 
     return nearestCollision;
+}
+
+const checkForPaddleCollisions = (oldBallXPos: number, oldBallYPos: number): (DistanceFromPoint | null) => {
+    let nearestCollision: (DistanceFromPoint | null) = null;
+
+    let oldBallBottomYPos: number = oldBallYPos + ballImage.height;
+    let ballBottomYPos: number = ballYPos + ballImage.height;
+    if (oldBallBottomYPos < paddleYPos && ballBottomYPos >= paddleYPos) {
+        let collisionTime: number = (paddleYPos - oldBallBottomYPos) / (ballBottomYPos - oldBallBottomYPos);
+
+        // Figure out what the ball's X pos was when it intersected with the top surface of the paddle
+        let ballXAtCollisionTime: number = ((ballXPos - oldBallXPos) * collisionTime) + ballXPos;
+
+        // Collision detected
+        if (ballXAtCollisionTime < (paddleXPos + paddleImage.width) && (ballXAtCollisionTime + ballImage.width) > paddleXPos) {
+            let paddleCollision: DistanceFromPoint = new DistanceFromPoint(ballXAtCollisionTime, paddleYPos, oldBallXPos, oldBallYPos);
+            paddleCollision.collisionType = COLLISION_WITH_PADDLE_MIDDLE;
+            if ((ballXAtCollisionTime - PADDLE_SIDE_WIDTH) < paddleXPos) {
+                paddleCollision.collisionType = COLLISION_WITH_PADDLE_LEFT;
+            } else if ((ballXAtCollisionTime + ballImage.width + PADDLE_SIDE_WIDTH) > (paddleXPos + paddleImage.width)) {
+                paddleCollision.collisionType = COLLISION_WITH_PADDLE_RIGHT;
+            }
+
+            return paddleCollision;
+        }
+    }
+
+    return null;
 }
 
 const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (DistanceFromPoint | null) => {
