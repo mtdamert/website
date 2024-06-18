@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ark_block_base from './ark_block_base.png';
-import ark_paddle from './ark_paddle.png';
-import ark_ball from './ark_ball.png';
+import ark_block_base from '../images/ark_block_base2.png';
+import ark_paddle from '../images/ark_paddle.png';
+import ark_ball from '../images/ark_ball.png';
 
 
 class Block {
