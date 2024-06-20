@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { World, LDtk } from 'ldtk';
 import ark_block_base from '../images/ark_block_base2.png';
 import ark_paddle from '../images/ark_paddle.png';
 import ark_ball from '../images/ark_ball.png';
@@ -291,7 +292,7 @@ const startNewGame = (): void => {
 
     // create a new, empty board
     blocks = new Array<(Block | null)>(0);
-    loadBlocks(1);
+    loadBlocks(currentLevel);
 
     window.addEventListener(
         "keydown",
@@ -335,7 +336,34 @@ const startNewGame = (): void => {
     gameLoop();
 }
 
-const loadBlocks = (level: number): void => {
+const loadBlocks = async (level: number): Promise<Response> => {
+
+    // TODO: Create a Controller on the server that loads levels
+
+    const levelResponse: Promise<Response> = await fetch("./ark_level1.ldtk"); //"./ark_level1.ldtk"
+    const data: string = await levelResponse.json();
+    debugger;
+
+
+    let obj = JSON.parse(data);
+    let myWorld: World = World.fromJSON(obj);
+    console.log("Tried to load a world");
+    let currentLevel = myWorld.levels[0];
+    for (const layer of currentLevel.layerInstances) {
+        console.log(layer);
+    }
+
+
+    //    //console.log(obj);
+    //});
+
+    //let myWorld: World = World.fromJSON(level1);
+    //console.log("Tried to load a world");
+    //let currentLevel = myWorld.levels[0];
+    //for (const layer of currentLevel.layerInstances) {
+    //    console.log(layer);
+    //}
+
     let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
 
     let newBlock: Block = new Block();
@@ -367,6 +395,8 @@ const loadBlocks = (level: number): void => {
     newBlock.div.appendChild(newBlock.image);
     if (playingArea !== null) { playingArea.appendChild(newBlock.div); }
     blocks.push(newBlock);
+
+    return levelResponse;
 }
 
 const handleEscKeyPress = (): void => {
