@@ -340,29 +340,16 @@ const loadBlocks = async (level: number): Promise<Response> => {
 
     // TODO: Create a Controller on the server that loads levels
 
-    const levelResponse: Promise<Response> = await fetch("./ark_level1.ldtk"); //"./ark_level1.ldtk"
-    const data: string = await levelResponse.json();
+    const levelResponse: Promise<Response> = await fetch('arkanoidlevel?id=1');
+    const levelData: string = await levelResponse.json();
     debugger;
 
-
-    let obj = JSON.parse(data);
-    let myWorld: World = World.fromJSON(obj);
+    let myWorld: World = World.fromJSON(levelData);
     console.log("Tried to load a world");
     let currentLevel = myWorld.levels[0];
-    for (const layer of currentLevel.layerInstances) {
-        console.log(layer);
+    for (const tile of currentLevel.layers[0].data.gridTiles) {
+        console.log(tile);
     }
-
-
-    //    //console.log(obj);
-    //});
-
-    //let myWorld: World = World.fromJSON(level1);
-    //console.log("Tried to load a world");
-    //let currentLevel = myWorld.levels[0];
-    //for (const layer of currentLevel.layerInstances) {
-    //    console.log(layer);
-    //}
 
     let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
 

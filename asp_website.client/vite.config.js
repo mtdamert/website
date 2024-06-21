@@ -51,6 +51,10 @@ export default defineConfig({
                 target,
                 secure: false
             },
+            '^/arkanoidlevel': {
+                target,
+                secure: false
+            },
             '^/dayssinceevents': {
                 target,
                 secure: false

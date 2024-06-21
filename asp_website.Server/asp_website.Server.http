@@ -10,6 +10,11 @@ Accept: application/json
 
 ###
 
+GET {{asp_website.Server_HostAddress}}/arkanoidlevel
+Accept: application/json
+
+###
+
 GET {{asp_website.Server_HostAddress}}/dayssinceevents/
 Accept: application/json
 
