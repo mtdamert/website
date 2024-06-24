@@ -342,46 +342,33 @@ const loadBlocks = async (level: number): Promise<Response> => {
 
     const levelResponse: Promise<Response> = await fetch('arkanoidlevel?id=1');
     const levelData: string = await levelResponse.json();
-    debugger;
+    //debugger;
+
+    let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
 
     let myWorld: World = World.fromJSON(levelData);
     console.log("Tried to load a world");
     let currentLevel = myWorld.levels[0];
     for (const tile of currentLevel.layers[0].data.gridTiles) {
-        console.log(tile);
+        if (tile.src[0] === 0) {
+            console.log(tile);
+
+            let newBlock: Block = new Block();
+            newBlock.div = document.createElement('div');
+            newBlock.div.style.visibility = 'visible';
+            newBlock.x = tile.px[0];
+            newBlock.y = tile.px[1];
+            newBlock.image = document.createElement('img');
+            newBlock.image.src = ark_block_base;
+            newBlock.image.style.backgroundColor = '#ff0000';
+            newBlock.image.style.position = 'absolute';
+            newBlock.image.style.top = newBlock.y + 'px';
+            newBlock.image.style.left = newBlock.x + 'px';
+            newBlock.div.appendChild(newBlock.image);
+            if (playingArea !== null) { playingArea.appendChild(newBlock.div); }
+            blocks.push(newBlock);
+        }
     }
-
-    let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
-
-    let newBlock: Block = new Block();
-    newBlock.div = document.createElement('div');
-    newBlock.div.style.visibility = 'visible';
-    newBlock.x = 400;
-    newBlock.y = 370;
-    newBlock.image = document.createElement('img');
-    newBlock.image.src = ark_block_base;
-    newBlock.image.style.backgroundColor = '#ff0000';
-    newBlock.image.style.position = 'absolute';
-    newBlock.image.style.top = newBlock.y + 'px';
-    newBlock.image.style.left = newBlock.x + 'px';
-    newBlock.div.appendChild(newBlock.image);
-    if (playingArea !== null) { playingArea.appendChild(newBlock.div); }
-    blocks.push(newBlock);
-
-    newBlock = new Block();
-    newBlock.div = document.createElement('div');
-    newBlock.div.style.visibility = 'visible';
-    newBlock.x = 200;
-    newBlock.y = 370;
-    newBlock.image = document.createElement('img');
-    newBlock.image.src = ark_block_base;
-    newBlock.image.style.backgroundColor = '#ff0000';
-    newBlock.image.style.position = 'absolute';
-    newBlock.image.style.top = newBlock.y + 'px';
-    newBlock.image.style.left = newBlock.x + 'px';
-    newBlock.div.appendChild(newBlock.image);
-    if (playingArea !== null) { playingArea.appendChild(newBlock.div); }
-    blocks.push(newBlock);
 
     return levelResponse;
 }
