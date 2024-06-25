@@ -785,7 +785,7 @@ const checkForLines = (): void => {
 
     let oldLevelNumber: number = Math.floor((totalNumLines - numLinesFound) / 10);
     if (oldLevelNumber !== levelNumber)
-            levelUp(levelNumber);
+        levelUp(levelNumber);
 
     if (numLinesFound === 1)
         newIncrementScore(40 * (levelNumber + 1));
