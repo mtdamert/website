@@ -290,7 +290,6 @@ const startNewGame = (): void => {
         playingArea.appendChild(ballDiv);
     }
 
-    // create a new, empty board
     blocks = new Array<(Block | null)>(0);
     loadBlocks(currentLevel);
 
@@ -349,10 +348,17 @@ const loadBlocks = async (level: number): Promise<Response> => {
     let myWorld: World = World.fromJSON(levelData);
     console.log("Tried to load a world");
     let currentLevel = myWorld.levels[0];
+    // create a new, empty board
+    if (blocks !== null && blocks?.length > 0) {
+        for (let i: number = 0; i < blocks.length; i++) {
+            blocks[i].image.style.visibility = 'hidden';
+            blocks[i] = null;
+        }
+
+        blocks = new Array<(Block | null)>(0);
+    }
     for (const tile of currentLevel.layers[0].data.gridTiles) {
         if (tile.src[0] === 0) {
-            console.log(tile);
-
             let newBlock: Block = new Block();
             newBlock.div = document.createElement('div');
             newBlock.div.style.visibility = 'visible';
@@ -449,12 +455,12 @@ const incrementSpeed = (): void => {
     // TODO
 }
 
-const removeBlock = (y: number): void => {
+const removeBlock = (blockNumber: number): void => {
     // Check all playingArea's children - they should all be of type 'block'
     let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
 
-    blocks[y].image.style.visibility = 'hidden';
-    blocks[y] = null;
+    blocks[blockNumber].image.style.visibility = 'hidden';
+    blocks[blockNumber] = null;
     numBlocksDestroyed++;
 
     let blocksRemaining: number = 0;
@@ -463,9 +469,16 @@ const removeBlock = (y: number): void => {
             blocksRemaining++;
         }
     }
+    console.log("Blocks remaining: " + blocksRemaining);
 
     if (blocksRemaining === 0) {
         levelUp(++currentLevel);
+    }
+
+    // Update score onscreen
+    let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
+    if (scoreBox !== null) {
+        scoreBox.innerHTML = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
     }
 }
 
@@ -561,6 +574,7 @@ const moveBall = (): void => {
                     changedYDirection = true;
                 }
 
+                console.log("Block being removed for collision: " + blockCollision.blockNumberCollision);
                 removeBlock(blockCollision.blockNumberCollision);
             } else {
                 // paddle collision is nearest
@@ -758,19 +772,19 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
             if (ballXPos < oldBallXPos) { // Check for right collision
                 if (ballXPos <= blockRightXPos && oldBallXPos > blockRightXPos) {
                     // Ball passed the block's right plane since last frame. But did it collide with the ball then?
-                    console.log("Ball passed block's right plane");
+                    //console.log("Ball passed block's right plane");
 
                     // find the point where the line hits the plane
                     // if that point intersects with the block's line segment, fill in data in the rightCollision object
                     let collisionTime: number = (oldBallXPos - blockRightXPos) / (oldBallXPos - ballXPos); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
                     let collisionY: number = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
-                    console.log("collision time: " + collisionTime + ", collisionY: " + collisionY + ", blocks[i].y: " + blocks[i].y + ", blockBottomYPos: " + blockBottomYPos);
+                    //console.log("collision time: " + collisionTime + ", collisionY: " + collisionY + ", blocks[i].y: " + blocks[i].y + ", blockBottomYPos: " + blockBottomYPos);
                     if ((collisionY + ballImage.height) > blocks[i].y && collisionY < blockBottomYPos) {
                         rightCollision.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
                         rightCollision.yPos = collisionY;
                         rightCollision.blockNumberCollision = i;
 
-                        console.log("Block right collision detected");
+                        console.log("Block right collision detected with block number collision: " + i);
                     }
                 }
             }
@@ -786,7 +800,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                         leftCollision.yPos = collisionY;
                         leftCollision.blockNumberCollision = i;
 
-                        console.log("Block left collision detected");
+                        console.log("Block left collision detected with block number collision: " + i);
                     }
                 }
             }
@@ -802,7 +816,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                         bottomCollision.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
                         bottomCollision.blockNumberCollision = i;
 
-                        console.log("Block bottom collision detected");
+                        console.log("Block bottom collision detected with block number collision: " + i);
                     }
 
                 }
@@ -819,7 +833,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                         topCollision.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
                         topCollision.blockNumberCollision = i;
 
-                        console.log("Block top collision detected");
+                        console.log("Block top collision detected with block number collision: " + i);
                     }
                 }
             }
