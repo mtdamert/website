@@ -523,7 +523,6 @@ const moveBall = (): void => {
     let paddleCollision: (DistanceFromPoint | null) = checkForPaddleCollisions(oldBallXPos, oldBallYPos);
     let nearestCollision: (DistanceFromPoint | null) = null;
 
-    let collisionsCounter = 0;
     // There was a collision. Get the nearest collision
     do {
         changedXDirection = false;
@@ -601,7 +600,7 @@ const moveBall = (): void => {
             oldBallYPos = nearestCollision.yPos;
 
             if (nearestCollision !== null && nearestCollision.collisionType === COLLISION_WITH_BLOCK_TOP) {
-                console.log("Found a collision with block top at (" + oldBallXPos + ", " + oldBallYPos + "), new ball pos: (" + ballXPos + ", " + ballYPos + ")");
+                console.log("   Found a collision with block top at (" + oldBallXPos + ", " + oldBallYPos + "), new ball pos: (" + ballXPos + ", " + ballYPos + ")");
             }
             if (nearestCollision !== null && (nearestCollision.collisionType === COLLISION_WITH_PADDLE_LEFT ||
                 nearestCollision.collisionType === COLLISION_WITH_PADDLE_MIDDLE || nearestCollision.collisionType === COLLISION_WITH_PADDLE_RIGHT)) {
@@ -783,10 +782,10 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                 }
             }
             if (ballYPos > oldBallYPos) { // Check for top collision
-                if (ballYPos >= blocks[i].y && oldBallYPos < blocks[i].y) {
+                if ((ballYPos + ballImage.height) >= blocks[i].y && (oldBallYPos + ballImage.height) < blocks[i].y) {
                     //console.log("Ball passed block's top plane");
 
-                    let collisionTime: number = (blocks[i].y - oldBallYPos) / (ballYPos - oldBallYPos);
+                    let collisionTime: number = (blocks[i].y - (oldBallYPos + ballImage.height)) / (ballYPos - oldBallYPos);
                     let collisionX: number = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
                     //console.log("collision time: " + collisionTime + ", collisionX: " + collisionX + ", blocks[i].x: " + blocks[i].x + ", blockRightXPos: " + blockRightXPos);
                     if ((collisionX + ballImage.width) > blocks[i].x && collisionX < blockRightXPos) {
