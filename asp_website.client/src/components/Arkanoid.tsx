@@ -531,7 +531,7 @@ const moveBall = (): void => {
         if ((wallCollision !== null && wallCollision.hasValue()) || (blockCollision !== null && blockCollision.hasValue()) || (paddleCollision !== null && paddleCollision.hasValue())) {
             if ((wallCollision !== null && wallCollision.hasValue()) && (blockCollision === null || wallCollision.getDistance() > blockCollision.getDistance())
                 && (paddleCollision === null || wallCollision.getDistance() > paddleCollision.getDistance())) {
-                // wall collision is nearest
+                // WALL COLLISION is nearest
                 nearestCollision = wallCollision;
 
                 if (wallCollision.collisionType === COLLISION_WITH_LEFT_WALL) {
@@ -557,7 +557,7 @@ const moveBall = (): void => {
                 oldBallYPos = wallCollision.yPos;
             } else if ((blockCollision !== null && blockCollision.hasValue()) && (wallCollision === null || blockCollision.getDistance() > wallCollision.getDistance())
                 && (paddleCollision === null || blockCollision.getDistance() > paddleCollision.getDistance())) {
-                // block collision is nearest
+                // BLOCK COLLISION is nearest
                 nearestCollision = blockCollision;
 
                 if (blockCollision.collisionType === COLLISION_WITH_BLOCK_LEFT) {
@@ -577,7 +577,7 @@ const moveBall = (): void => {
                 //console.log("Block being removed for collision: " + blockCollision.blockNumberCollision);
                 removeBlock(blockCollision.blockNumberCollision);
             } else {
-                // paddle collision is nearest
+                // PADDLE COLLISION is nearest
                 nearestCollision = paddleCollision;
 
                 ballYVelocity = -ballYVelocity;
@@ -599,9 +599,6 @@ const moveBall = (): void => {
             oldBallXPos = nearestCollision.xPos;
             oldBallYPos = nearestCollision.yPos;
 
-            if (nearestCollision !== null && nearestCollision.collisionType === COLLISION_WITH_BLOCK_TOP) {
-                console.log("   Found a collision with block top at (" + oldBallXPos + ", " + oldBallYPos + "), new ball pos: (" + ballXPos + ", " + ballYPos + ")");
-            }
             if (nearestCollision !== null && (nearestCollision.collisionType === COLLISION_WITH_PADDLE_LEFT ||
                 nearestCollision.collisionType === COLLISION_WITH_PADDLE_MIDDLE || nearestCollision.collisionType === COLLISION_WITH_PADDLE_RIGHT)) {
                 console.log("Found a collision with paddle at (" + oldBallXPos + ", " + oldBallYPos + "), new ball pos: (" + ballXPos + ", " + ballYPos + ")");
