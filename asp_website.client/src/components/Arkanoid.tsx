@@ -66,7 +66,7 @@ class HighScore {
 
 
 // Initial speeds
-let paddleSpeed: number = 200;
+let paddleSpeed: number = 800;
 let lastFrameTime: number = new Date().getTime();
 let currentScore: number = 0;
 let currentLevel: number = 1;
@@ -132,7 +132,7 @@ const gameLoop = (): void => {
     if (isGameOver === false && gameState !== STATE_GAME_PAUSED) {
         //still in play - keep the loop going
         gameOverVarsSet = false;
-        setTimeout(gameLoop, 50);
+        setTimeout(gameLoop, 17);
     } else if (isGameOver === true) {
         gameOver();
     }
