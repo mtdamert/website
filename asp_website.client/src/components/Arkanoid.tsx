@@ -66,7 +66,7 @@ class HighScore {
 
 
 // Initial speeds
-let paddleSpeed: number = 800;
+let paddleSpeed: number = 400;
 let lastFrameTime: number = new Date().getTime();
 let currentScore: number = 0;
 let currentLevel: number = 1;
@@ -92,6 +92,8 @@ let ballImage: (HTMLImageElement | null) = null;
 
 const DIRECTION_LEFT: number = 0;
 const DIRECTION_RIGHT: number = 1;
+let isLeftKeyPressed: boolean = false;
+let isRightKeyPressed: boolean = false;
 let paddleXPos: number = 280;
 const paddleYPos: number = 590;
 let paddleDiv: (HTMLDivElement | null) = null;
@@ -126,6 +128,10 @@ let Level1Color: string = '#00ff00';
 const gameLoop = (): void => {
     //game loop
     moveBall();
+
+    if (isLeftKeyPressed) movePaddle(DIRECTION_LEFT);
+    if (isRightKeyPressed) movePaddle(DIRECTION_RIGHT);
+
     lastFrameTime = new Date().getTime();
 
     //end conditions
@@ -309,11 +315,11 @@ const startNewGame = (): void => {
             switch (event.code) {
                 case "KeyA":
                 case "ArrowLeft":
-                    movePaddle(DIRECTION_LEFT);
+                    isLeftKeyPressed = true;
                     break;
                 case "KeyD":
                 case "ArrowRight":
-                    movePaddle(DIRECTION_RIGHT);
+                    isRightKeyPressed = true;
                     break;
                 case "Escape":
                     handleEscKeyPress();
@@ -328,6 +334,35 @@ const startNewGame = (): void => {
         },
         true,
     );
+
+    window.addEventListener(
+        "keyup",
+        (event) => {
+            if (event.defaultPrevented) {
+                return; // Do nothing if event already handled
+            }
+
+            // Ignore input when we're paused as long as the input isn't un-pausing the game
+            if (gameState === STATE_GAME_PAUSED && event.code !== "Escape")
+                return;
+            if (isGameOver === true)
+                return;
+
+            switch (event.code) {
+                case "KeyA":
+                case "ArrowLeft":
+                    isLeftKeyPressed = false;
+                    break;
+                case "KeyD":
+                case "ArrowRight":
+                    isRightKeyPressed = false;
+                    break;
+            }
+        },
+        true,
+    );
+
+
     
     gameState = STATE_GAME_RUNNING;
 
