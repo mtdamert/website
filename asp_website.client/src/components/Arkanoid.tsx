@@ -20,6 +20,24 @@ class Block {
     };
 }
 
+class Vector {
+    direction: number; // in radians
+    magnitude: number;
+
+    getX = (): number => {
+        return Math.sin(this.direction) * this.magnitude;
+    }
+
+    getY = (): number => {
+        return Math.cos(this.direction) * this.magnitude;
+    }
+
+    constructor(dir, value) {
+        this.direction = dir;
+        this.magnitude = value;
+    }
+}
+
 class DistanceFromPoint {
     xPos: number;
     yPos: number;
@@ -85,6 +103,8 @@ const BOARD_HEIGHT: number = 640;
 
 let ballXPos: number = 450;
 let ballYPos: number = 30;
+let ballDirectionDegrees: number = 45;
+let ballTotalVelocity: number = 113;
 let ballXVelocity: number = 120;
 let ballYVelocity: number = 120;
 let ballDiv: (HTMLDivElement | null) = null;
@@ -613,6 +633,8 @@ const moveBall = (): void => {
                 removeBlock(blockCollision.blockNumberCollision);
             } else {
                 // PADDLE COLLISION is nearest
+                if (isLeftKeyPressed === true) paddleCollision.collisionType = COLLISION_WITH_PADDLE_LEFT;
+                if (isRightKeyPressed === true) paddleCollision.collisionType = COLLISION_WITH_PADDLE_RIGHT;
                 nearestCollision = paddleCollision;
 
                 ballYVelocity = -ballYVelocity;
@@ -637,6 +659,18 @@ const moveBall = (): void => {
             if (nearestCollision !== null && (nearestCollision.collisionType === COLLISION_WITH_PADDLE_LEFT ||
                 nearestCollision.collisionType === COLLISION_WITH_PADDLE_MIDDLE || nearestCollision.collisionType === COLLISION_WITH_PADDLE_RIGHT)) {
                 console.log("Found a collision with paddle at (" + oldBallXPos + ", " + oldBallYPos + "), new ball pos: (" + ballXPos + ", " + ballYPos + ")");
+
+                if (nearestCollision.collisionType === COLLISION_WITH_PADDLE_LEFT) {
+                    // TODO
+                //    rotateBallLeft();
+                //    ballXVelocity = ;
+                //    ballYVelocity = ;
+                } else if (nearestCollision.collisionType === COLLISION_WITH_PADDLE_RIGHT) {
+                    // TODO
+                //    rotateBallRight();
+                //    ballXVelocity = ;
+                //    ballYVelocity = ;
+                }
             }
 
             // Re-run the collisions so we can run the loop again
@@ -727,11 +761,12 @@ const checkForPaddleCollisions = (oldBallXPos: number, oldBallYPos: number): (Di
         if (ballXAtCollisionTime < (paddleXPos + paddleImage.width) && (ballXAtCollisionTime + ballImage.width) > paddleXPos) {
             let paddleCollision: DistanceFromPoint = new DistanceFromPoint(ballXAtCollisionTime, paddleYPos, oldBallXPos, oldBallYPos);
             paddleCollision.collisionType = COLLISION_WITH_PADDLE_MIDDLE;
-            if ((ballXAtCollisionTime - PADDLE_SIDE_WIDTH) < paddleXPos) {
-                paddleCollision.collisionType = COLLISION_WITH_PADDLE_LEFT;
-            } else if ((ballXAtCollisionTime + ballImage.width + PADDLE_SIDE_WIDTH) > (paddleXPos + paddleImage.width)) {
-                paddleCollision.collisionType = COLLISION_WITH_PADDLE_RIGHT;
-            }
+            // collision in different directions based on where it hits the paddle
+            //if ((ballXAtCollisionTime - PADDLE_SIDE_WIDTH) < paddleXPos) {
+            //    paddleCollision.collisionType = COLLISION_WITH_PADDLE_LEFT;
+            //} else if ((ballXAtCollisionTime + ballImage.width + PADDLE_SIDE_WIDTH) > (paddleXPos + paddleImage.width)) {
+            //    paddleCollision.collisionType = COLLISION_WITH_PADDLE_RIGHT;
+            //}
 
             console.log("Paddle collision detected");
             return paddleCollision;
