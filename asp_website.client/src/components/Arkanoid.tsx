@@ -32,9 +32,9 @@ class Vector {
         return Math.cos(this.direction) * this.magnitude;
     }
 
-    constructor(dir, value) {
-        this.direction = dir;
-        this.magnitude = value;
+    constructor(radians, velocity) {
+        this.direction = radians;
+        this.magnitude = velocity;
     }
 }
 
@@ -105,6 +105,7 @@ let ballXPos: number = 450;
 let ballYPos: number = 30;
 let ballDirectionDegrees: number = 45;
 let ballTotalVelocity: number = 113;
+let ballVelocity: (Vector | null) = null;
 let ballXVelocity: number = 120;
 let ballYVelocity: number = 120;
 let ballDiv: (HTMLDivElement | null) = null;
@@ -237,6 +238,8 @@ const startNewGame = (): void => {
     currentScore = 0;
     currentLevel = 1;
     numBlocksDestroyed = 0;
+
+    ballVelocity = new Vector(Math.PI / 4, 113);
 
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     if (playingAreaScreen !== null) {
@@ -551,8 +554,10 @@ const removeFromPlayingGrid = (x: number, y: number, block: Block): void => {
 
 
 const moveBall = (): void => {
-    let moveBallXDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballXVelocity;
-    let moveBallYDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballYVelocity;
+    //let moveBallXDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballXVelocity;
+    //let moveBallYDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballYVelocity;
+    let moveBallXDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballVelocity.getX();
+    let moveBallYDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballVelocity.getY();
 
     // TODO: First go through a series of IF statements to check for collisions with blocks and the paddle
     let oldBallXPos = ballXPos;
