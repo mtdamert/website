@@ -24,6 +24,14 @@ class Vector {
     direction: number; // in radians
     magnitude: number;
 
+    reverseXDirection = (): void => {
+        if (this.direction > Math.PI / 2) {
+            this.direction += Math.PI / 2;
+        } else {
+            this.direction -= Math.PI / 2;
+        }
+    }
+
     getX = (): number => {
         return Math.sin(this.direction) * this.magnitude;
     }
@@ -596,11 +604,13 @@ const moveBall = (): void => {
 
                 if (wallCollision.collisionType === COLLISION_WITH_LEFT_WALL) {
                     ballXPos = -ballXPos;
-                    ballXVelocity = -ballXVelocity;
+                    //ballXVelocity = -ballXVelocity;
+                    ballVelocity.reverseXDirection();
                     changedXDirection = true;
                 } else if (wallCollision.collisionType === COLLISION_WITH_RIGHT_WALL) {
                     ballXPos = ballXPos - (2 * (ballXPos - (BOARD_WIDTH - ballImage.width)));
-                    ballXVelocity = -ballXVelocity;
+                    //ballXVelocity = -ballXVelocity;
+                    ballVelocity.reverseXDirection();
                     changedXDirection = true;
                 } else if (wallCollision.collisionType === COLLISION_WITH_TOP_WALL) {
                     ballYPos = -ballYPos;
@@ -621,10 +631,12 @@ const moveBall = (): void => {
                 nearestCollision = blockCollision;
 
                 if (blockCollision.collisionType === COLLISION_WITH_BLOCK_LEFT) {
-                    ballXVelocity = -ballXVelocity;
+                    //ballXVelocity = -ballXVelocity;
+                    ballVelocity.reverseXDirection();
                     changedXDirection = true;
                 } else if (blockCollision.collisionType === COLLISION_WITH_BLOCK_RIGHT) {
-                    ballXVelocity = -ballXVelocity;
+                    //ballXVelocity = -ballXVelocity;
+                    ballVelocity.reverseXDirection();
                     changedXDirection = true;
                 } else if (blockCollision.collisionType === COLLISION_WITH_BLOCK_BOTTOM) {
                     ballYVelocity = -ballYVelocity;
