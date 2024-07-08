@@ -21,23 +21,27 @@ class Block {
 }
 
 class Vector {
-    direction: number; // in radians
+    direction: number; // in radians - should always be in the range of (0, 2*PI)
     magnitude: number;
 
     reverseXDirection = (): void => {
-        if (this.direction > Math.PI / 2) {
-            this.direction += Math.PI / 2;
+        if (this.direction < Math.PI) {
+            this.direction = Math.PI - this.direction;
         } else {
-            this.direction -= Math.PI / 2;
+            this.direction = Math.PI - (this.direction - Math.PI) + Math.PI;
         }
     }
 
+    reverseYDirection = (): void => {
+        this.direction = -this.direction + (2 * Math.PI);
+    }
+
     getX = (): number => {
-        return Math.sin(this.direction) * this.magnitude;
+        return Math.cos(this.direction) * this.magnitude;
     }
 
     getY = (): number => {
-        return Math.cos(this.direction) * this.magnitude;
+        return Math.sin(this.direction) * this.magnitude;
     }
 
     constructor(radians, velocity) {
@@ -546,18 +550,10 @@ const removeBlock = (blockNumber: number): void => {
     }
 }
 
+
 const levelUp = (newLevel: number): void => {
     // todo
     console.log("LEVEL COMPLETED");
-}
-
-const removeFromPlayingGrid = (x: number, y: number, block: Block): void => {
-    blocks[x][y] = null;
-
-    // Update graphics
-    if (block !== null && block.image !== null) {
-        block.image.style.display = 'none';
-    }
 }
 
 
@@ -614,12 +610,14 @@ const moveBall = (): void => {
                     changedXDirection = true;
                 } else if (wallCollision.collisionType === COLLISION_WITH_TOP_WALL) {
                     ballYPos = -ballYPos;
-                    ballYVelocity = -ballYVelocity;
+                    //ballYVelocity = -ballYVelocity;
+                    ballVelocity.reverseYDirection();
                     //changedYDirection = true;
                 } else {
                     // TODO: Death
                     ballYPos = ballYPos - (2 * (ballYPos - (BOARD_HEIGHT - ballImage.height)));
-                    ballYVelocity = -ballYVelocity;
+                    //ballYVelocity = -ballYVelocity;
+                    ballVelocity.reverseYDirection();
                     //changedYDirection = true;
                 }
 
@@ -639,10 +637,12 @@ const moveBall = (): void => {
                     ballVelocity.reverseXDirection();
                     changedXDirection = true;
                 } else if (blockCollision.collisionType === COLLISION_WITH_BLOCK_BOTTOM) {
-                    ballYVelocity = -ballYVelocity;
+                    //ballYVelocity = -ballYVelocity;
+                    ballVelocity.reverseYDirection();
                     changedYDirection = true;
                 } else if (blockCollision.collisionType === COLLISION_WITH_BLOCK_TOP) {
-                    ballYVelocity = -ballYVelocity;
+                    //ballYVelocity = -ballYVelocity;
+                    ballVelocity.reverseYDirection();
                     changedYDirection = true;
                 }
 
@@ -654,7 +654,8 @@ const moveBall = (): void => {
                 if (isRightKeyPressed === true) paddleCollision.collisionType = COLLISION_WITH_PADDLE_RIGHT;
                 nearestCollision = paddleCollision;
 
-                ballYVelocity = -ballYVelocity;
+                //ballYVelocity = -ballYVelocity;
+                ballVelocity.reverseYDirection();
                 //changedYDirection = true;
             }
 
