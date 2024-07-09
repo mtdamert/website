@@ -118,8 +118,8 @@ let ballYPos: number = 30;
 let ballDirectionDegrees: number = 45;
 let ballTotalVelocity: number = 113;
 let ballVelocity: (Vector | null) = null;
-let ballXVelocity: number = 120;
-let ballYVelocity: number = 120;
+//let ballXVelocity: number = 120;
+//let ballYVelocity: number = 120;
 let ballDiv: (HTMLDivElement | null) = null;
 let ballImage: (HTMLImageElement | null) = null;
 
@@ -131,7 +131,6 @@ let paddleXPos: number = 280;
 const paddleYPos: number = 590;
 let paddleDiv: (HTMLDivElement | null) = null;
 let paddleImage: (HTMLImageElement | null) = null;
-const PADDLE_SIDE_WIDTH = 10;
 
 const STATE_GAME_RUNNING: number = 0;
 const STATE_GAME_PAUSED: number = 1;
@@ -155,8 +154,6 @@ const PADDLE_NOT_MOVING: number = 1;
 const PADDLE_MOVING_RIGHT: number = 2;
 const PADDLE_MOVING_LEFT: number = 3;
 let paddleMotion: number = PADDLE_NOT_MOVING;
-
-let Level1Color: string = '#00ff00';
 
 const gameLoop = (): void => {
     //game loop
@@ -409,7 +406,7 @@ const loadBlocks = async (level: number): Promise<Response> => {
 
     // TODO: Create a Controller on the server that loads levels
 
-    const levelResponse: Promise<Response> = await fetch('arkanoidlevel?id=1');
+    const levelResponse: Promise<Response> = await fetch('arkanoidlevel?id=' + level);
     const levelData: string = await levelResponse.json();
     //debugger;
 
@@ -421,8 +418,10 @@ const loadBlocks = async (level: number): Promise<Response> => {
     // create a new, empty board
     if (blocks !== null && blocks?.length > 0) {
         for (let i: number = 0; i < blocks.length; i++) {
-            blocks[i].image.style.visibility = 'hidden';
-            blocks[i] = null;
+            if (blocks[i] !== null && blocks[i].image !== null && blocks[i].image.style !== null) {
+                blocks[i].image.style.visibility = 'hidden';
+                blocks[i] = null;
+            }
         }
 
         blocks = new Array<(Block | null)>(0);
@@ -445,6 +444,10 @@ const loadBlocks = async (level: number): Promise<Response> => {
             blocks.push(newBlock);
         }
     }
+
+    console.log("level bg color: " + currentLevel.background.color);
+    playingArea.style.backgroundColor = currentLevel.background.color;
+    //levelBackgroundColor = currentLevel.background.color;
 
     return levelResponse;
 }
@@ -554,6 +557,8 @@ const removeBlock = (blockNumber: number): void => {
 const levelUp = (newLevel: number): void => {
     // todo
     console.log("LEVEL COMPLETED");
+
+    loadBlocks(newLevel);
 }
 
 
