@@ -329,7 +329,7 @@ const startNewGame = (): void => {
     }
 
     blocks = new Array<(Block | null)>(0);
-    loadBlocks(currentLevel);
+    loadLevel(currentLevel);
 
     window.addEventListener(
         "keydown",
@@ -402,7 +402,7 @@ const startNewGame = (): void => {
     gameLoop();
 }
 
-const loadBlocks = async (level: number): Promise<Response> => {
+const loadLevel = async (level: number): Promise<Response> => {
 
     // TODO: Create a Controller on the server that loads levels
 
@@ -426,6 +426,13 @@ const loadBlocks = async (level: number): Promise<Response> => {
 
         blocks = new Array<(Block | null)>(0);
     }
+
+    // Populate board
+    const blockColorField = currentLevel.data.fieldInstances.find((instance) => instance.__identifier === "BlockColor");
+    let blockColor = "#000000";
+    if (blockColorField !== null) {
+        blockColor = blockColorField.__value;
+    }
     for (const tile of currentLevel.layers[0].data.gridTiles) {
         if (tile.src[0] === 0) {
             let newBlock: Block = new Block();
@@ -439,6 +446,7 @@ const loadBlocks = async (level: number): Promise<Response> => {
             newBlock.image.style.position = 'absolute';
             newBlock.image.style.top = newBlock.y + 'px';
             newBlock.image.style.left = newBlock.x + 'px';
+            newBlock.image.style.backgroundColor = blockColor;
             newBlock.div.appendChild(newBlock.image);
             if (playingArea !== null) { playingArea.appendChild(newBlock.div); }
             blocks.push(newBlock);
@@ -558,7 +566,7 @@ const levelUp = (newLevel: number): void => {
     // todo
     console.log("LEVEL COMPLETED");
 
-    loadBlocks(newLevel);
+    loadLevel(newLevel);
 }
 
 
