@@ -115,11 +115,7 @@ const BOARD_HEIGHT: number = 640;
 
 let ballXPos: number = 450;
 let ballYPos: number = 30;
-let ballDirectionDegrees: number = 45;
-let ballTotalVelocity: number = 113;
 let ballVelocity: (Vector | null) = null;
-//let ballXVelocity: number = 120;
-//let ballYVelocity: number = 120;
 let ballDiv: (HTMLDivElement | null) = null;
 let ballImage: (HTMLImageElement | null) = null;
 
@@ -455,7 +451,9 @@ const loadLevel = async (level: number): Promise<Response> => {
 
     console.log("level bg color: " + currentLevel.background.color);
     playingArea.style.backgroundColor = currentLevel.background.color;
-    //levelBackgroundColor = currentLevel.background.color;
+
+    // Speed ball up by 10%
+    ballVelocity.magnitude += (ballVelocity.magnitude / 10);
 
     return levelResponse;
 }
