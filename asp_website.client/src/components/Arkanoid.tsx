@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { World, LDtk } from 'ldtk';
 import ark_block_base from '../images/ark_block_base2.png';
+import ark_blocks from '../images/ark_blocks.png';
 import ark_paddle from '../images/ark_paddle.png';
 import ark_ball from '../images/ark_ball.png';
 
@@ -112,6 +113,8 @@ let currentUserName: string = "(current)";
 
 const BOARD_WIDTH: number = 640;
 const BOARD_HEIGHT: number = 640;
+const BLOCK_WIDTH: number = 64;
+const BLOCK_HEIGHT: number = 32;
 
 let ballXPos: number = 450;
 let ballYPos: number = 30;
@@ -327,6 +330,7 @@ const startNewGame = (): void => {
     blocks = new Array<(Block | null)>(0);
     loadLevel(currentLevel);
 
+    // Handle key presses
     window.addEventListener(
         "keydown",
         (event) => {
@@ -436,14 +440,28 @@ const loadLevel = async (level: number): Promise<Response> => {
             newBlock.div.style.visibility = 'visible';
             newBlock.x = tile.px[0];
             newBlock.y = tile.px[1];
-            newBlock.image = document.createElement('img');
-            newBlock.image.src = ark_block_base;
-            newBlock.image.style.backgroundColor = '#ff0000';
-            newBlock.image.style.position = 'absolute';
-            newBlock.image.style.top = newBlock.y + 'px';
-            newBlock.image.style.left = newBlock.x + 'px';
-            newBlock.image.style.backgroundColor = blockColor;
-            newBlock.div.appendChild(newBlock.image);
+
+            newBlock.div.style.backgroundImage = `url(${ark_blocks})`;
+            newBlock.div.style.backgroundPosition = "0px 0px"; // Visible coordinates in image
+            newBlock.div.style.height = BLOCK_HEIGHT + 'px';
+            newBlock.div.style.width = BLOCK_WIDTH + 'px';
+            newBlock.div.style.position = 'absolute';
+            newBlock.div.style.top = newBlock.y + 'px';
+            newBlock.div.style.left = newBlock.x + 'px';
+            newBlock.div.style.backgroundColor = blockColor;
+
+            //newBlock.image = document.createElement('img');
+            //newBlock.image.src = ark_block_base;
+            //newBlock.image.style.backgroundColor = '#ff0000';
+            //newBlock.image.style.position = 'absolute';
+            //newBlock.image.style.top = newBlock.y + 'px';
+            //newBlock.image.style.left = newBlock.x + 'px';
+            //newBlock.image.style.backgroundColor = blockColor;
+            //newBlock.div.appendChild(newBlock.image);
+
+            // TEST
+            console.log("block div width: " + newBlock.div.style.width);
+
             if (playingArea !== null) { playingArea.appendChild(newBlock.div); }
             blocks.push(newBlock);
         }
@@ -538,7 +556,10 @@ const removeBlock = (blockNumber: number): void => {
     // Check all playingArea's children - they should all be of type 'block'
     let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
 
-    blocks[blockNumber].image.style.visibility = 'hidden';
+    if (blocks[blockNumber].image !== null) {
+        blocks[blockNumber].image.style.visibility = 'hidden';
+    }
+    blocks[blockNumber].div.style.visibility = 'hidden';
     blocks[blockNumber] = null;
     numBlocksDestroyed++;
 
@@ -819,8 +840,8 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
 
     for (let i: number = 0; i < blocks.length; i++) {
         if (blocks[i] !== null) {
-            let blockRightXPos: number = blocks[i].x + blocks[i].image.width;
-            let blockBottomYPos: number = blocks[i].y + blocks[i].image.height;
+            let blockRightXPos: number = blocks[i].x + parseInt(blocks[i].div.style.width, 10);
+            let blockBottomYPos: number = blocks[i].y + parseInt(blocks[i].div.style.height, 10);
 
             // TODO: Collisions should happen if the bottom of the ball hits the top of the block;
             //       and if the top of the ball hits the bottom of the block
