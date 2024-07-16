@@ -131,8 +131,14 @@ const paddleYPos: number = 590;
 let paddleDiv: (HTMLDivElement | null) = null;
 let paddleImage: (HTMLImageElement | null) = null;
 
+let loadingLevelCountdown: number = 0;
+const LOADING_LEVEL_INTERVAL: number = 3000;
+
+const FPS_FRAME_LENGTH: number = 17;
+
 const STATE_GAME_RUNNING: number = 0;
 const STATE_GAME_PAUSED: number = 1;
+const STATE_LOADING_LEVEL: number = 2;
 
 const NUM_HIGH_SCORES: number = 5;
 
@@ -155,8 +161,20 @@ const PADDLE_MOVING_LEFT: number = 3;
 let paddleMotion: number = PADDLE_NOT_MOVING;
 
 const gameLoop = (): void => {
-    //game loop
-    moveBall();
+    if (gameState !== STATE_LOADING_LEVEL) {
+        //game loop
+        moveBall();
+    } else {
+        loadingLevelCountdown -= FPS_FRAME_LENGTH;
+        if (loadingLevelCountdown <= 0) {
+            gameState = STATE_GAME_RUNNING;
+
+            let newLevelBox: (HTMLElement | null) = document.getElementById("newLevelBox");
+            if (newLevelBox !== null) {
+                newLevelBox.style.visibility = 'hidden';
+            }
+        }
+    }
 
     if (isLeftKeyPressed) movePaddle(DIRECTION_LEFT);
     if (isRightKeyPressed) movePaddle(DIRECTION_RIGHT);
@@ -167,7 +185,7 @@ const gameLoop = (): void => {
     if (isGameOver === false && gameState !== STATE_GAME_PAUSED) {
         //still in play - keep the loop going
         gameOverVarsSet = false;
-        setTimeout(gameLoop, 17);
+        setTimeout(gameLoop, FPS_FRAME_LENGTH);
     } else if (isGameOver === true) {
         gameOver();
     }
@@ -433,13 +451,17 @@ const loadLevel = async (level: number): Promise<Response> => {
     if (blockColorField !== null) {
         blockColor = blockColorField.__value;
     }
+
+    let blockCounter: number = 0;
     for (const tile of currentLevel.layers[0].data.gridTiles) {
         if (tile.src[0] === 0) {
             let newBlock: Block = new Block();
             newBlock.div = document.createElement('div');
+            newBlock.div.style.display = 'inline';
             newBlock.div.style.visibility = 'visible';
             newBlock.x = tile.px[0];
             newBlock.y = tile.px[1];
+            newBlock.div.id = "block" + blockCounter++;
 
             newBlock.div.style.backgroundImage = `url(${ark_blocks})`;
             newBlock.div.style.backgroundPosition = "0px 0px"; // Visible coordinates in image
@@ -449,6 +471,7 @@ const loadLevel = async (level: number): Promise<Response> => {
             newBlock.div.style.top = newBlock.y + 'px';
             newBlock.div.style.left = newBlock.x + 'px';
             newBlock.div.style.backgroundColor = blockColor;
+            newBlock.image = null;
 
             //newBlock.image = document.createElement('img');
             //newBlock.image.src = ark_block_base;
@@ -554,12 +577,15 @@ const incrementSpeed = (): void => {
 
 const removeBlock = (blockNumber: number): void => {
     // Check all playingArea's children - they should all be of type 'block'
-    let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
+    //let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
 
     if (blocks[blockNumber].image !== null) {
         blocks[blockNumber].image.style.visibility = 'hidden';
     }
+    blocks[blockNumber].div.style.display = 'none';
     blocks[blockNumber].div.style.visibility = 'hidden';
+    // TODO: Using getElementById works; accessing the blocks[] array seems to access copies of the blocks, not the blocks themselves
+    document.getElementById("block" + blockNumber).style.display = 'none';
     blocks[blockNumber] = null;
     numBlocksDestroyed++;
 
@@ -582,8 +608,17 @@ const removeBlock = (blockNumber: number): void => {
 
 
 const levelUp = (newLevel: number): void => {
-    // todo
-    console.log("LEVEL COMPLETED");
+    console.log("LEVEL " + (newLevel - 1) + " COMPLETED");
+
+    gameState = STATE_LOADING_LEVEL;
+    let newLevelBox: (HTMLElement | null) = document.getElementById("newLevelBox");
+    if (newLevelBox !== null) {
+        newLevelBox.style.display = 'inline';
+        newLevelBox.style.visibility = 'visible';
+        newLevelBox.innerHTML = "LEVEL " + newLevel;
+    }
+
+    loadingLevelCountdown = LOADING_LEVEL_INTERVAL;
 
     loadLevel(newLevel);
 }
@@ -1093,6 +1128,7 @@ const gameOver = (): void => {
     if (currentHighScores.some((highScore) => { return highScore.isCurrentScore === true })) {
         let enterName: (HTMLElement | null) = document.getElementById("enterName");
         if (enterName !== null) {
+            enterName.style.display = 'inline';
             enterName.style.visibility = 'visible';
         }
 
@@ -1106,20 +1142,20 @@ const gameOver = (): void => {
 
     let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
     if (pausedBox !== null) {
-        pausedBox.style.visibility = 'visible';
+        pausedBox.style.display = 'inline';
         pausedBox.innerHTML = "GAME OVER";
         pausedBox.style.color = "rgb(224,224,224)";
         pausedBox.style.backgroundColor = "rgb(175, 58, 57)";
     }
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     if (playingAreaScreen !== null) {
-        playingAreaScreen.style.visibility = 'visible';
+        playingAreaScreen.style.display = 'inline';
     }
 
     // Add a NEW GAME button
     let playAgainButton: (HTMLElement | null) = document.getElementById("playAgainButton");
     if (playAgainButton !== null) {
-        playAgainButton.style.visibility = 'visible';
+        playAgainButton.style.display = 'inline';
     }
 
     gameOverVarsSet = true;
@@ -1154,6 +1190,9 @@ export default function Arkanoid() {
                 <div id="playingArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[640px] h-[${BOARD_HEIGHT}px] bg-[#c0c0c0]`} />
                     <div id="pausedBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
                         PAUSED
+                    </div>
+                    <div id="newLevelBox" className={`absolute top-600px left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-green-700 bg-[#808080]`}>
+                        LEVEL 1
                     </div>
                     <div id="enterName" className={`absolute top-[400px] left-[80px] w-[${BOARD_WIDTH}px] border-black bg-[#C0C0C0] text-center text-lg z-10`}>
                         <div>New high score! Enter your name:</div>
