@@ -132,7 +132,7 @@ let paddleDiv: (HTMLDivElement | null) = null;
 let paddleImage: (HTMLImageElement | null) = null;
 
 let loadingLevelCountdown: number = 0;
-const LOADING_LEVEL_INTERVAL: number = 3000;
+const LOADING_LEVEL_INTERVAL: number = 8000;
 
 const FPS_FRAME_LENGTH: number = 17;
 
@@ -1191,7 +1191,7 @@ export default function Arkanoid() {
                     <div id="pausedBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
                         PAUSED
                     </div>
-                    <div id="newLevelBox" className={`absolute top-600px left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-green-700 bg-[#808080]`}>
+                    <div id="newLevelBox" className={`absolute top-[600px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-green-700 bg-[#808080]`}>
                         LEVEL 1
                     </div>
                     <div id="enterName" className={`absolute top-[400px] left-[80px] w-[${BOARD_WIDTH}px] border-black bg-[#C0C0C0] text-center text-lg z-10`}>
