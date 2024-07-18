@@ -9,15 +9,22 @@ import ark_ball from '../images/ark_ball.png';
 class Block {
     div: (HTMLDivElement | null);
     image: (HTMLImageElement | null);
-    pieceType: number;
+    blockType: number;
     x: number;
     y: number;
+    numHits: number;
+
+    setBlockType(imageYCoord) {
+        this.blockType = imageYCoord / BLOCK_HEIGHT;
+    }
 
     constructor() {
         this.div = null;
         this.image = null;
+        this.blockType = BLOCK_TYPE_BASIC;
         this.x = 0;
         this.y = 0;
+        this.numHits = 0;
     };
 }
 
@@ -159,6 +166,9 @@ const PADDLE_NOT_MOVING: number = 1;
 const PADDLE_MOVING_RIGHT: number = 2;
 const PADDLE_MOVING_LEFT: number = 3;
 let paddleMotion: number = PADDLE_NOT_MOVING;
+
+const BLOCK_TYPE_BASIC: number = 0;
+const BLOCK_TYPE_STRONG: number = 1;
 
 const gameLoop = (): void => {
     if (gameState !== STATE_LOADING_LEVEL) {
@@ -464,7 +474,7 @@ const loadLevel = async (level: number): Promise<Response> => {
             newBlock.div.id = "block" + blockCounter++;
 
             newBlock.div.style.backgroundImage = `url(${ark_blocks})`;
-            newBlock.div.style.backgroundPosition = "0px 0px"; // Visible coordinates in image
+            newBlock.div.style.backgroundPosition = "0px " + tile.src[1] + "px"; // Visible coordinates in image
             newBlock.div.style.height = BLOCK_HEIGHT + 'px';
             newBlock.div.style.width = BLOCK_WIDTH + 'px';
             newBlock.div.style.position = 'absolute';
@@ -472,6 +482,8 @@ const loadLevel = async (level: number): Promise<Response> => {
             newBlock.div.style.left = newBlock.x + 'px';
             newBlock.div.style.backgroundColor = blockColor;
             newBlock.image = null;
+
+            newBlock.setBlockType(tile.src[1]);
 
             //newBlock.image = document.createElement('img');
             //newBlock.image.src = ark_block_base;
@@ -481,9 +493,6 @@ const loadLevel = async (level: number): Promise<Response> => {
             //newBlock.image.style.left = newBlock.x + 'px';
             //newBlock.image.style.backgroundColor = blockColor;
             //newBlock.div.appendChild(newBlock.image);
-
-            // TEST
-            console.log("block div width: " + newBlock.div.style.width);
 
             if (playingArea !== null) { playingArea.appendChild(newBlock.div); }
             blocks.push(newBlock);
@@ -1191,7 +1200,7 @@ export default function Arkanoid() {
                     <div id="pausedBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
                         PAUSED
                     </div>
-                    <div id="newLevelBox" className={`absolute top-[600px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-green-700 bg-[#808080]`}>
+                    <div id="newLevelBox" className={`absolute top-[650px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-green-700 bg-[#808080]`}>
                         LEVEL 1
                     </div>
                     <div id="enterName" className={`absolute top-[400px] left-[80px] w-[${BOARD_WIDTH}px] border-black bg-[#C0C0C0] text-center text-lg z-10`}>
