@@ -870,8 +870,6 @@ const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (Dist
 }
 
 const checkForPaddleCollisions = (oldBallXPos: number, oldBallYPos: number): (DistanceFromPoint | null) => {
-    let nearestCollision: (DistanceFromPoint | null) = null;
-
     let oldBallBottomYPos: number = oldBallYPos + ballImage.height;
     let ballBottomYPos: number = ballYPos + ballImage.height;
     if (oldBallBottomYPos < paddleYPos && ballBottomYPos >= paddleYPos) {
