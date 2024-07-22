@@ -508,7 +508,9 @@ const loadLevel = async (level: number): Promise<Response> => {
     playingArea.style.backgroundColor = currentLevel.background.color;
 
     // Speed ball up by 10%
-    ballVelocity.magnitude += (ballVelocity.magnitude / 10);
+    if (level > 1) {
+        ballVelocity.magnitude += (ballVelocity.magnitude / 10);
+    }
 
     return levelResponse;
 }
