@@ -4,7 +4,6 @@ import { World, LDtk } from 'ldtk';
 import ark_blocks from '../images/ark_blocks.png';
 import ark_paddle from '../images/ark_paddle.png';
 import ark_ball from '../images/ark_ball.png';
-import translucent_bg from '../images/translucent_light_gray.png';
 
 
 class Block {
@@ -184,8 +183,11 @@ const gameLoop = (): void => {
             if (newLevelBox !== null) {
                 newLevelBox.style.visibility = 'hidden';
             }
-            let darkScreen: (HTMLElement | null) = document.getElementById("darkScreen");
-            darkScreen.style.visibility = 'hidden';
+
+            let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
+            if (playingAreaScreen !== null) {
+                playingAreaScreen.style.visibility = 'hidden';
+            }
         }
     }
 
@@ -279,9 +281,6 @@ const startNewGame = (): void => {
     numBlocksDestroyed = 0;
 
     ballVelocity = new Vector(Math.PI / 4, 113);
-
-    let darkScreen: (HTMLElement | null) = document.getElementById("darkScreen");
-    darkScreen.style.backgroundImage = `url(${translucent_bg})`;
 
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     if (playingAreaScreen !== null) {
@@ -632,8 +631,11 @@ const levelUp = (newLevel: number): void => {
         newLevelBox.style.visibility = 'visible';
         newLevelBox.innerHTML = "LEVEL " + newLevel;
     }
-    let darkScreen: (HTMLElement | null) = document.getElementById("darkScreen");
-    darkScreen.style.visibility = 'visible';
+
+    let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
+    if (playingAreaScreen !== null) {
+        playingAreaScreen.style.visibility = 'visible';
+    }
 
     loadingLevelCountdown = LOADING_LEVEL_INTERVAL;
 
@@ -1208,7 +1210,6 @@ export default function Arkanoid() {
                     <div id="pausedBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
                         PAUSED
                     </div>
-                    <div id="darkScreen" className={`absolute top-[200px] left-[80px] w-[640px] h-[640px] z-10 invisible`}></div>
                     <div id="newLevelBox" className={`absolute top-[650px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-green-700 bg-[#808080]`}>
                         LEVEL 1
                     </div>
