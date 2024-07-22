@@ -18,6 +18,21 @@ class Block {
         this.blockType = imageYCoord / BLOCK_HEIGHT;
     }
 
+    blockHit(): boolean {
+        this.numHits++;
+        switch (this.blockType)
+        {
+            case BLOCK_TYPE_BASIC:
+                return true;
+            case BLOCK_TYPE_STRONG:
+                if (this.numHits >= 2) {
+                    return true;
+                }
+        }
+
+        return false;
+    }
+
     constructor() {
         this.div = null;
         this.image = null;
@@ -735,7 +750,10 @@ const moveBall = (): void => {
                 }
 
                 //console.log("Block being removed for collision: " + blockCollision.blockNumberCollision);
-                removeBlock(blockCollision.blockNumberCollision);
+                // Remove the block if it's been hit enough times
+                if (blocks[blockCollision.blockNumberCollision].blockHit()) {
+                    removeBlock(blockCollision.blockNumberCollision);
+                }
             } else {
                 // PADDLE COLLISION is nearest
                 if (isLeftKeyPressed === true) paddleCollision.collisionType = COLLISION_WITH_PADDLE_LEFT;
