@@ -14,11 +14,11 @@ class Block {
     y: number;
     numHits: number;
 
-    setBlockType(imageYCoord) {
+    setBlockType = (imageYCoord: number): void => {
         this.blockType = imageYCoord / BLOCK_HEIGHT;
     }
 
-    blockHit(): boolean {
+    blockHit = (): boolean => {
         this.numHits++;
         switch (this.blockType)
         {
@@ -57,6 +57,25 @@ class Vector {
 
     reverseYDirection = (): void => {
         this.direction = -this.direction + (2 * Math.PI);
+    }
+
+    adjustDirection = (collisionType: number): void => {
+        let oldDirection: number = this.direction;
+        // TODO: Only change direction if it doesn't push the direction over/under threshold of x*PI
+        //       So if the current direction is (7 / 8)*PI and we're going to increase it, don't increase it
+        if (collisionType === COLLISION_WITH_PADDLE_LEFT) {
+            this.direction += Math.PI / 6;
+            console.log("Direction changed from " + oldDirection + " to " + this.direction);
+        } else if (collisionType === COLLISION_WITH_PADDLE_RIGHT) {
+            this.direction -= Math.PI / 6;
+            console.log("Direction changed from " + oldDirection + " to " + this.direction);
+        //} else {
+        //    console.log("Direction not changed because the paddle was not moving");
+        }
+
+        if (this.direction > 2 * Math.PI) {
+            this.direction -= 2 * Math.PI;
+        }
     }
 
     getX = (): number => {
@@ -762,6 +781,7 @@ const moveBall = (): void => {
 
                 //ballYVelocity = -ballYVelocity;
                 ballVelocity.reverseYDirection();
+                ballVelocity.adjustDirection(paddleCollision.collisionType);
                 //changedYDirection = true;
             }
 
