@@ -11,7 +11,7 @@
 	"iid": "42b16ed0-25d0-11ef-8186-8732185e2af4",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 4,
+	"nextUid": 5,
 	"identifierStyle": "Capitalize",
 	"toc": [],
 	"worldLayout": "Free",
@@ -79,13 +79,13 @@
 	], "entities": [], "tilesets": [
 		{
 			"__cWid": 2,
-			"__cHei": 1,
-			"identifier": "Ark_block_base2",
-			"uid": 2,
-			"relPath": "../asp_website.client/src/images/ark_block_base2.png",
+			"__cHei": 2,
+			"identifier": "Ark_blocks",
+			"uid": 4,
+			"relPath": "../asp_website.client/src/images/ark_blocks.png",
 			"embedAtlas": null,
 			"pxWid": 64,
-			"pxHei": 32,
+			"pxHei": 64,
 			"tileGridSize": 32,
 			"spacing": 0,
 			"padding": 0,
@@ -94,7 +94,7 @@
 			"enumTags": [],
 			"customData": [],
 			"savedSelections": [],
-			"cachedPixelData": { "opaqueTiles": "11", "averageColors": "f999f888" }
+			"cachedPixelData": { "opaqueTiles": "0011", "averageColors": "69996777f999f999" }
 		}
 	], "enums": [], "externalEnums": [], "levelFields": [
 		{
@@ -166,8 +166,8 @@
 					"__opacity": 1,
 					"__pxTotalOffsetX": 0,
 					"__pxTotalOffsetY": 0,
-					"__tilesetDefUid": 2,
-					"__tilesetRelPath": "../asp_website.client/src/images/ark_block_base2.png",
+					"__tilesetDefUid": 4,
+					"__tilesetRelPath": "../asp_website.client/src/images/ark_blocks.png",
 					"iid": "aeb5e8d0-25d0-11ef-8186-b129ffb3ed5d",
 					"levelId": 0,
 					"layerDefUid": 1,
@@ -178,7 +178,7 @@
 					"intGridCsv": [],
 					"autoLayerTiles": [],
 					"seed": 4364,
-					"overrideTilesetUid": null,
+					"overrideTilesetUid": 4,
 					"gridTiles": [
 						{ "px": [160,32], "src": [0,0], "f": 0, "t": 0, "d": [25], "a": 1 },
 						{ "px": [192,32], "src": [32,0], "f": 0, "t": 1, "d": [26], "a": 1 },
