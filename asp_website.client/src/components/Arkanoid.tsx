@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { World, LDtk } from 'ldtk';
-//import ark_block_base from '../images/ark_block_base2.png';
 import ark_blocks from '../images/ark_blocks.png';
 import ark_paddle from '../images/ark_paddle.png';
 import ark_ball from '../images/ark_ball.png';
@@ -532,15 +531,6 @@ const loadLevel = async (level: number): Promise<Response> => {
 
             newBlock.setBlockType(tile.src[1]);
 
-            //newBlock.image = document.createElement('img');
-            //newBlock.image.src = ark_block_base;
-            //newBlock.image.style.backgroundColor = '#ff0000';
-            //newBlock.image.style.position = 'absolute';
-            //newBlock.image.style.top = newBlock.y + 'px';
-            //newBlock.image.style.left = newBlock.x + 'px';
-            //newBlock.image.style.backgroundColor = blockColor;
-            //newBlock.div.appendChild(newBlock.image);
-
             if (playingArea !== null) { playingArea.appendChild(newBlock.div); }
             blocks.push(newBlock);
         }
@@ -608,30 +598,6 @@ const init = (): void => {
     startNewGame();
 }
 
-const incrementSpeed = (): void => {
-    // Level    Drop speed
-    //        (frames/line)
-    //    00            48 (0.8 s)
-    //    01            43 (0.72s)
-    //    02            38 (0.63s)
-    //    03            33 (0.55s)
-    //    04            28 (0.47s)
-    //    05            23 (0.38s)
-    //    06            18 (0.3 s)
-    //    07            13 (0.22s)
-    //    08             8 (0.13s)
-    //    09             6 (0.1 s)
-    // 10-11             5 (0.08s)
-    // 12-13             4 (0.07s)
-    // 14-15               (0.06s)
-    // 16-17             3 (0.05s)
-    // 18-19               (0.04s)
-    // 20-23             2 (0.03s)
-    // 24-28               (0.035s)
-    //   29+             1 (0.02s)
-
-    // TODO
-}
 
 const removeBlock = (blockNumber: number): void => {
     // Check all playingArea's children - they should all be of type 'block'
@@ -1226,6 +1192,7 @@ const gameOver = (): void => {
     gameOverVarsSet = true;
 }
 
+
 export default function Arkanoid() {
     const [userName, setUserName] = useState('');
 
@@ -1253,28 +1220,30 @@ export default function Arkanoid() {
 
             <div id="fullArea">
                 <div id="playingArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[640px] h-[${BOARD_HEIGHT}px] bg-[#c0c0c0]`} />
-                    <div id="pausedBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
-                        PAUSED
+                <div id="pausedBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
+                    PAUSED
+                </div>
+                <div id="newLevelBox" className={`absolute top-[650px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-green-700 bg-[#808080]`}>
+                    LEVEL 1
+                </div>
+                <div id="enterName" className={`absolute top-[400px] left-[80px] w-[${BOARD_WIDTH}px] border-black bg-[#C0C0C0] text-center text-lg z-10`}>
+                    <div>New high score! Enter your name:</div>
+                    <div>
+                        <form onSubmit={handleNameSubmit}>
+                            <span><input type="text" value={userName} onChange={e => setUserName(e.target.value)} id="highScoreName" name="userName" /></span>
+                            <span><input type="submit" value="Enter" /></span>
+                        </form>
                     </div>
-                    <div id="newLevelBox" className={`absolute top-[650px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-green-700 bg-[#808080]`}>
-                        LEVEL 1
-                    </div>
-                    <div id="enterName" className={`absolute top-[400px] left-[80px] w-[${BOARD_WIDTH}px] border-black bg-[#C0C0C0] text-center text-lg z-10`}>
-                        <div>New high score! Enter your name:</div>
-                        <div>
-                            <form onSubmit={handleNameSubmit}>
-                                <span><input type="text" value={userName} onChange={e => setUserName(e.target.value)} id="highScoreName" name="userName" /></span>
-                                <span><input type="submit" value="Enter" /></span>
-                            </form>
-                        </div>
-                    </div>
+                </div>
 
-                    <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[147px] text-xl center invisible z-10 px-3 py-1 text-[#256bb4] bg-[#c0c0c0]">
-                        Click to Play Again
-                    </button>
-                        <div id="scoreBox" className={`absolute top-[840px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[24px] text-base text-white bg-[#007fff]`}>
-                        Score: 0; Lines: 0
-                    </div>
+                <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[147px] text-xl center invisible z-10 px-3 py-1 text-[#256bb4] bg-[#c0c0c0]">
+                    Click to Play Again
+                </button>
+                <div id="scoreBox" className={`absolute top-[840px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[24px] text-base text-white bg-[#007fff]`}>
+                    Score: 0; Lines: 0
+                    <div id="extraLivesBox" className={`absolute `}></div>
+                </div>
+
 
                 <div id="playingAreaScreen" className={`absolute top-[200px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[${BOARD_HEIGHT}px] opacity-80 bg-[#080808]`}> </div>
 
