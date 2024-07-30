@@ -156,6 +156,7 @@ let blocks: Array<(Block | null)>;
 let isGameOver: boolean = false;
 let gameOverVarsSet: boolean = false;
 let gameState: number;
+let extraLives: number = 3;
 let highScoresLoaded = false;
 let currentUserName: string = "(current)";
 
@@ -350,7 +351,24 @@ const startNewGame = (): void => {
     if (scoreBox !== null) {
         scoreBox.style.color = "white";
         scoreBox.style.backgroundColor = "rgb(68, 148, 229)";
-        scoreBox.innerHTML = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
+        scoreBox.innerText = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
+    }
+
+    // Show extra lives
+    let extraLivesBox: (HTMLElement | null) = document.getElementById("extraLivesBox");
+    if (extraLivesBox !== null) {
+        let extraLifeBallImg: Array<(HTMLImageElement | null)> = new Array<(HTMLImageElement | null)>(extraLives);
+
+        while (extraLivesBox.hasChildNodes()) {
+            extraLivesBox.removeChild(extraLivesBox.firstChild);
+        }
+
+        for (let i: number = 0; i < extraLives; i++) {
+            extraLifeBallImg[i] = document.createElement('img');
+            extraLifeBallImg[i].src = ark_ball;
+
+            extraLivesBox.appendChild(extraLifeBallImg[i]);
+        }
     }
 
     loadHighScores();
@@ -626,7 +644,7 @@ const removeBlock = (blockNumber: number): void => {
     // Update score onscreen
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
     if (scoreBox !== null) {
-        scoreBox.innerHTML = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
+        scoreBox.innerText = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
     }
 }
 
@@ -1086,7 +1104,7 @@ const newIncrementScore = (amount: number): void => {
 
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
     if (scoreBox !== null) {
-        scoreBox.innerHTML = 'Score: ' + currentScore + "; Lines: " + totalNumLines;
+        scoreBox.innerText = 'Score: ' + currentScore + "; Lines: " + totalNumLines;
     }
 }
 
@@ -1145,7 +1163,7 @@ const incrementScore = (amount: number): void => {
 
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
     if (scoreBox !== null) {
-        scoreBox.innerHTML = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
+        scoreBox.innerText = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
     }
 
 }
@@ -1241,8 +1259,8 @@ export default function Arkanoid() {
                 </button>
                 <div id="scoreBox" className={`absolute top-[840px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[24px] text-base text-white bg-[#007fff]`}>
                     Score: 0; Lines: 0
-                    <div id="extraLivesBox" className={`absolute `}></div>
                 </div>
+                <div id="extraLivesBox" className="absolute top-[840px] left-[600px] h-[24px] text-base text-white"><img src={ark_ball} className="float-left top-0" /> </div>
 
 
                 <div id="playingAreaScreen" className={`absolute top-[200px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[${BOARD_HEIGHT}px] opacity-80 bg-[#080808]`}> </div>
