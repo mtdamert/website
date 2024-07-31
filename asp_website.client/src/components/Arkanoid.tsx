@@ -357,6 +357,7 @@ const startNewGame = (): void => {
     // Show extra lives
     let extraLivesBox: (HTMLElement | null) = document.getElementById("extraLivesBox");
     if (extraLivesBox !== null) {
+        let extraLifeBallDiv: Array<(HTMLDivElement | null)> = new Array<(HTMLDivElement | null)>(extraLives);
         let extraLifeBallImg: Array<(HTMLImageElement | null)> = new Array<(HTMLImageElement | null)>(extraLives);
 
         while (extraLivesBox.hasChildNodes()) {
@@ -364,10 +365,15 @@ const startNewGame = (): void => {
         }
 
         for (let i: number = 0; i < extraLives; i++) {
+            extraLifeBallDiv[i] = document.createElement('div');
+            extraLifeBallDiv[i].style.visibility = 'visible';
+            extraLifeBallDiv[i].style.display = 'inline-block';
+            extraLifeBallDiv[i].style.width = '24px';
             extraLifeBallImg[i] = document.createElement('img');
             extraLifeBallImg[i].src = ark_ball;
+            extraLifeBallDiv[i].appendChild(extraLifeBallImg[i]);
 
-            extraLivesBox.appendChild(extraLifeBallImg[i]);
+            extraLivesBox.appendChild(extraLifeBallDiv[i]);
         }
     }
 
