@@ -595,6 +595,7 @@ const handleEscKeyPress = (): void => {
                 playingAreaScreen.style.visibility = 'hidden';
             }
 
+            lastFrameTime = new Date().getTime() - FPS_FRAME_LENGTH;
             setTimeout(() => { gameLoop() }, FPS_FRAME_LENGTH);
         }
     }
