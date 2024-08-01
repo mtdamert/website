@@ -510,7 +510,6 @@ const loadLevel = async (level: number): Promise<Response> => {
     let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
 
     let myWorld: World = World.fromJSON(levelData);
-    console.log("Tried to load a world");
     let currentLevel = myWorld.levels[0];
     // create a new, empty board
     if (blocks !== null && blocks?.length > 0) {
@@ -559,7 +558,6 @@ const loadLevel = async (level: number): Promise<Response> => {
         }
     }
 
-    console.log("level bg color: " + currentLevel.background.color);
     playingArea.style.backgroundColor = currentLevel.background.color;
 
     // Speed ball up by 10%
