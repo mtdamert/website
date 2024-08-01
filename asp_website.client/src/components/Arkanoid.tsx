@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { World, LDtk } from 'ldtk';
 import ark_blocks from '../images/ark_blocks.png';
 import ark_paddle from '../images/ark_paddle.png';
-import ark_ball from '../images/ark_ball.png';
+import ark_ball from '../images/ark_ball_rendered.png';
 
 
 class Block {
@@ -147,6 +147,7 @@ class HighScore {
 // Initial speeds
 let paddleSpeed: number = 400;
 let lastFrameTime: number = new Date().getTime();
+let lastPauseTime: number = 0;
 let currentScore: number = 0;
 let currentLevel: number = 1;
 let numBlocksDestroyed: number = 0;
@@ -456,7 +457,7 @@ const startNewGame = (): void => {
                     break;
             }
     
-            if (event.code !== "Tab") {
+            if (event.code !== "Tab" && event.code !== "Escape") {
                 // Consume the event so it doesn't get handled twice,
                 // as long as the user isn't trying to move focus away
                 event.preventDefault();
@@ -491,8 +492,6 @@ const startNewGame = (): void => {
         },
         true,
     );
-
-
     
     gameState = STATE_GAME_RUNNING;
 
@@ -574,26 +573,32 @@ const loadLevel = async (level: number): Promise<Response> => {
 const handleEscKeyPress = (): void => {
     let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
+    let currentTime = new Date().getTime();
 
-    if (gameState === STATE_GAME_RUNNING) {
-        gameState = STATE_GAME_PAUSED;
-        if (pausedBox !== null) {
-            pausedBox.style.visibility = 'visible';
-        }
-        if (playingAreaScreen !== null) {
-            playingAreaScreen.style.visibility = 'visible';
-        }
-    }
-    else if (gameState === STATE_GAME_PAUSED) {
-        gameState = STATE_GAME_RUNNING;
-        if (pausedBox !== null) {
-            pausedBox.style.visibility = 'hidden';
-        }
-        if (playingAreaScreen !== null) {
-            playingAreaScreen.style.visibility = 'hidden';
-        }
+    // Wait 0.1 seconds between ESC presses so we don't accidentally register a double-press in debug mode when frames are drawn twice
+    if ((lastPauseTime + 100) < currentTime) {
+        lastPauseTime = currentTime;
 
-        setTimeout(() => {gameLoop()}, 50);
+        if (gameState === STATE_GAME_RUNNING) {
+            gameState = STATE_GAME_PAUSED;
+            if (pausedBox !== null) {
+                pausedBox.style.visibility = 'visible';
+            }
+            if (playingAreaScreen !== null) {
+                playingAreaScreen.style.visibility = 'visible';
+            }
+        }
+        else if (gameState === STATE_GAME_PAUSED) {
+            gameState = STATE_GAME_RUNNING;
+            if (pausedBox !== null) {
+                pausedBox.style.visibility = 'hidden';
+            }
+            if (playingAreaScreen !== null) {
+                playingAreaScreen.style.visibility = 'hidden';
+            }
+
+            setTimeout(() => { gameLoop() }, FPS_FRAME_LENGTH);
+        }
     }
 }
 
