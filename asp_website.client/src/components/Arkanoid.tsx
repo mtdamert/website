@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { World, LDtk } from 'ldtk';
+import { World } from 'ldtk';
 import ark_blocks from '../images/ark_blocks.png';
 import ark_paddle from '../images/ark_paddle.png';
 import ark_ball from '../images/ark_ball_rendered.png';
