@@ -181,14 +181,16 @@ const paddleYPos: number = 590;
 let paddleDiv: (HTMLDivElement | null) = null;
 let paddleImage: (HTMLImageElement | null) = null;
 
-let loadingLevelCountdown: number = 0;
+let gameSuspendedCountdown: number = 0;
 const LOADING_LEVEL_INTERVAL: number = 8000;
+const LOST_LIFE_INTERVAL: number = 4000;
 
 const FPS_FRAME_LENGTH: number = 17;
 
 const STATE_GAME_RUNNING: number = 0;
 const STATE_GAME_PAUSED: number = 1;
 const STATE_LOADING_LEVEL: number = 2;
+const STATE_GAME_LOST_LIFE: number = 3;
 
 const NUM_HIGH_SCORES: number = 5;
 
@@ -214,17 +216,22 @@ const BLOCK_TYPE_BASIC: number = 0;
 const BLOCK_TYPE_STRONG: number = 1;
 
 const gameLoop = (): void => {
-    if (gameState !== STATE_LOADING_LEVEL) {
+    if (gameState === STATE_GAME_RUNNING) {
         //game loop
         moveBall();
     } else {
-        loadingLevelCountdown -= FPS_FRAME_LENGTH;
-        if (loadingLevelCountdown <= 0) {
+        gameSuspendedCountdown -= FPS_FRAME_LENGTH;
+        if (gameState !== STATE_GAME_PAUSED && gameSuspendedCountdown <= 0) {
             gameState = STATE_GAME_RUNNING;
 
             let newLevelBox: (HTMLElement | null) = document.getElementById("newLevelBox");
             if (newLevelBox !== null) {
                 newLevelBox.style.visibility = 'hidden';
+            }
+
+            let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
+            if (pausedBox !== null) {
+                pausedBox.style.visibility = 'hidden';
             }
 
             let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
@@ -296,6 +303,34 @@ const saveHighScores = async (): Promise<Response> => {
     return fetchSendHighScores;
 }
 
+
+const updateExtraLivesDisplay = () => {
+    // Show extra lives
+    let extraLivesBox: (HTMLElement | null) = document.getElementById("extraLivesBox");
+    if (extraLivesBox !== null) {
+        let extraLifeBallDiv: Array<(HTMLDivElement | null)> = new Array<(HTMLDivElement | null)>(extraLives);
+        let extraLifeBallImg: Array<(HTMLImageElement | null)> = new Array<(HTMLImageElement | null)>(extraLives);
+
+        while (extraLivesBox.hasChildNodes()) {
+            extraLivesBox.removeChild(extraLivesBox.firstChild);
+        }
+
+        for (let i: number = 0; i < extraLives; i++) {
+            extraLifeBallDiv[i] = document.createElement('div');
+            extraLifeBallDiv[i].style.visibility = 'visible';
+            extraLifeBallDiv[i].style.display = 'inline-block';
+            extraLifeBallDiv[i].style.width = '24px';
+            extraLifeBallImg[i] = document.createElement('img');
+            extraLifeBallImg[i].src = ark_ball;
+            extraLifeBallDiv[i].appendChild(extraLifeBallImg[i]);
+
+            extraLivesBox.appendChild(extraLifeBallDiv[i]);
+        }
+    }
+
+}
+
+
 const movePaddle = (direction) => {
     let movePaddleDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * paddleSpeed;
 
@@ -355,28 +390,7 @@ const startNewGame = (): void => {
         scoreBox.innerText = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
     }
 
-    // Show extra lives
-    let extraLivesBox: (HTMLElement | null) = document.getElementById("extraLivesBox");
-    if (extraLivesBox !== null) {
-        let extraLifeBallDiv: Array<(HTMLDivElement | null)> = new Array<(HTMLDivElement | null)>(extraLives);
-        let extraLifeBallImg: Array<(HTMLImageElement | null)> = new Array<(HTMLImageElement | null)>(extraLives);
-
-        while (extraLivesBox.hasChildNodes()) {
-            extraLivesBox.removeChild(extraLivesBox.firstChild);
-        }
-
-        for (let i: number = 0; i < extraLives; i++) {
-            extraLifeBallDiv[i] = document.createElement('div');
-            extraLifeBallDiv[i].style.visibility = 'visible';
-            extraLifeBallDiv[i].style.display = 'inline-block';
-            extraLifeBallDiv[i].style.width = '24px';
-            extraLifeBallImg[i] = document.createElement('img');
-            extraLifeBallImg[i].src = ark_ball;
-            extraLifeBallDiv[i].appendChild(extraLifeBallImg[i]);
-
-            extraLivesBox.appendChild(extraLifeBallDiv[i]);
-        }
-    }
+    updateExtraLivesDisplay();
 
     loadHighScores();
 
@@ -581,6 +595,7 @@ const handleEscKeyPress = (): void => {
             gameState = STATE_GAME_PAUSED;
             if (pausedBox !== null) {
                 pausedBox.style.visibility = 'visible';
+                pausedBox.innerHTML = "PAUSED";
             }
             if (playingAreaScreen !== null) {
                 playingAreaScreen.style.visibility = 'visible';
@@ -675,15 +690,13 @@ const levelUp = (newLevel: number): void => {
         playingAreaScreen.style.visibility = 'visible';
     }
 
-    loadingLevelCountdown = LOADING_LEVEL_INTERVAL;
+    gameSuspendedCountdown = LOADING_LEVEL_INTERVAL;
 
     loadLevel(newLevel);
 }
 
 
 const moveBall = (): void => {
-    //let moveBallXDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballXVelocity;
-    //let moveBallYDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballYVelocity;
     let moveBallXDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballVelocity.getX();
     let moveBallYDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballVelocity.getY();
 
@@ -724,25 +737,38 @@ const moveBall = (): void => {
 
                 if (wallCollision.collisionType === COLLISION_WITH_LEFT_WALL) {
                     ballXPos = -ballXPos;
-                    //ballXVelocity = -ballXVelocity;
                     ballVelocity.reverseXDirection();
                     changedXDirection = true;
                 } else if (wallCollision.collisionType === COLLISION_WITH_RIGHT_WALL) {
                     ballXPos = ballXPos - (2 * (ballXPos - (BOARD_WIDTH - ballImage.width)));
-                    //ballXVelocity = -ballXVelocity;
                     ballVelocity.reverseXDirection();
                     changedXDirection = true;
                 } else if (wallCollision.collisionType === COLLISION_WITH_TOP_WALL) {
                     ballYPos = -ballYPos;
-                    //ballYVelocity = -ballYVelocity;
                     ballVelocity.reverseYDirection();
-                    //changedYDirection = true;
                 } else {
                     // TODO: Death
-                    ballYPos = ballYPos - (2 * (ballYPos - (BOARD_HEIGHT - ballImage.height)));
-                    //ballYVelocity = -ballYVelocity;
-                    ballVelocity.reverseYDirection();
-                    //changedYDirection = true;
+                    gameState = STATE_GAME_LOST_LIFE;
+                    gameSuspendedCountdown = LOST_LIFE_INTERVAL;
+
+                    extraLives--;
+                    updateExtraLivesDisplay();
+
+                    // TODO: Reset ball to start position
+                    ballXPos = 450;
+                    ballYPos = 30;
+                    ballVelocity.direction = Math.PI / 4;
+
+                    let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
+                    if (pausedBox !== null) {
+                        pausedBox.style.visibility = 'visible';
+                        pausedBox.innerHTML = "YOU DIED";
+                    }
+
+                    let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
+                    if (playingAreaScreen !== null) {
+                        playingAreaScreen.style.visibility = 'visible';
+                    }
                 }
 
                 oldBallXPos = wallCollision.xPos;
@@ -753,19 +779,15 @@ const moveBall = (): void => {
                 nearestCollision = blockCollision;
 
                 if (blockCollision.collisionType === COLLISION_WITH_BLOCK_LEFT) {
-                    //ballXVelocity = -ballXVelocity;
                     ballVelocity.reverseXDirection();
                     changedXDirection = true;
                 } else if (blockCollision.collisionType === COLLISION_WITH_BLOCK_RIGHT) {
-                    //ballXVelocity = -ballXVelocity;
                     ballVelocity.reverseXDirection();
                     changedXDirection = true;
                 } else if (blockCollision.collisionType === COLLISION_WITH_BLOCK_BOTTOM) {
-                    //ballYVelocity = -ballYVelocity;
                     ballVelocity.reverseYDirection();
                     changedYDirection = true;
                 } else if (blockCollision.collisionType === COLLISION_WITH_BLOCK_TOP) {
-                    //ballYVelocity = -ballYVelocity;
                     ballVelocity.reverseYDirection();
                     changedYDirection = true;
                 }
@@ -781,10 +803,8 @@ const moveBall = (): void => {
                 if (isRightKeyPressed === true) paddleCollision.collisionType = COLLISION_WITH_PADDLE_RIGHT;
                 nearestCollision = paddleCollision;
 
-                //ballYVelocity = -ballYVelocity;
                 ballVelocity.reverseYDirection();
                 ballVelocity.adjustDirection(paddleCollision.collisionType);
-                //changedYDirection = true;
             }
 
             // If the ball changed direction, we need to recalculate the ball's final x and y positions
@@ -805,18 +825,6 @@ const moveBall = (): void => {
             if (nearestCollision !== null && (nearestCollision.collisionType === COLLISION_WITH_PADDLE_LEFT ||
                 nearestCollision.collisionType === COLLISION_WITH_PADDLE_MIDDLE || nearestCollision.collisionType === COLLISION_WITH_PADDLE_RIGHT)) {
                 console.log("Found a collision with paddle at (" + oldBallXPos + ", " + oldBallYPos + "), new ball pos: (" + ballXPos + ", " + ballYPos + ")");
-
-                if (nearestCollision.collisionType === COLLISION_WITH_PADDLE_LEFT) {
-                    // TODO
-                //    rotateBallLeft();
-                //    ballXVelocity = ;
-                //    ballYVelocity = ;
-                } else if (nearestCollision.collisionType === COLLISION_WITH_PADDLE_RIGHT) {
-                    // TODO
-                //    rotateBallRight();
-                //    ballXVelocity = ;
-                //    ballYVelocity = ;
-                }
             }
 
             // Re-run the collisions so we can run the loop again
