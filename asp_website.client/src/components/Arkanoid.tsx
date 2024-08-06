@@ -210,7 +210,6 @@ const COLLISION_WITH_BLOCK_TOP: number = 11;
 const PADDLE_NOT_MOVING: number = 1;
 const PADDLE_MOVING_RIGHT: number = 2;
 const PADDLE_MOVING_LEFT: number = 3;
-let paddleMotion: number = PADDLE_NOT_MOVING;
 
 const BLOCK_TYPE_BASIC: number = 0;
 const BLOCK_TYPE_STRONG: number = 1;
@@ -273,7 +272,6 @@ const loadHighScores = async (): Promise<Response> => {
 
     // Make all high scores black (which means they're not in the current game)
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
-        //let highScoreDivName: string = "highScoreText" + (i + 1);
         let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
         if (highScoreDiv !== null) {
             highScoreDiv.style.color = "rgb(0,0,0)";
@@ -341,7 +339,7 @@ const movePaddle = (direction) => {
         }
         paddleImage.style.left = paddleXPos + 'px';
 
-        paddleMotion = PADDLE_MOVING_LEFT;
+        //paddleMotion = PADDLE_MOVING_LEFT;
     } else if (direction === DIRECTION_RIGHT) {
         paddleXPos += movePaddleDistance;
         if (paddleXPos > (BOARD_WIDTH - paddleImage.width)) {
@@ -349,7 +347,7 @@ const movePaddle = (direction) => {
         }
         paddleImage.style.left = paddleXPos + 'px';
 
-        paddleMotion = PADDLE_MOVING_RIGHT;
+        //paddleMotion = PADDLE_MOVING_RIGHT;
     }
 }
 
@@ -396,7 +394,6 @@ const startNewGame = (): void => {
 
     // Make all high scores black (which means they're not in the current game)
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
-        //let highScoreDivName: string = "highScoreText" + (i + 1);
         let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
         if (highScoreDiv !== null) {
             highScoreDiv.style.color = "rgb(0,0,0)";
@@ -514,12 +511,8 @@ const startNewGame = (): void => {
 }
 
 const loadLevel = async (level: number): Promise<Response> => {
-
-    // TODO: Create a Controller on the server that loads levels
-
     const levelResponse: Promise<Response> = await fetch('arkanoidlevel?id=' + level);
     const levelData: string = await levelResponse.json();
-    //debugger;
 
     let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
 
@@ -643,9 +636,6 @@ const init = (): void => {
 
 
 const removeBlock = (blockNumber: number): void => {
-    // Check all playingArea's children - they should all be of type 'block'
-    //let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
-
     if (blocks[blockNumber].image !== null) {
         blocks[blockNumber].image.style.visibility = 'hidden';
     }
@@ -754,6 +744,10 @@ const moveBall = (): void => {
                     extraLives--;
                     updateExtraLivesDisplay();
 
+                    if (extraLives <= 0) {
+                        //gameOver();
+                    }
+
                     // TODO: Reset ball to start position
                     ballXPos = 450;
                     ballYPos = 30;
@@ -799,6 +793,7 @@ const moveBall = (): void => {
                 }
             } else {
                 // PADDLE COLLISION is nearest
+                paddleCollision.collisionType = COLLISION_WITH_PADDLE_MIDDLE;
                 if (isLeftKeyPressed === true) paddleCollision.collisionType = COLLISION_WITH_PADDLE_LEFT;
                 if (isRightKeyPressed === true) paddleCollision.collisionType = COLLISION_WITH_PADDLE_RIGHT;
                 nearestCollision = paddleCollision;
@@ -912,7 +907,7 @@ const checkForPaddleCollisions = (oldBallXPos: number, oldBallYPos: number): (Di
         // Detect whether the collision is on the side of the paddle or not - TODO: do we want to use this info?
         if (ballXAtCollisionTime < (paddleXPos + paddleImage.width) && (ballXAtCollisionTime + ballImage.width) > paddleXPos) {
             let paddleCollision: DistanceFromPoint = new DistanceFromPoint(ballXAtCollisionTime, paddleYPos, oldBallXPos, oldBallYPos);
-            paddleCollision.collisionType = COLLISION_WITH_PADDLE_MIDDLE;
+            //paddleCollision.collisionType = COLLISION_WITH_PADDLE_MIDDLE;
             // collision in different directions based on where it hits the paddle
             //if ((ballXAtCollisionTime - PADDLE_SIDE_WIDTH) < paddleXPos) {
             //    paddleCollision.collisionType = COLLISION_WITH_PADDLE_LEFT;
