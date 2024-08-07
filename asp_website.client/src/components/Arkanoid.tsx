@@ -157,7 +157,7 @@ let blocks: Array<(Block | null)>;
 let isGameOver: boolean = false;
 let gameOverVarsSet: boolean = false;
 let gameState: number;
-let extraLives: number = 3;
+let extraLives: number;
 let highScoresLoaded = false;
 let currentUserName: string = "(current)";
 
@@ -303,6 +303,10 @@ const saveHighScores = async (): Promise<Response> => {
 
 
 const updateExtraLivesDisplay = () => {
+    if (extraLives < 0) {
+        extraLives = 0;
+    }
+
     // Show extra lives
     let extraLivesBox: (HTMLElement | null) = document.getElementById("extraLivesBox");
     if (extraLivesBox !== null) {
@@ -355,6 +359,7 @@ const startNewGame = (): void => {
     currentScore = 0;
     currentLevel = 1;
     numBlocksDestroyed = 0;
+    extraLives = 3;
 
     ballVelocity = new Vector(Math.PI / 4, 113);
 
@@ -661,6 +666,8 @@ const removeBlock = (blockNumber: number): void => {
     if (scoreBox !== null) {
         scoreBox.innerText = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
     }
+
+    incrementScore(1);
 }
 
 
@@ -738,31 +745,31 @@ const moveBall = (): void => {
                     ballVelocity.reverseYDirection();
                 } else {
                     // TODO: Death
-                    gameState = STATE_GAME_LOST_LIFE;
-                    gameSuspendedCountdown = LOST_LIFE_INTERVAL;
-
                     extraLives--;
                     updateExtraLivesDisplay();
 
                     if (extraLives <= 0) {
-                        //gameOver();
+                        gameOver();
+                    } else {
+                        gameState = STATE_GAME_LOST_LIFE;
+                        gameSuspendedCountdown = LOST_LIFE_INTERVAL;
+
+                        let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
+                        if (pausedBox !== null) {
+                            pausedBox.style.visibility = 'visible';
+                            pausedBox.innerHTML = "YOU DIED";
+                        }
+
+                        let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
+                        if (playingAreaScreen !== null) {
+                            playingAreaScreen.style.visibility = 'visible';
+                        }
                     }
 
                     // TODO: Reset ball to start position
                     ballXPos = 450;
                     ballYPos = 30;
                     ballVelocity.direction = Math.PI / 4;
-
-                    let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
-                    if (pausedBox !== null) {
-                        pausedBox.style.visibility = 'visible';
-                        pausedBox.innerHTML = "YOU DIED";
-                    }
-
-                    let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
-                    if (playingAreaScreen !== null) {
-                        playingAreaScreen.style.visibility = 'visible';
-                    }
                 }
 
                 oldBallXPos = wallCollision.xPos;
@@ -1057,7 +1064,7 @@ const redrawHighScores = (): void => {
     }
 }
 
-const newIncrementScore = (amount: number): void => {
+const incrementScore = (amount: number): void => {
     currentScore += amount;
     let currentScoreAdded: boolean = false;
     let redrawScores: boolean = false;
@@ -1114,72 +1121,8 @@ const newIncrementScore = (amount: number): void => {
     if (redrawScores) {
         redrawHighScores();
     }
-
-    let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
-    if (scoreBox !== null) {
-        scoreBox.innerText = 'Score: ' + currentScore + "; Lines: " + totalNumLines;
-    }
 }
 
-const incrementScore = (amount: number): void => {
-    currentScore += amount;
-
-    // If this is a high score, push other old scores down the list
-    let prevHighScore: number = 0;
-    for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
-        let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
-        if (highScoreDiv != null) {
-            console.log("found high score div " + (i + 1) + ", value: " + Number(highScoreDiv.innerHTML));
-            // current high score: "rgb(0,192,64)";
-            // existing high score: "rgb(0,192,64)";
-
-            if (currentScore > Number(highScoreDiv.innerHTML)) {
-                if (highScoreDiv.style.color === "rgb(0, 0, 0)") {
-                    console.log("REPLACING BLACK TEXT ON THE HIGH SCORES");
-                    prevHighScore = Number(highScoreDiv.innerHTML);
-                    highScoreDiv.innerHTML = "" + currentScore;
-                    highScoreDiv.style.color = "rgb(0,192,64)";
-
-                    // push all other scores down the list and make them "rgb(0,0,0)"
-                    let updatedHighScore: number = prevHighScore;
-                    console.log("Updated high score value: " + updatedHighScore);
-                    for (i = i + 1; i < NUM_HIGH_SCORES; i++) {
-                        highScoreDiv = document.getElementById("highScoreText" + (i + 1));
-                        if (highScoreDiv != null && updatedHighScore !== 0) {
-                            prevHighScore = Number(highScoreDiv.innerHTML);
-                            highScoreDiv.innerHTML = "" + updatedHighScore;
-
-                            if (updatedHighScore !== 0 && highScoreDiv.style.color === "rgb(0, 0, 0)") { // If a black score is found (a score from another game), shift it down the list
-                                updatedHighScore = prevHighScore;
-                            }
-                            else { // If a colored score is found (an old score from the current game), replace it and stop shifting scores down
-                                updatedHighScore = 0;
-                            }
-                            highScoreDiv.style.color = "rgb(0,0,0)";
-                        }
-                    }
-                }
-                else { // Found current game's previous score. Just replace it
-                    console.log("Found a high score to replace; score is " + highScoreDiv.innerText);
-                    highScoreDiv.innerHTML = "" + currentScore;
-                }
-
-                break;
-            }
-            else {
-                //console.log("Found a high score div, but didn't replace it because its color was " + highScoreDiv.style.color);
-            }
-        }
-    }
-
-    console.log("====================");
-
-    let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
-    if (scoreBox !== null) {
-        scoreBox.innerText = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
-    }
-
-}
 
 const gameOver = (): void => {
     isGameOver = true;
@@ -1204,7 +1147,7 @@ const gameOver = (): void => {
 
     let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
     if (pausedBox !== null) {
-        pausedBox.style.display = 'inline';
+        pausedBox.style.visibility = 'visible';
         pausedBox.innerHTML = "GAME OVER";
         pausedBox.style.color = "rgb(224,224,224)";
         pausedBox.style.backgroundColor = "rgb(175, 58, 57)";
@@ -1217,7 +1160,7 @@ const gameOver = (): void => {
     // Add a NEW GAME button
     let playAgainButton: (HTMLElement | null) = document.getElementById("playAgainButton");
     if (playAgainButton !== null) {
-        playAgainButton.style.display = 'inline';
+        playAgainButton.style.visibility = 'visible';
     }
 
     gameOverVarsSet = true;
@@ -1267,7 +1210,7 @@ export default function Arkanoid() {
                     </div>
                 </div>
 
-                <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[147px] text-xl center invisible z-10 px-3 py-1 text-[#256bb4] bg-[#c0c0c0]">
+                <button id="playAgainButton" onClick={startNewGame} className="absolute top-[580px] left-[306px] text-xl center invisible z-10 px-3 py-1 text-[#256bb4] bg-[#c0c0c0]">
                     Click to Play Again
                 </button>
                 <div id="scoreBox" className={`absolute top-[840px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[24px] text-base text-white bg-[#007fff]`}>
