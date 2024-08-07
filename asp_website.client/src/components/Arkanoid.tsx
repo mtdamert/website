@@ -223,14 +223,9 @@ const gameLoop = (): void => {
         if (gameState !== STATE_GAME_PAUSED && gameSuspendedCountdown <= 0) {
             gameState = STATE_GAME_RUNNING;
 
-            let newLevelBox: (HTMLElement | null) = document.getElementById("newLevelBox");
-            if (newLevelBox !== null) {
-                newLevelBox.style.visibility = 'hidden';
-            }
-
-            let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
-            if (pausedBox !== null) {
-                pausedBox.style.visibility = 'hidden';
+            let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
+            if (infoBox !== null) {
+                infoBox.style.visibility = 'hidden';
             }
 
             let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
@@ -378,12 +373,12 @@ const startNewGame = (): void => {
         enterName.style.visibility = 'hidden';
     }
 
-    let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
-    if (pausedBox !== null) {
-        pausedBox.style.visibility = 'hidden';
-        pausedBox.innerHTML = "PAUSED";
-        pausedBox.style.color = "rgb(175, 58, 57)";
-        pausedBox.style.backgroundColor = "rgb(192,192,192)";
+    let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
+    if (infoBox !== null) {
+        infoBox.style.visibility = 'hidden';
+        infoBox.innerHTML = "PAUSED";
+        infoBox.style.color = "rgb(175, 58, 57)";
+        infoBox.style.backgroundColor = "rgb(192,192,192)";
     }
 
     let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
@@ -575,7 +570,7 @@ const loadLevel = async (level: number): Promise<Response> => {
 }
 
 const handleEscKeyPress = (): void => {
-    let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
+    let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     let currentTime = new Date().getTime();
 
@@ -585,9 +580,9 @@ const handleEscKeyPress = (): void => {
 
         if (gameState === STATE_GAME_RUNNING) {
             gameState = STATE_GAME_PAUSED;
-            if (pausedBox !== null) {
-                pausedBox.style.visibility = 'visible';
-                pausedBox.innerHTML = "PAUSED";
+            if (infoBox !== null) {
+                infoBox.style.visibility = 'visible';
+                infoBox.innerHTML = "PAUSED";
             }
             if (playingAreaScreen !== null) {
                 playingAreaScreen.style.visibility = 'visible';
@@ -595,8 +590,8 @@ const handleEscKeyPress = (): void => {
         }
         else if (gameState === STATE_GAME_PAUSED) {
             gameState = STATE_GAME_RUNNING;
-            if (pausedBox !== null) {
-                pausedBox.style.visibility = 'hidden';
+            if (infoBox !== null) {
+                infoBox.style.visibility = 'hidden';
             }
             if (playingAreaScreen !== null) {
                 playingAreaScreen.style.visibility = 'hidden';
@@ -669,11 +664,11 @@ const levelUp = (newLevel: number): void => {
     console.log("LEVEL " + (newLevel - 1) + " COMPLETED");
 
     gameState = STATE_LOADING_LEVEL;
-    let newLevelBox: (HTMLElement | null) = document.getElementById("newLevelBox");
-    if (newLevelBox !== null) {
-        newLevelBox.style.display = 'inline';
-        newLevelBox.style.visibility = 'visible';
-        newLevelBox.innerHTML = "LEVEL " + newLevel;
+    let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
+    if (infoBox !== null) {
+        infoBox.style.display = 'inline';
+        infoBox.style.visibility = 'visible';
+        infoBox.innerHTML = "LEVEL " + newLevel;
     }
 
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
@@ -748,10 +743,10 @@ const moveBall = (): void => {
                         gameState = STATE_GAME_LOST_LIFE;
                         gameSuspendedCountdown = LOST_LIFE_INTERVAL;
 
-                        let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
-                        if (pausedBox !== null) {
-                            pausedBox.style.visibility = 'visible';
-                            pausedBox.innerHTML = "YOU DIED";
+                        let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
+                        if (infoBox !== null) {
+                            infoBox.style.visibility = 'visible';
+                            infoBox.innerHTML = "" + extraLives + " LIVES LEFT";
                         }
 
                         let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
@@ -1139,12 +1134,12 @@ const gameOver = (): void => {
         scoreBox.style.backgroundColor = 'rgb(128,0,0)';
     }
 
-    let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
-    if (pausedBox !== null) {
-        pausedBox.style.visibility = 'visible';
-        pausedBox.innerHTML = "GAME OVER";
-        pausedBox.style.color = "rgb(224,224,224)";
-        pausedBox.style.backgroundColor = "rgb(175, 58, 57)";
+    let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
+    if (infoBox !== null) {
+        infoBox.style.visibility = 'visible';
+        infoBox.innerHTML = "GAME OVER";
+        infoBox.style.color = "rgb(224,224,224)";
+        infoBox.style.backgroundColor = "rgb(175, 58, 57)";
     }
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     if (playingAreaScreen !== null) {
@@ -1188,11 +1183,8 @@ export default function Arkanoid() {
 
             <div id="fullArea">
                 <div id="playingArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[640px] h-[${BOARD_HEIGHT}px] bg-[#c0c0c0]`} />
-                <div id="pausedBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
+                <div id="infoBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
                     PAUSED
-                </div>
-                <div id="newLevelBox" className={`absolute top-[650px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-green-700 bg-[#808080]`}>
-                    LEVEL 1
                 </div>
                 <div id="enterName" className={`absolute top-[400px] left-[80px] w-[${BOARD_WIDTH}px] border-black bg-[#C0C0C0] text-center text-lg z-10`}>
                     <div>New high score! Enter your name:</div>
