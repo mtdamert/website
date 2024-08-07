@@ -472,12 +472,6 @@ const startNewGame = (): void => {
                     handleEscKeyPress();
                     break;
             }
-    
-            if (event.code !== "Tab" && event.code !== "Escape") {
-                // Consume the event so it doesn't get handled twice,
-                // as long as the user isn't trying to move focus away
-                event.preventDefault();
-            }
         },
         true,
     );
