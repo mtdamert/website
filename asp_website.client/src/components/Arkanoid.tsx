@@ -536,7 +536,6 @@ const loadLevel = async (level: number): Promise<Response> => {
         if (tile.src[0] === 0) {
             let newBlock: Block = new Block();
             newBlock.div = document.createElement('div');
-            newBlock.div.style.display = 'inline';
             newBlock.div.style.visibility = 'visible';
             newBlock.x = tile.px[0];
             newBlock.y = tile.px[1];
@@ -666,8 +665,8 @@ const levelUp = (newLevel: number): void => {
     gameState = STATE_LOADING_LEVEL;
     let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
     if (infoBox !== null) {
-        infoBox.style.display = 'inline';
         infoBox.style.visibility = 'visible';
+        infoBox.style.color = "rgb(56, 175, 68)";
         infoBox.innerHTML = "LEVEL " + newLevel;
     }
 
@@ -746,6 +745,7 @@ const moveBall = (): void => {
                         let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
                         if (infoBox !== null) {
                             infoBox.style.visibility = 'visible';
+                            infoBox.style.color = "rgb(56, 175, 68)";
                             infoBox.innerHTML = "" + extraLives + " LIVES LEFT";
                         }
 
@@ -1122,7 +1122,6 @@ const gameOver = (): void => {
     if (currentHighScores.some((highScore) => { return highScore.isCurrentScore === true })) {
         let enterName: (HTMLElement | null) = document.getElementById("enterName");
         if (enterName !== null) {
-            enterName.style.display = 'inline';
             enterName.style.visibility = 'visible';
         }
 
@@ -1143,7 +1142,7 @@ const gameOver = (): void => {
     }
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     if (playingAreaScreen !== null) {
-        playingAreaScreen.style.display = 'inline';
+        playingAreaScreen.style.visibility = 'visible';
     }
 
     // Add a NEW GAME button
