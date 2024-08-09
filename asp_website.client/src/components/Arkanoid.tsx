@@ -214,6 +214,7 @@ const PADDLE_MOVING_LEFT: number = 3;
 const BLOCK_TYPE_BASIC: number = 0;
 const BLOCK_TYPE_STRONG: number = 1;
 
+
 const gameLoop = (): void => {
     if (gameState === STATE_GAME_RUNNING) {
         //game loop
@@ -253,6 +254,7 @@ const gameLoop = (): void => {
     }
 }
 
+
 // Pull high scores from the server
 const loadHighScores = async (): Promise<Response> => {
     if (highScoresLoaded) {
@@ -282,6 +284,7 @@ const loadHighScores = async (): Promise<Response> => {
 
     return response;
 }
+
 
 const saveHighScores = async (): Promise<Response> => {
     const fetchSendHighScores = fetch('arkanoidhighscores', {
@@ -349,6 +352,7 @@ const movePaddle = (direction) => {
         //paddleMotion = PADDLE_MOVING_RIGHT;
     }
 }
+
 
 const startNewGame = (): void => {
     currentScore = 0;
@@ -504,6 +508,15 @@ const startNewGame = (): void => {
     gameLoop();
 }
 
+
+const updateScoreBox = (): void => {
+    let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
+    if (scoreBox !== null) {
+        scoreBox.innerText = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
+    }
+}
+
+
 const loadLevel = async (level: number): Promise<Response> => {
     const levelResponse: Promise<Response> = await fetch('arkanoidlevel?id=' + level);
     const levelData: string = await levelResponse.json();
@@ -565,8 +578,12 @@ const loadLevel = async (level: number): Promise<Response> => {
         ballVelocity.magnitude += (ballVelocity.magnitude / 10);
     }
 
+    numBlocksDestroyed = 0;
+    updateScoreBox();
+
     return levelResponse;
 }
+
 
 const handleEscKeyPress = (): void => {
     let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
@@ -601,6 +618,7 @@ const handleEscKeyPress = (): void => {
         }
     }
 }
+
 
 const init = (): void => {
     currentHighScores = new Array<HighScore>(NUM_HIGH_SCORES);
@@ -649,13 +667,9 @@ const removeBlock = (blockNumber: number): void => {
         levelUp(++currentLevel);
     }
 
-    // Update score onscreen
-    let scoreBox: (HTMLElement | null) = document.getElementById("scoreBox");
-    if (scoreBox !== null) {
-        scoreBox.innerText = 'Score: ' + currentScore + "; Level: " + currentLevel + "; Blocks Destroyed: " + numBlocksDestroyed;
-    }
-
     incrementScore(1);
+
+    updateScoreBox();
 }
 
 
@@ -830,6 +844,7 @@ const moveBall = (): void => {
     ballImage.style.top = ballYPos + 'px';
 }
 
+
 const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (DistanceFromPoint | null) => {
     // Find and return the nearest wall collision
     let collisionLeft: DistanceFromPoint = new DistanceFromPoint(-100, -100, oldBallXPos, oldBallYPos);
@@ -890,6 +905,7 @@ const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (Dist
     return nearestCollision;
 }
 
+
 const checkForPaddleCollisions = (oldBallXPos: number, oldBallYPos: number): (DistanceFromPoint | null) => {
     let oldBallBottomYPos: number = oldBallYPos + ballImage.height;
     let ballBottomYPos: number = ballYPos + ballImage.height;
@@ -918,6 +934,7 @@ const checkForPaddleCollisions = (oldBallXPos: number, oldBallYPos: number): (Di
 
     return null;
 }
+
 
 const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (DistanceFromPoint | null) => {
     let nearestCollision: (DistanceFromPoint | null) = null;
@@ -1039,6 +1056,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
     return nearestCollision;
 }
 
+
 const redrawHighScores = (): void => {
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
         let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
@@ -1052,6 +1070,7 @@ const redrawHighScores = (): void => {
         }
     }
 }
+
 
 const incrementScore = (amount: number): void => {
     currentScore += amount;
