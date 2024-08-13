@@ -59,7 +59,7 @@ class Vector {
     }
 
     adjustDirection = (collisionType: number): void => {
-        let oldDirection: number = this.direction;
+        //let oldDirection: number = this.direction;
         // Only change direction if it doesn't push the direction over/under threshold of x*PI
         // So if the current direction is (7 / 8)*PI and we're going to increase it, don't increase it
         if (collisionType === COLLISION_WITH_PADDLE_LEFT) {
@@ -207,9 +207,9 @@ const COLLISION_WITH_BLOCK_RIGHT: number = 9;
 const COLLISION_WITH_BLOCK_BOTTOM: number = 10;
 const COLLISION_WITH_BLOCK_TOP: number = 11;
 
-const PADDLE_NOT_MOVING: number = 1;
-const PADDLE_MOVING_RIGHT: number = 2;
-const PADDLE_MOVING_LEFT: number = 3;
+//const PADDLE_NOT_MOVING: number = 1;
+//const PADDLE_MOVING_RIGHT: number = 2;
+//const PADDLE_MOVING_LEFT: number = 3;
 
 const BLOCK_TYPE_BASIC: number = 0;
 const BLOCK_TYPE_STRONG: number = 1;
@@ -360,7 +360,7 @@ const startNewGame = (): void => {
     numBlocksDestroyed = 0;
     extraLives = 3;
 
-    ballVelocity = new Vector(Math.PI / 4, 113);
+    ballVelocity = new Vector(Math.PI / 4, 140);
 
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     if (playingAreaScreen !== null) {
@@ -519,6 +519,12 @@ const updateScoreBox = (): void => {
 
 const loadLevel = async (level: number): Promise<Response> => {
     const levelResponse: Promise<Response> = await fetch('arkanoidlevel?id=' + level);
+
+    // TODO: Either there was an error or the player just finished the final level
+    if (!levelResponse.ok) {
+        return levelResponse;
+    }
+
     const levelData: string = await levelResponse.json();
 
     let playingArea: (HTMLElement | null) = document.getElementById("playingArea");
@@ -572,11 +578,6 @@ const loadLevel = async (level: number): Promise<Response> => {
     }
 
     playingArea.style.backgroundColor = currentLevel.background.color;
-
-    // Speed ball up by 10%
-    if (level > 1) {
-        ballVelocity.magnitude += (ballVelocity.magnitude / 10);
-    }
 
     numBlocksDestroyed = 0;
     updateScoreBox();
@@ -677,12 +678,6 @@ const levelUp = (newLevel: number): void => {
     console.log("LEVEL " + (newLevel - 1) + " COMPLETED");
 
     gameState = STATE_LOADING_LEVEL;
-    let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
-    if (infoBox !== null) {
-        infoBox.style.visibility = 'visible';
-        infoBox.style.color = "rgb(56, 175, 68)";
-        infoBox.innerHTML = "LEVEL " + newLevel;
-    }
 
     let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
     if (playingAreaScreen !== null) {
@@ -691,7 +686,29 @@ const levelUp = (newLevel: number): void => {
 
     gameSuspendedCountdown = LOADING_LEVEL_INTERVAL;
 
-    loadLevel(newLevel);
+    // Speed ball up by 12.5%
+    ballVelocity.magnitude += (ballVelocity.magnitude / 8);
+
+    const levelResponse: Promise<Response> = loadLevel(newLevel);
+
+    if (levelResponse !== null) {
+        if (levelResponse.ok) {
+            let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
+            if (infoBox !== null) {
+                infoBox.style.visibility = 'visible';
+                infoBox.style.color = "rgb(56, 175, 68)";
+                infoBox.innerHTML = "LEVEL " + newLevel;
+            }
+        } else {
+            console.log("No level found. Is the game over?");
+            let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
+            if (infoBox !== null) {
+                infoBox.style.visibility = 'visible';
+                infoBox.style.color = "rgb(56, 175, 68)";
+                infoBox.innerHTML = "YOU WIN";
+            }
+        }
+    }
 }
 
 
