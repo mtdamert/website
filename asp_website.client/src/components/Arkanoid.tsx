@@ -704,8 +704,8 @@ const levelUp = (newLevel: number): void => {
             let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
             if (infoBox !== null) {
                 infoBox.style.visibility = 'visible';
-                infoBox.style.color = "rgb(56, 175, 68)";
-                infoBox.innerHTML = "YOU WIN";
+                infoBox.style.color = "rgb(0, 128, 255)";
+                infoBox.innerHTML = "YOU WIN!";
             }
         }
     }
@@ -763,7 +763,7 @@ const moveBall = (): void => {
                     ballYPos = -ballYPos;
                     ballVelocity.reverseYDirection();
                 } else {
-                    // TODO: Death
+                    // Death
                     extraLives--;
                     updateExtraLivesDisplay();
 
@@ -844,10 +844,10 @@ const moveBall = (): void => {
             oldBallXPos = nearestCollision.xPos;
             oldBallYPos = nearestCollision.yPos;
 
-            if (nearestCollision !== null && (nearestCollision.collisionType === COLLISION_WITH_PADDLE_LEFT ||
-                nearestCollision.collisionType === COLLISION_WITH_PADDLE_MIDDLE || nearestCollision.collisionType === COLLISION_WITH_PADDLE_RIGHT)) {
-                console.log("Found a collision with paddle at (" + oldBallXPos + ", " + oldBallYPos + "), new ball pos: (" + ballXPos + ", " + ballYPos + ")");
-            }
+            //if (nearestCollision !== null && (nearestCollision.collisionType === COLLISION_WITH_PADDLE_LEFT ||
+            //    nearestCollision.collisionType === COLLISION_WITH_PADDLE_MIDDLE || nearestCollision.collisionType === COLLISION_WITH_PADDLE_RIGHT)) {
+            //    console.log("Found a collision with paddle at (" + oldBallXPos + ", " + oldBallYPos + "), new ball pos: (" + ballXPos + ", " + ballYPos + ")");
+            //}
 
             // Re-run the collisions so we can run the loop again
             nearestCollision = null;
@@ -944,7 +944,7 @@ const checkForPaddleCollisions = (oldBallXPos: number, oldBallYPos: number): (Di
             //    paddleCollision.collisionType = COLLISION_WITH_PADDLE_RIGHT;
             //}
 
-            console.log("Paddle collision detected");
+            //console.log("Paddle collision detected");
             return paddleCollision;
         }
     }
@@ -1218,7 +1218,7 @@ export default function Arkanoid() {
 
             <div id="fullArea">
                 <div id="playingArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[640px] h-[${BOARD_HEIGHT}px] bg-[#c0c0c0]`} />
-                <div id="infoBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-orange-700 bg-[#808080]`}>
+                <div id="infoBox" className={`absolute top-[500px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[48px] text-4xl text-center invisible z-10 font-semibold text-orange-700 bg-[#808080]`}>
                     PAUSED
                 </div>
                 <div id="enterName" className={`absolute top-[400px] left-[80px] w-[${BOARD_WIDTH}px] border-black bg-[#C0C0C0] text-center text-lg z-10`}>
@@ -1235,7 +1235,7 @@ export default function Arkanoid() {
                     Click to Play Again
                 </button>
                 <div id="scoreBox" className={`absolute top-[840px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[24px] text-base text-white bg-[#007fff]`}>
-                    Score: 0; Lines: 0
+                    Score: 0; Level: 1; Blocks Destroyed: 0
                 </div>
                 <div id="extraLivesBox" className="absolute top-[840px] left-[600px] h-[24px] text-base text-white"><img src={ark_ball} className="float-left top-0" /> </div>
 
