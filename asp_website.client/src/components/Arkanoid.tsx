@@ -59,7 +59,6 @@ class Vector {
     }
 
     adjustDirection = (collisionType: number): void => {
-        //let oldDirection: number = this.direction;
         // Only change direction if it doesn't push the direction over/under threshold of x*PI
         // So if the current direction is (7 / 8)*PI and we're going to increase it, don't increase it
         if (collisionType === COLLISION_WITH_PADDLE_RIGHT) {
@@ -68,16 +67,12 @@ class Vector {
             } else if (this.direction > Math.PI && this.direction < ((15 / 8) * Math.PI)) {
                 this.direction += Math.PI / 8;
             }
-
-            //console.log("Direction changed from " + oldDirection + " to " + this.direction);
         } else if (collisionType === COLLISION_WITH_PADDLE_LEFT) {
             if (this.direction > Math.PI && this.direction > ((9 / 8) * Math.PI)) {
                 this.direction -= Math.PI / 8;
             } else if (this.direction > 0 && this.direction > ((1 / 8) * Math.PI)) {
                 this.direction -= Math.PI / 8;
             }
-
-            //console.log("Direction changed from " + oldDirection + " to " + this.direction);
         }
 
         if (this.direction > 2 * Math.PI) {
