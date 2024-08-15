@@ -191,6 +191,7 @@ const STATE_GAME_RUNNING: number = 0;
 const STATE_GAME_PAUSED: number = 1;
 const STATE_LOADING_LEVEL: number = 2;
 const STATE_GAME_LOST_LIFE: number = 3;
+const STATE_YOU_WIN: number = 4;
 
 const NUM_HIGH_SCORES: number = 5;
 
@@ -206,10 +207,6 @@ const COLLISION_WITH_BLOCK_LEFT: number = 8;
 const COLLISION_WITH_BLOCK_RIGHT: number = 9;
 const COLLISION_WITH_BLOCK_BOTTOM: number = 10;
 const COLLISION_WITH_BLOCK_TOP: number = 11;
-
-//const PADDLE_NOT_MOVING: number = 1;
-//const PADDLE_MOVING_RIGHT: number = 2;
-//const PADDLE_MOVING_LEFT: number = 3;
 
 const BLOCK_TYPE_BASIC: number = 0;
 const BLOCK_TYPE_STRONG: number = 1;
@@ -242,14 +239,14 @@ const gameLoop = (): void => {
     lastFrameTime = new Date().getTime();
 
     //end conditions
-    if (isGameOver === false && gameState !== STATE_GAME_PAUSED) {
+    if (isGameOver === false && gameState !== STATE_GAME_PAUSED && gameState !== STATE_YOU_WIN) {
         //still in play - keep the loop going
         gameOverVarsSet = false;
         setTimeout(gameLoop, FPS_FRAME_LENGTH);
     } else if (isGameOver === true) {
         gameOver();
     }
-    else if (gameState === STATE_GAME_PAUSED) {
+    else if (gameState === STATE_GAME_PAUSED || gameState === STATE_YOU_WIN) {
         // idle
     }
 }
@@ -706,6 +703,28 @@ const levelUp = (newLevel: number): void => {
                 infoBox.style.visibility = 'visible';
                 infoBox.style.color = "rgb(0, 128, 255)";
                 infoBox.innerHTML = "YOU WIN!";
+            }
+
+            gameState = STATE_YOU_WIN;
+
+            if (currentHighScores.some((highScore) => { return highScore.isCurrentScore === true })) {
+                let enterName: (HTMLElement | null) = document.getElementById("enterName");
+                if (enterName !== null) {
+                    enterName.style.visibility = 'visible';
+                }
+
+                saveHighScores();
+            }
+
+            // Add a NEW GAME button
+            let playAgainButton: (HTMLElement | null) = document.getElementById("playAgainButton");
+            if (playAgainButton !== null) {
+                playAgainButton.style.visibility = 'visible';
+            }
+
+            let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
+            if (playingAreaScreen !== null) {
+                playingAreaScreen.style.visibility = 'visible';
             }
         }
     }
@@ -1214,7 +1233,7 @@ export default function Arkanoid() {
       // the playing area is 640 x 640 (BOARD_WIDTH x BOARD_HEIGHT)
     return (
         <div>
-            <span className="italic absolute top-[140px] left-[100px]">Press up arrow to rotate.<br/>Press ESC to pause.</span>
+            <span className="italic absolute top-[140px] left-[100px]">Press ESC to pause</span>
 
             <div id="fullArea">
                 <div id="playingArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[640px] h-[${BOARD_HEIGHT}px] bg-[#c0c0c0]`} />
