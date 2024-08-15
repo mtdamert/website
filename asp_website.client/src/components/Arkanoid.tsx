@@ -257,8 +257,6 @@ const loadHighScores = async (): Promise<Response> => {
     const response: Promise<Response> = await fetch('arkanoidhighscores');
     const data: Array<HighScore> = await response.json();
 
-    //console.log("loadHighScores data: " + data);
-
     // Make all high scores black (which means they're not in the current game)
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
         let highScoreDiv: (HTMLElement | null) = document.getElementById("highScoreText" + (i + 1));
@@ -332,16 +330,12 @@ const movePaddle = (direction) => {
             paddleXPos = 0;
         }
         paddleImage.style.left = paddleXPos + 'px';
-
-        //paddleMotion = PADDLE_MOVING_LEFT;
     } else if (direction === DIRECTION_RIGHT) {
         paddleXPos += movePaddleDistance;
         if (paddleXPos > (BOARD_WIDTH - paddleImage.width)) {
             paddleXPos = (BOARD_WIDTH - paddleImage.width);
         }
         paddleImage.style.left = paddleXPos + 'px';
-
-        //paddleMotion = PADDLE_MOVING_RIGHT;
     }
 }
 
@@ -512,7 +506,7 @@ const updateScoreBox = (): void => {
 const loadLevel = async (level: number): Promise<Response> => {
     const levelResponse: Promise<Response> = await fetch('arkanoidlevel?id=' + level);
 
-    // TODO: Either there was an error or the player just finished the final level
+    // Assume that the player just finished the final level
     if (!levelResponse.ok) {
         return levelResponse;
     }
@@ -630,7 +624,6 @@ const init = (): void => {
         highScoreDiv.style.color = "rgb(0,0,0)";
 
         if (rightPanel !== null) {
-            //console.log("Adding to right panel: " + highScoreDiv.id);
             rightPanel.appendChild(highScoreDiv);
         }
     }
@@ -912,7 +905,6 @@ const checkForWallCollisions = (oldBallXPos: number, oldBallYPos: number): (Dist
         let collisionTime: number = oldBallYPos / (oldBallYPos - ballYPos);
         collisionBottom.xPos = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
 
-        //console.log("Found bottom wall collision: " + ballXPos + ", " + ballYPos);
         collisionBottom.collisionType = COLLISION_WITH_BOTTOM_WALL;
     }
 
@@ -1225,7 +1217,7 @@ export default function Arkanoid() {
         }
     }
 
-      // the playing area is 640 x 640 (BOARD_WIDTH x BOARD_HEIGHT)
+    // the playing area is 640 x 640 (BOARD_WIDTH x BOARD_HEIGHT)
     return (
         <div>
             <span className="italic absolute top-[140px] left-[100px]">Press ESC to pause</span>
