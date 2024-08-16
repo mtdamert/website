@@ -12,9 +12,11 @@ namespace asp_website.Server.Controllers
         }
 
         [HttpGet(Name = "GetArkanoidLevel")]
-        public string Get(int id)
+        [ProducesResponseType<string>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult Get(int id)
         {
-            string levelName = "ark_level" + id + ".ldtk";
+            string levelName = "ark_levels\\ark_level" + id + ".ldtk";
 
             if (System.IO.File.Exists(levelName))
             {
@@ -22,11 +24,11 @@ namespace asp_website.Server.Controllers
                 string json = System.IO.File.ReadAllText(levelName);
                 if (!string.IsNullOrEmpty(json))
                 {
-                    return json;
+                    return Ok(json); // TODO: Can I return a non-HTTP 200 code?
                 }
             }
 
-            return string.Empty;
+            return NotFound();
         }
     }
 }
