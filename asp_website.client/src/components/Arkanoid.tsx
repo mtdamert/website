@@ -568,6 +568,8 @@ const loadLevel = async (level: number): Promise<Response> => {
     numBlocksDestroyed = 0;
     updateScoreBox();
 
+    console.log("LEVEL " + level + " LOADED");
+
     return levelResponse;
 }
 
@@ -677,44 +679,50 @@ const levelUp = (newLevel: number): void => {
     const levelResponse: Promise<Response> = loadLevel(newLevel);
 
     if (levelResponse !== null) {
-        if (levelResponse.ok) {
-            let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
-            if (infoBox !== null) {
-                infoBox.style.visibility = 'visible';
-                infoBox.style.color = "rgb(56, 175, 68)";
-                infoBox.innerHTML = "LEVEL " + newLevel;
-            }
-        } else {
-            console.log("No level found. Is the game over?");
-            let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
-            if (infoBox !== null) {
-                infoBox.style.visibility = 'visible';
-                infoBox.style.color = "rgb(0, 128, 255)";
-                infoBox.innerHTML = "YOU WIN!";
-            }
 
-            gameState = STATE_YOU_WIN;
+        levelResponse.then((result) => { // TODO: Should the IF condition be one function, and the ELSE condition be another function? And each function is passed as an arg to then()?
 
-            if (currentHighScores.some((highScore) => { return highScore.isCurrentScore === true })) {
-                let enterName: (HTMLElement | null) = document.getElementById("enterName");
-                if (enterName !== null) {
-                    enterName.style.visibility = 'visible';
+            if (result.ok) {
+                let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
+                if (infoBox !== null) {
+                    infoBox.style.visibility = 'visible';
+                    infoBox.style.color = "rgb(56, 175, 68)";
+                    infoBox.innerHTML = "LEVEL " + newLevel;
+                }
+            } else {
+                console.log("No level found. Is the game over?");
+                console.log("levelResponse: ");
+                console.log(result);
+                let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
+                if (infoBox !== null) {
+                    infoBox.style.visibility = 'visible';
+                    infoBox.style.color = "rgb(0, 128, 255)";
+                    infoBox.innerHTML = "YOU WIN!";
                 }
 
-                saveHighScores();
-            }
+                gameState = STATE_YOU_WIN;
 
-            // Add a NEW GAME button
-            let playAgainButton: (HTMLElement | null) = document.getElementById("playAgainButton");
-            if (playAgainButton !== null) {
-                playAgainButton.style.visibility = 'visible';
-            }
+                if (currentHighScores.some((highScore) => { return highScore.isCurrentScore === true })) {
+                    let enterName: (HTMLElement | null) = document.getElementById("enterName");
+                    if (enterName !== null) {
+                        enterName.style.visibility = 'visible';
+                    }
 
-            let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
-            if (playingAreaScreen !== null) {
-                playingAreaScreen.style.visibility = 'visible';
+                    saveHighScores();
+                }
+
+                // Add a NEW GAME button
+                let playAgainButton: (HTMLElement | null) = document.getElementById("playAgainButton");
+                if (playAgainButton !== null) {
+                    playAgainButton.style.visibility = 'visible';
+                }
+
+                let playingAreaScreen: (HTMLElement | null) = document.getElementById("playingAreaScreen");
+                if (playingAreaScreen !== null) {
+                    playingAreaScreen.style.visibility = 'visible';
+                }
             }
-        }
+        });
     }
 }
 
