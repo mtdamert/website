@@ -801,7 +801,7 @@ const moveBall = (): void => {
                         }
                     }
 
-                    // TODO: Reset ball to start position
+                    // Reset ball to start position
                     ballXPos = 450;
                     ballYPos = 30;
                     ballVelocity.direction = Math.PI / 4;
@@ -1251,7 +1251,7 @@ export default function Arkanoid() {
                 <div id="scoreBox" className={`absolute top-[840px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[24px] text-base text-white bg-[#007fff]`}>
                     Score: 0; Level: 1; Blocks Destroyed: 0
                 </div>
-                <div id="extraLivesBox" className="absolute top-[840px] left-[600px] h-[24px] text-base text-white"><img src={ark_ball} className="float-left top-0" /> </div>
+                <div id="extraLivesBox" className="absolute pl-1 pr-0 top-[842px] left-[600px] h-[20px] text-base text-white bg-[#d0d0d0]"><img src={ark_ball} className="float-left top-0" /> </div>
 
 
                 <div id="playingAreaScreen" className={`absolute top-[200px] left-[80px] border-t-[1px] border-black w-[${BOARD_WIDTH}px] h-[${BOARD_HEIGHT}px] opacity-80 bg-[#080808]`}> </div>
