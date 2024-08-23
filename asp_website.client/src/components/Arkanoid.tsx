@@ -1043,7 +1043,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                 if ((ballYPos + ballImage.height) >= blocks[i].y && (oldBallYPos + ballImage.height) < blocks[i].y) {
                     //console.log("Ball passed block's top plane");
 
-                    let collisionTime: number = (blocks[i].y - (oldBallYPos + ballImage.height)) / (ballYPos - oldBallYPos);
+                    let collisionTime: number = (blocks[i].y - (oldBallYPos + ballImage.height)) / ((ballYPos + ballImage.height) - oldBallYPos);
                     let collisionX: number = oldBallXPos + ((ballXPos - oldBallXPos) * collisionTime);
                     //console.log("collision time: " + collisionTime + ", collisionX: " + collisionX + ", blocks[i].x: " + blocks[i].x + ", blockRightXPos: " + blockRightXPos);
                     if ((collisionX + ballImage.width) > blocks[i].x && collisionX < blockRightXPos) {
@@ -1051,8 +1051,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                         topCollision.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
                         topCollision.blockNumberCollision = i;
 
-                        console.log("Top collision: y = " + topCollision.yPos + ", block y = " + blocks[i].y);
-
+                        console.log("Block top collision: y = " + topCollision.yPos + ", block y = " + blocks[i].y + ", ballYPos: " + ballYPos + ", oldBallYPos: " + oldBallYPos + ", blocks[i].y: " + blocks[i].y);
                         console.log("Block top collision detected with block number " + i);
                     }
                 }
