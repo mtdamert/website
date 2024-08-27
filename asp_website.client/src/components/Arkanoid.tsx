@@ -618,7 +618,6 @@ const init = (): void => {
     let rightPanel: (HTMLElement | null) = document.getElementById("rightPanel");
     for (let i: number = 0; i < NUM_HIGH_SCORES; i++) {
         let highScoreDiv: HTMLDivElement = document.createElement('div');
-        // TODO: Make sure the DIV elements don't already exist
         let top = (390 + (20) * i);
         highScoreDiv.className = "absolute top-[" + top + "px] left-[760px] text-lg";
         highScoreDiv.id = "highScoreText" + (i + 1);
@@ -731,18 +730,10 @@ const moveBall = (): void => {
     let moveBallXDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballVelocity.getX();
     let moveBallYDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * ballVelocity.getY();
 
-    // TODO: First go through a series of IF statements to check for collisions with blocks and the paddle
     let oldBallXPos = ballXPos;
     let oldBallYPos = ballYPos;
     ballXPos += moveBallXDistance;
     ballYPos += moveBallYDistance;
-
-    //console.log("ball x: " + ballXPos);
-    //console.log("ball y: " + ballYPos);
-
-    //console.log("last frame time: " + lastFrameTime);
-    //console.log("ball x move: " + moveBallXDistance);
-    //console.log("ball y move: " + moveBallYDistance);
 
     let changedXDirection: boolean = false;
     let changedYDirection: boolean = false;
@@ -828,8 +819,6 @@ const moveBall = (): void => {
                     changedYDirection = true;
                 }
 
-                //console.log("Block being removed for collision: " + blockCollision.blockNumberCollision);
-                // Remove the block if it's been hit enough times
                 if (blocks[blockCollision.blockNumberCollision].blockHit()) {
                     removeBlock(blockCollision.blockNumberCollision);
                 }
@@ -846,9 +835,6 @@ const moveBall = (): void => {
 
             // If the ball changed direction, we need to recalculate the ball's final x and y positions
             if (changedXDirection) {
-                //ballXPos = ballXPos - (2 * (oldBallXPos - ballXPos));
-                //console.log("initial X[0]: " + oldBallXPos + ", initial X[1]: " + ballXPos);
-                //console.log("trying to move ball X from " + ballXPos + " to " + (ballXPos - (2 * (oldBallXPos - ballXPos))));
             }
             if (changedYDirection) {
                 console.log("ball Y direction changed; y pos: " + ballYPos + ", collision y pos: " + nearestCollision.yPos);
@@ -858,11 +844,6 @@ const moveBall = (): void => {
             // Move the ball using the point of this collision as its starting point
             oldBallXPos = nearestCollision.xPos;
             oldBallYPos = nearestCollision.yPos;
-
-            //if (nearestCollision !== null && (nearestCollision.collisionType === COLLISION_WITH_PADDLE_LEFT ||
-            //    nearestCollision.collisionType === COLLISION_WITH_PADDLE_MIDDLE || nearestCollision.collisionType === COLLISION_WITH_PADDLE_RIGHT)) {
-            //    console.log("Found a collision with paddle at (" + oldBallXPos + ", " + oldBallYPos + "), new ball pos: (" + ballXPos + ", " + ballYPos + ")");
-            //}
 
             // Re-run the collisions so we can run the loop again
             nearestCollision = null;
@@ -950,13 +931,6 @@ const checkForPaddleCollisions = (oldBallXPos: number, oldBallYPos: number): (Di
         // Detect whether the collision is on the side of the paddle or not - TODO: do we want to use this info?
         if (ballXAtCollisionTime < (paddleXPos + paddleImage.width) && (ballXAtCollisionTime + ballImage.width) > paddleXPos) {
             let paddleCollision: DistanceFromPoint = new DistanceFromPoint(ballXAtCollisionTime, paddleYPos, oldBallXPos, oldBallYPos);
-            //paddleCollision.collisionType = COLLISION_WITH_PADDLE_MIDDLE;
-            // collision in different directions based on where it hits the paddle
-            //if ((ballXAtCollisionTime - PADDLE_SIDE_WIDTH) < paddleXPos) {
-            //    paddleCollision.collisionType = COLLISION_WITH_PADDLE_LEFT;
-            //} else if ((ballXAtCollisionTime + ballImage.width + PADDLE_SIDE_WIDTH) > (paddleXPos + paddleImage.width)) {
-            //    paddleCollision.collisionType = COLLISION_WITH_PADDLE_RIGHT;
-            //}
 
             //console.log("Paddle collision detected");
             return paddleCollision;
@@ -984,14 +958,11 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
             let blockRightXPos: number = blocks[i].x + parseInt(blocks[i].div.style.width, 10);
             let blockBottomYPos: number = blocks[i].y + parseInt(blocks[i].div.style.height, 10);
 
-            // TODO: Collisions should happen if the bottom of the ball hits the top of the block;
-            //       and if the top of the ball hits the bottom of the block
+            // Collisions should happen if the bottom of the ball hits the top of the block;
+            // and if the top of the ball hits the bottom of the block
 
             if (ballXPos < oldBallXPos) { // Check for right collision
                 if (ballXPos <= blockRightXPos && oldBallXPos > blockRightXPos) {
-                    // Ball passed the block's right plane since last frame. But did it collide with the ball then?
-                    //console.log("Ball passed block's right plane");
-
                     // find the point where the line hits the plane
                     // if that point intersects with the block's line segment, fill in data in the rightCollision object
                     let collisionTime: number = (oldBallXPos - blockRightXPos) / (oldBallXPos - ballXPos); // in the range of 0 (old frame) and 1 (new frame), when did the ball hit the paddle?
