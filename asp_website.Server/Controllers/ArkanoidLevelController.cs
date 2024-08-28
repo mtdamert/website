@@ -16,6 +16,7 @@ namespace asp_website.Server.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult Get(int id)
         {
+            //string levelName = "..\\asp_website.client\\src\\ark_levels\\ark_level" + id + ".ldtk";
             string levelName = "ark_levels\\ark_level" + id + ".ldtk";
 
             if (System.IO.File.Exists(levelName))
@@ -24,7 +25,7 @@ namespace asp_website.Server.Controllers
                 string json = System.IO.File.ReadAllText(levelName);
                 if (!string.IsNullOrEmpty(json))
                 {
-                    return Ok(json); // TODO: Can I return a non-HTTP 200 code?
+                    return Ok(json);
                 }
             }
 
