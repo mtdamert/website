@@ -122,6 +122,10 @@ const loadHighScores = async (): Promise<Response> => {
     }
 
     const response: Promise<Response> = await fetch('tetrishighscores');
+    if (!response.ok) {
+        console.log("ERROR! Unable to load high scores file");
+    }
+
     const data: Array<HighScore> = await response.json();
 
     console.log("loadHighScores data: " + data);

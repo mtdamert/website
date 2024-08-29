@@ -255,6 +255,10 @@ const loadHighScores = async (): Promise<Response> => {
     }
 
     const response: Promise<Response> = await fetch('arkanoidhighscores');
+    if (!response.ok) {
+        console.log("ERROR! Unable to load high scores file");
+    }
+
     const data: Array<HighScore> = await response.json();
 
     // Make all high scores black (which means they're not in the current game)
