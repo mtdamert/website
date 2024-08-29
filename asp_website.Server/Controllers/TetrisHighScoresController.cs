@@ -10,7 +10,6 @@ namespace asp_website.Server.Controllers
     {
         const int NUM_HIGH_SCORES = 5;
 
-        int revisionNumber;
         HighScores[]? highScores;
         const string highScoresPath = "TetrisHighScores.txt";
 
