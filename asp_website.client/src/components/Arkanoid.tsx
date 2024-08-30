@@ -694,8 +694,8 @@ const levelUp = (newLevel: number): void => {
                 }
             } else {
                 console.log("No level found. Is the game over?");
-                console.log("levelResponse: ");
-                console.log(result);
+                //console.log("levelResponse: ");
+                //console.log(result);
                 let infoBox: (HTMLElement | null) = document.getElementById("infoBox");
                 if (infoBox !== null) {
                     infoBox.style.visibility = 'visible';
@@ -841,7 +841,7 @@ const moveBall = (): void => {
             if (changedXDirection) {
             }
             if (changedYDirection) {
-                console.log("ball Y direction changed; y pos: " + ballYPos + ", collision y pos: " + nearestCollision.yPos);
+                //console.log("ball Y direction changed; y pos: " + ballYPos + ", collision y pos: " + nearestCollision.yPos);
                 ballYPos = ballYPos - (2 * (ballYPos - nearestCollision.yPos));
             }
 
@@ -977,7 +977,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                         rightCollision.yPos = collisionY;
                         rightCollision.blockNumberCollision = i;
 
-                        console.log("Block right collision detected with block number " + i);
+                    //    console.log("Block right collision detected with block number " + i);
                     }
                 }
             }
@@ -993,7 +993,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                         leftCollision.yPos = collisionY;
                         leftCollision.blockNumberCollision = i;
 
-                        console.log("Block left collision detected with block number " + i);
+                    //    console.log("Block left collision detected with block number " + i);
                     }
                 }
             }
@@ -1009,7 +1009,7 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                         bottomCollision.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
                         bottomCollision.blockNumberCollision = i;
 
-                        console.log("Block bottom collision detected with block number " + i);
+                    //    console.log("Block bottom collision detected with block number " + i);
                     }
 
                 }
@@ -1026,8 +1026,8 @@ const checkForBlockCollisions = (oldBallXPos: number, oldBallYPos: number): (Dis
                         topCollision.yPos = oldBallYPos + ((ballYPos - oldBallYPos) * collisionTime);
                         topCollision.blockNumberCollision = i;
 
-                        console.log("Block top collision: y = " + topCollision.yPos + ", block y = " + blocks[i].y + ", ballYPos: " + ballYPos + ", oldBallYPos: " + oldBallYPos + ", blocks[i].y: " + blocks[i].y);
-                        console.log("Block top collision detected with block number " + i);
+                    //    console.log("Block top collision: y = " + topCollision.yPos + ", block y = " + blocks[i].y + ", ballYPos: " + ballYPos + ", oldBallYPos: " + oldBallYPos + ", blocks[i].y: " + blocks[i].y);
+                    //    console.log("Block top collision detected with block number " + i);
                     }
                 }
             }
