@@ -84,9 +84,9 @@ function RetirementCalc() {
             sSIncome *= 1.02;
             remainingSavings *= (1.0 + (predictedYield * 0.01));
             remainingPreTaxSavings *= (1.0 + (predictedYield * 0.01));
-            if (currentAge < retirementAge)
+            if (ageCounter < retirementAge)
                 remainingSavings += Number(income);
-            if (currentAge >= startSocialSecurityAge)
+            if (ageCounter >= startSocialSecurityAge)
                 remainingSavings += sSIncome;
 
             if (extrapolateCapGains === true) {
@@ -155,7 +155,7 @@ function RetirementCalc() {
                     </label>
                     <input type="number"
                         value={currentAge}
-                        onChange={(e) => { setCurrentAge(e.target.value); } }
+                        onChange={(e) => { setCurrentAge(Number(e.target.value)); } }
                         className="float-right border text-right"
                     />
             </div>
