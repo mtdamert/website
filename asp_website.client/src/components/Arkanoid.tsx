@@ -88,7 +88,7 @@ class Vector {
         return Math.sin(this.direction) * this.magnitude;
     }
 
-    constructor(radians, velocity) {
+    constructor(radians: Number, velocity: Number) {
         this.direction = radians;
         this.magnitude = velocity;
     }
@@ -325,7 +325,7 @@ const updateExtraLivesDisplay = () => {
 }
 
 
-const movePaddle = (direction) => {
+const movePaddle = (direction: Number) => {
     let movePaddleDistance: number = ((new Date().getTime() - lastFrameTime) / 1000) * paddleSpeed;
 
     if (direction === DIRECTION_LEFT) {
