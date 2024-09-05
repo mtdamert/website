@@ -7,7 +7,9 @@
     "preserveConstEnums": true,
     "sourceMap": true
   },
+  "include": [ "../images/**/*" ],
   "files": [
-    "tetris.tsx"
+    "Tetris.tsx",
+    "Arkanoid.tsx"
   ]
 }
