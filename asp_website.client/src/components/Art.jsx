@@ -58,31 +58,34 @@ function Art(props) {
         const mesh = useRef(null)
         const ref = useRef()
         const { nodes, animations } = useGLTF("./test_anim.glb")
-        let mixer = new AnimationMixer(nodes)
+        const mixer = new AnimationMixer(nodes.Scene)
+        //mixer.clipAction(animations[0]).play()
 
-        console.log("nodes: ");
+        console.log("test cube nodes: ");
         console.log(nodes);
+        //console.log("test cube mixer: ");
+        //console.log(mixer);
+        //console.log("test cube animations: ");
+        //console.log(animations);
 
+        // Load and play all animations
         animations.forEach((clip) => {
             const action = mixer.clipAction(clip);
             action.play();
         })
-        useFrame((state, delta) => {
-            mixer.update(delta);
+        // Update the animation mixer object with the delta in time each frame
+        useFrame(({ clock }) => {
+            mixer.update(clock);
         })
 
         return (
             <group ref={ref} {...props} dispose={null}>
-                <group rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
-                    <primitive object={nodes.Scene} />
+                <group>
                     <mesh
                         {...props}
                         ref={mesh}
-                        //onClick={() => setIndex((index + 1) % names.length)}
                         geometry={nodes.Cube.geometry}
-                        skeleton={nodes.Cube.skeleton}
-                        //rotation={[-Math.PI / 2, 0, 0]}
-                        scale={100}>
+                        >
                         <meshStandardMaterial color='hotpink' />
                     </mesh>
                 </group>
@@ -111,7 +114,7 @@ function Art(props) {
             mixer.update(delta);
         });
 
-        console.log("nodes: ");
+        console.log("horse nodes: ");
         console.log(nodes);
 
         // Extract animation actions
@@ -160,12 +163,22 @@ function Art(props) {
                     {/*    scale={100}>*/}
                     {/*    <meshStandardMaterial color='orange' />*/}
                     {/*</mesh>*/}
+                    {/*<mesh*/}
+                    {/*    {...props}*/}
+                    {/*    ref={mesh}*/}
+                    {/*    //onClick={() => setIndex((index + 1) % names.length)}*/}
+                    {/*    geometry={nodes.Horse_1.geometry}*/}
+                    {/*    skeleton={nodes.Horse_1.skeleton}*/}
+                    {/*    rotation={[-Math.PI / 2, 0, 0]}*/}
+                    {/*    scale={100}>*/}
+                    {/*    <meshStandardMaterial color='hotpink' />*/}
+                    {/*</mesh>*/}
                     <mesh
                         {...props}
                         ref={mesh}
                         //onClick={() => setIndex((index + 1) % names.length)}
-                        geometry={nodes.Horse_1.geometry}
-                        skeleton={nodes.Horse_1.skeleton}
+                        geometry={nodes.Scene.geometry}
+                        skeleton={nodes.Scene.skeleton}
                         rotation={[-Math.PI / 2, 0, 0]}
                         scale={100}>
                         <meshStandardMaterial color='hotpink' />
@@ -196,7 +209,7 @@ function Art(props) {
                     <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
                     {/*<Horse />*/}
                     <TestCube />
-                    <MyAnimatedBox />
+                    {/*<MyAnimatedBox />*/}
                     {<Button3D position={[-4.0, 0, 0]} /> }
                 </Canvas>
             </div>
