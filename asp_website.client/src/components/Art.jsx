@@ -1,8 +1,7 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
-import { useGLTF, useTexture, useAnimations } from '@react-three/drei';
-//import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import { PlaneGeometry, AnimationMixer } from 'three';
+import React, { useRef, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
+import { PlaneGeometry, AnimationMixer, Color } from 'three';
 
 const geom = new PlaneGeometry(1, 1);
 
@@ -59,35 +58,26 @@ function Art(props) {
         const ref = useRef()
         const { nodes, animations } = useGLTF("./test_anim.glb")
         const mixer = new AnimationMixer(nodes.Scene)
-        //mixer.clipAction(animations[0]).play()
-
-        console.log("test cube nodes: ");
-        console.log(nodes);
-        //console.log("test cube mixer: ");
-        //console.log(mixer);
-        //console.log("test cube animations: ");
-        //console.log(animations);
 
         // Load and play all animations
         animations.forEach((clip) => {
             const action = mixer.clipAction(clip);
             action.play();
         })
+        // Just load the first animation
+        // mixer.clipAction(animations[0]).play()
+
         // Update the animation mixer object with the delta in time each frame
-        useFrame(({ clock }) => {
-            mixer.update(clock);
-        })
+        useFrame((state, delta) => {
+            mixer.update(delta);
+        });
+
+        nodes.Cube.material.color = new Color(1, 0.3, 0)
 
         return (
             <group ref={ref} {...props} dispose={null}>
                 <group>
-                    <mesh
-                        {...props}
-                        ref={mesh}
-                        geometry={nodes.Cube.geometry}
-                        >
-                        <meshStandardMaterial color='hotpink' />
-                    </mesh>
+                    <primitive ref={mesh} object={nodes.Scene} dispose={null} scale={0.1} position={[0, -0.5, 0]} />
                 </group>
             </group>
         )
@@ -99,12 +89,8 @@ function Art(props) {
         useFrame((state, delta) => {
             ((active) ? mesh.current.rotation.y += delta : mesh.current.rotation.y -= delta);
         });
-        //const gltf = useLoader(GLTFLoader, "./horse.glb");
         const { nodes, animations } = useGLTF("./horse.glb");
-        let mixer = new AnimationMixer(nodes);
-
-        console.log("animations: ");
-        console.log(animations);
+        let mixer = new AnimationMixer(nodes.Scene);
 
         animations.forEach((clip) => {
             const action = mixer.clipAction(clip);
@@ -114,45 +100,14 @@ function Art(props) {
             mixer.update(delta);
         });
 
-        console.log("horse nodes: ");
-        console.log(nodes);
-
         // Extract animation actions
         const ref = useRef();
-        //const { ref, actions, names } = useAnimations(animations);
-        // Animation-index state
-        //const [index, setIndex] = useState(4);
-
-        //var mixer = new AnimationMixer(gltf.scene);
-
-        // Change animation when the index changes
-        //useEffect(() => {
-        //    // Reset and fade in animation after an index has been changed
-        //    actions[names[index]].reset().fadeIn(0.5).play()
-        //    // In the clean-up phase, fade it out
-        //    return () => actions[names[index]].fadeOut(0.5)
-        //}, [index, actions, names])
-
-    //    return (
-    //        <mesh
-    //            {...props}
-    //            ref={mesh}
-    //            onClick={(event) => setActive(!active)}
-    //            onPointerOver={(event) => setHover(true)}
-    //            onPointerOut={(event) => setHover(false)}>
-    //        <primitive
-    //            object={gltf.scene}
-    //            scale={2.0}
-    //            rotation={[0, Math.PI / 2, 0]}
-    //            position={[0, -2, 0]} />
-    //        <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-    //        </mesh>
-        //    );
 
         return (
             <group ref={ref} {...props} dispose={null}>
-                <group rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
-                    <primitive object={nodes.Scene} />
+                <group>
+                    <primitive ref={mesh} object={nodes.Scene} dispose={null} />
+
                     {/*<mesh*/}
                     {/*    {...props}*/}
                     {/*    ref={mesh}*/}
@@ -173,16 +128,17 @@ function Art(props) {
                     {/*    scale={100}>*/}
                     {/*    <meshStandardMaterial color='hotpink' />*/}
                     {/*</mesh>*/}
-                    <mesh
-                        {...props}
-                        ref={mesh}
-                        //onClick={() => setIndex((index + 1) % names.length)}
-                        geometry={nodes.Scene.geometry}
-                        skeleton={nodes.Scene.skeleton}
-                        rotation={[-Math.PI / 2, 0, 0]}
-                        scale={100}>
-                        <meshStandardMaterial color='hotpink' />
-                    </mesh>
+                    {/*<mesh*/}
+                    {/*    {...props}*/}
+                    {/*    ref={mesh}*/}
+                    {/*    //onClick={() => setIndex((index + 1) % names.length)}*/}
+                    {/*    geometry={nodes.Scene.geometry}*/}
+                    {/*    skeleton={nodes.Scene.skeleton}*/}
+                    {/*    rotation={[-Math.PI / 2, 0, 0]}*/}
+                    {/*    scale={100}>*/}
+                    {/*    <meshStandardMaterial color='hotpink' />*/}
+                    {/*</mesh>*/}
+
                     {/*<mesh*/}
                     {/*    {...props}*/}
                     {/*    ref={mesh}*/}
@@ -207,7 +163,7 @@ function Art(props) {
                     <ambientLight intensity={Math.PI / 2} />
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
                     <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-                    {/*<Horse />*/}
+                    <Horse />
                     <TestCube />
                     {/*<MyAnimatedBox />*/}
                     {<Button3D position={[-4.0, 0, 0]} /> }
