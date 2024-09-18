@@ -7,7 +7,7 @@ const geom = new PlaneGeometry(1, 1);
 
 function Art(props) {
 
-    function MyAnimatedBox() {
+    function MyAnimatedBox(props) {
         const myMesh = React.useRef();
 
         useFrame(({ clock }) => {
@@ -17,7 +17,8 @@ function Art(props) {
         })
 
         return (
-            <mesh ref={myMesh}>
+            <mesh {...props}
+                ref={myMesh}>
                 <boxGeometry />
                 <meshBasicMaterial color="royalblue" />
             </mesh>
@@ -31,17 +32,20 @@ function Art(props) {
         const [hovered, setHover] = useState(false);
         const [active, setActive] = useState(false);
 
+        const makeButtonActive = () => {
+            setActive(true);
+        }
+
         return (
             <>
                 <mesh
                     {...props}
                     ref={mesh}
-                    scale={1}
-                    onClick={(event) => setActive(true)}
+                    onClick={() => { props.onClick(); makeButtonActive(); }}
                     onPointerOver={(event) => setHover(true)}
                     onPointerOut={(event) => setHover(false)}>
                     <boxGeometry args={[4, 1, 0.1]} />
-                    <meshStandardMaterial color={hovered ? '#ffffff' : '#c0c0c0' } />
+                    <meshStandardMaterial color={hovered ? (active ? '#ff8080' : '#ffffff') : (active ? '#ff0000' : '#c0c0c0') } />
                 </mesh>
                 
                 <mesh {...props} geometry={geom}>
@@ -157,16 +161,23 @@ function Art(props) {
 
     return (
         <div className="items-center border w-full h-screen">
+            <div className="w-full">(work in progress)</div>
+            <div id="hiddenDiv" className="invisible">Hello, World!</div>
             <div className="flex w-screen h-screen">
-            <div>(work in progress)</div>
                 <Canvas>
                     <ambientLight intensity={Math.PI / 2} />
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
                     <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
                     <Horse />
                     <TestCube />
-                    {/*<MyAnimatedBox />*/}
-                    {<Button3D position={[-4.0, 0, 0]} /> }
+                    {<MyAnimatedBox scale={0.1} position={[-1.0, -1.0, 0.0]} />}
+
+                    {<Button3D scale={0.25} position={[-6.0, 1.6, 0]}
+                        onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; }} />}
+                    {<Button3D scale={0.25} position={[-6.0, 1.2, 0]} />}
+                    {<Button3D scale={0.25} position={[-6.0, 0.8, 0]} />}
+                    {<Button3D scale={0.25} position={[-6.0, 0.4, 0]} />}
+                    {<Button3D scale={0.25} position={[-6.0, 0, 0]} /> }
                 </Canvas>
             </div>
         </div>
