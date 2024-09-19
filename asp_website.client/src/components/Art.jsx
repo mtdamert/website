@@ -1,11 +1,18 @@
 import React, { useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
-import { PlaneGeometry, AnimationMixer, Color } from 'three';
+import { PlaneGeometry, AnimationMixer, Color, MeshStandardMaterial } from 'three';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+import almendra from '../fonts/Almendra SC_Regular.json';
 
 const geom = new PlaneGeometry(1, 1);
 
+extend({ TextGeometry });
+
 function Art(props) {
+
+    const font = new FontLoader().parse(almendra);
 
     function MyAnimatedBox(props) {
         const myMesh = React.useRef();
@@ -27,8 +34,6 @@ function Art(props) {
 
     function Button3D(props) {
         const mesh = useRef(null);
-        //const textMesh = useRef(null);
-        const mat = useRef();
         const [hovered, setHover] = useState(false);
         const [active, setActive] = useState(false);
 
@@ -48,9 +53,9 @@ function Art(props) {
                     <meshStandardMaterial color={hovered ? (active ? '#ff8080' : '#ffffff') : (active ? '#ff0000' : '#c0c0c0') } />
                 </mesh>
                 
-                <mesh {...props} geometry={geom}>
-                    <meshBasicMaterial ref={mat} />
-                    {/*'A' && <Text3D size={5}>{'A'}</Text3D>*/}
+                <mesh {...props}>
+                    <textGeometry args={[(props.text), { font, size: 0.4, height: 0.1 }]} />
+                    <meshStandardMaterial color={ (active ? '#000000' : '#808080')} />
                 </mesh>
                 
             </>
@@ -173,11 +178,12 @@ function Art(props) {
                     {<MyAnimatedBox scale={0.1} position={[-1.0, -1.0, 0.0]} />}
 
                     {<Button3D scale={0.25} position={[-6.0, 1.6, 0]}
-                        onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; }} />}
-                    {<Button3D scale={0.25} position={[-6.0, 1.2, 0]} />}
-                    {<Button3D scale={0.25} position={[-6.0, 0.8, 0]} />}
-                    {<Button3D scale={0.25} position={[-6.0, 0.4, 0]} />}
-                    {<Button3D scale={0.25} position={[-6.0, 0, 0]} /> }
+                        onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; }}
+                        text={'Option 0'} />}
+                    {<Button3D scale={0.25} position={[-6.0, 1.2, 0]} text={'Option 1'} />}
+                    {<Button3D scale={0.25} position={[-6.0, 0.8, 0]} text={'Option 2'} />}
+                    {<Button3D scale={0.25} position={[-6.0, 0.4, 0]} text={'Option 3'} />}
+                    {<Button3D scale={0.25} position={[-6.0, 0, 0]} text={'Option 4'} /> }
                 </Canvas>
             </div>
         </div>
