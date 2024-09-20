@@ -1,12 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
-import { PlaneGeometry, AnimationMixer, Color, MeshStandardMaterial } from 'three';
+import { AnimationMixer, Color } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import almendra from '../fonts/Almendra SC_Regular.json';
-
-const geom = new PlaneGeometry(1, 1);
 
 extend({ TextGeometry });
 
@@ -54,7 +52,7 @@ function Art(props) {
                 </mesh>
                 
                 <mesh {...props}>
-                    <textGeometry args={[(props.text), { font, size: 0.4, height: 0.1 }]} />
+                    <textGeometry args={[(props.text), { font, size: 0.4, depth: 0.1 }]} />
                     <meshStandardMaterial color={ (active ? '#000000' : '#808080')} />
                 </mesh>
                 
@@ -116,49 +114,6 @@ function Art(props) {
             <group ref={ref} {...props} dispose={null}>
                 <group>
                     <primitive ref={mesh} object={nodes.Scene} dispose={null} />
-
-                    {/*<mesh*/}
-                    {/*    {...props}*/}
-                    {/*    ref={mesh}*/}
-                    {/*    //onClick={() => setIndex((index + 1) % names.length)}*/}
-                    {/*    geometry={nodes.Horse.geometry}*/}
-                    {/*    skeleton={nodes.Horse.skeleton}*/}
-                    {/*    rotation={[-Math.PI / 2, 0, 0]}*/}
-                    {/*    scale={100}>*/}
-                    {/*    <meshStandardMaterial color='orange' />*/}
-                    {/*</mesh>*/}
-                    {/*<mesh*/}
-                    {/*    {...props}*/}
-                    {/*    ref={mesh}*/}
-                    {/*    //onClick={() => setIndex((index + 1) % names.length)}*/}
-                    {/*    geometry={nodes.Horse_1.geometry}*/}
-                    {/*    skeleton={nodes.Horse_1.skeleton}*/}
-                    {/*    rotation={[-Math.PI / 2, 0, 0]}*/}
-                    {/*    scale={100}>*/}
-                    {/*    <meshStandardMaterial color='hotpink' />*/}
-                    {/*</mesh>*/}
-                    {/*<mesh*/}
-                    {/*    {...props}*/}
-                    {/*    ref={mesh}*/}
-                    {/*    //onClick={() => setIndex((index + 1) % names.length)}*/}
-                    {/*    geometry={nodes.Scene.geometry}*/}
-                    {/*    skeleton={nodes.Scene.skeleton}*/}
-                    {/*    rotation={[-Math.PI / 2, 0, 0]}*/}
-                    {/*    scale={100}>*/}
-                    {/*    <meshStandardMaterial color='hotpink' />*/}
-                    {/*</mesh>*/}
-
-                    {/*<mesh*/}
-                    {/*    {...props}*/}
-                    {/*    ref={mesh}*/}
-                    {/*    //onClick={() => setIndex((index + 1) % names.length)}*/}
-                    {/*    geometry={nodes.Horse_2.geometry}*/}
-                    {/*    skeleton={nodes.Horse_2.skeleton}*/}
-                    {/*    rotation={[-Math.PI / 2, 0, 0]}*/}
-                    {/*    scale={100}>*/}
-                    {/*    <meshStandardMaterial color='hotpink' />*/}
-                    {/*</mesh>*/}
-
                 </group>
             </group>
         )
