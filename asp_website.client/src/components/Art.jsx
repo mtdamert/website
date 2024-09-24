@@ -13,7 +13,7 @@ function Art(props) {
     const font = new FontLoader().parse(almendra);
 
     function MyAnimatedBox(props) {
-        const myMesh = React.useRef();
+        const myMesh = useRef();
 
         useFrame(({ clock }) => {
             //console.log("Hey, I'm executing every frame!");
@@ -51,8 +51,10 @@ function Art(props) {
                     <meshStandardMaterial color={hovered ? (active ? '#ff8080' : '#ffffff') : (active ? '#ff0000' : '#c0c0c0') } />
                 </mesh>
                 
-                <mesh {...props}>
-                    <textGeometry args={[(props.text), { font, size: 0.4, depth: 0.1 }]} />
+                <mesh
+                    {...props}
+                    position={[props.position[0] - 0.2, props.position[1] - 0.05, props.position[2]]}>
+                    <textGeometry args={[(props.text), { font, size: 0.4, depth: 0.1,  }]} />
                     <meshStandardMaterial color={ (active ? '#000000' : '#808080')} />
                 </mesh>
                 
