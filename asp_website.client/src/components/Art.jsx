@@ -86,7 +86,7 @@ function Art(props) {
         return (
             <group ref={ref} {...props} dispose={null}>
                 <group>
-                    <primitive ref={mesh} object={nodes.Scene} dispose={null} scale={0.1} position={[0, -0.5, 0]} />
+                    <primitive ref={mesh} object={nodes.Scene} dispose={null}  />
                 </group>
             </group>
         )
@@ -94,9 +94,18 @@ function Art(props) {
 
     const Horse = (props) => {
         const mesh = useRef(null); // useRef is React's way of creating an object that can be held in memory 
-        const [active, setActive] = useState(false);
+        const [active, setActive] = useState(true);
+        //useFrame((state, delta) => {
+        //    ((active) ? mesh.current.rotation.y += delta : mesh.current.rotation.y -= delta);
+        //});
         useFrame((state, delta) => {
-            ((active) ? mesh.current.rotation.y += delta : mesh.current.rotation.y -= delta);
+            if (active)
+                mesh.current.position.x += delta;
+            if (mesh.current.position.x > 25)
+                mesh.current.position.x = -8;
+
+            if (active)
+                mixer.update(delta);
         });
         const { nodes, animations } = useGLTF("./horse.glb");
         let mixer = new AnimationMixer(nodes.Scene);
@@ -106,16 +115,19 @@ function Art(props) {
             action.play();
         });
         useFrame((state, delta) => {
-            mixer.update(delta);
         });
 
         // Extract animation actions
         const ref = useRef();
 
+        const toggleHorseActive = () => {
+            setActive(!active);
+        }
+
         return (
             <group ref={ref} {...props} dispose={null}>
                 <group>
-                    <primitive ref={mesh} object={nodes.Scene} dispose={null} />
+                    <primitive ref={mesh} object={nodes.Scene} dispose={null} onClick={toggleHorseActive} rotation={[0, 90, 0]} />
                 </group>
             </group>
         )
@@ -130,9 +142,9 @@ function Art(props) {
                     <ambientLight intensity={Math.PI / 2} />
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
                     <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
-                    <Horse />
-                    <TestCube />
-                    {<MyAnimatedBox scale={0.1} position={[-1.0, -1.0, 0.0]} />}
+                    <Horse scale={0.5} position={[-6, -1.5, 0]} />
+                    <TestCube scale={0.2} position={[0, 0.5, 0]} />
+                    {<MyAnimatedBox scale={0.25} position={[-1.0, 1, 0.0]} />}
 
                     {<Button3D scale={0.25} position={[-6.0, 1.6, 0]}
                         onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; }}
