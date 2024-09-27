@@ -145,27 +145,27 @@ function Art(props) {
     };
 
     return (
-        <div className="items-center border w-full h-screen">
-            <div className="w-full">(work in progress)</div>
+        <div className="items-center border w-screen h-lvh">
+            <div className="">(work in progress)</div>
             <div id="hiddenDiv" className="invisible">Hello, World!</div>
-            <div className="flex w-screen h-screen">
+            <div className="flex w-full h-full">
                 <Canvas>
-                    <ambientLight intensity={Math.PI / 2} />
-                    <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />
-                    <pointLight position={[-10, -10, -10]} decay={0} intensity={Math.PI} />
+                    <ambientLight intensity={Math.PI / 4} />
+                    {/*<spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />*/}
+                    <pointLight position={[0, 4, 5]} decay={1} intensity={Math.PI * 2} />
                     <Horse scale={0.5} position={[-6, -1.5, 0]} />
-                    <GroundPlane scale={8} rotation={[3.14, 0, 0]} position={[0, -2, 0]} />
+                    <GroundPlane scale={8} rotation={[Math.PI / 2.499, 0, 0]} position={[0, -1.6, 0]} />
 
                     <TestCube scale={0.2} position={[0, 0.5, 0]} />
                     {<MyAnimatedBox scale={0.25} position={[-1.0, 1, 0.0]} />}
 
-                    {<Button3D scale={0.25} position={[-6.0, 1.6, 0]}
+                    {<Button3D scale={0.25} position={[-3.0, 1.6, 0]}
                         onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; }}
                         text={'Option 0'} />}
-                    {<Button3D scale={0.25} position={[-6.0, 1.2, 0]} text={'Option 1'} />}
-                    {<Button3D scale={0.25} position={[-6.0, 0.8, 0]} text={'Option 2'} />}
-                    {<Button3D scale={0.25} position={[-6.0, 0.4, 0]} text={'Option 3'} />}
-                    {<Button3D scale={0.25} position={[-6.0, 0, 0]} text={'Option 4'} /> }
+                    {<Button3D scale={0.25} position={[-3.0, 1.2, 0]} text={'Option 1'} />}
+                    {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 2'} />}
+                    {<Button3D scale={0.25} position={[-3.0, 0.4, 0]} text={'Option 3'} />}
+                    {<Button3D scale={0.25} position={[-3.0, 0, 0]} text={'Option 4'} /> }
                 </Canvas>
             </div>
         </div>
