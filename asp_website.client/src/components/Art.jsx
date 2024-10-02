@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, GradientTexture } from '@react-three/drei';
 import { AnimationMixer, Color, MeshBasicMaterial } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
@@ -59,7 +59,15 @@ function Art(props) {
                     onPointerOver={(event) => setHover(true)}
                     onPointerOut={(event) => setHover(false)}>
                     <boxGeometry args={[4, 1, 0.1]} />
-                    <meshStandardMaterial color={hovered ? (active ? '#ff8080' : '#ffffff') : (active ? '#ff0000' : '#c0c0c0') } />
+                    {/*<meshStandardMaterial color={hovered ? (active ? '#ff8080' : '#ffffff') : (active ? '#ff0000' : '#c0c0c0') } />*/}
+                    <meshBasicMaterial>
+                        <GradientTexture
+                            stops={[0, 1]}
+                            colors={hovered ? ['teal', 'fuchsia'] : ['aquamarine', 'hotpink']}
+                            size={1024}
+                        />
+                    </meshBasicMaterial>
+
                 </mesh>
                 
                 <mesh
