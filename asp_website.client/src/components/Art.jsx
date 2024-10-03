@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { useGLTF, GradientTexture } from '@react-three/drei';
-import { AnimationMixer, Color, MeshBasicMaterial } from 'three';
+import { AnimationMixer, Color, DoubleSide } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 import almendra from '../fonts/Almendra SC_Regular.json';
@@ -15,10 +15,14 @@ function Art(props) {
     function GroundPlane(props) {
         const myMesh = useRef();
 
+        //useFrame(({ clock }) => {
+        //    myMesh.current.rotation.x = clock.getElapsedTime();
+        //})
+
         return (
             <mesh {...props} ref={myMesh}>
                 <planeGeometry />
-                <meshBasicMaterial color={[0.4, 0.2, 0.1]} />
+                <meshBasicMaterial color={[0.4, 0.2, 0.1]} side={DoubleSide} />
             </mesh>
         )
     }
@@ -27,8 +31,6 @@ function Art(props) {
         const myMesh = useRef();
 
         useFrame(({ clock }) => {
-            //console.log("Hey, I'm executing every frame!");
-            //console.log(myMesh);
             myMesh.current.rotation.x = clock.getElapsedTime();
         })
 
@@ -162,7 +164,7 @@ function Art(props) {
                     {/*<spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />*/}
                     <pointLight position={[0, 4, 5]} decay={1} intensity={Math.PI * 2} />
                     <Horse scale={0.5} position={[-6, -1.5, 0]} />
-                    <GroundPlane scale={8} rotation={[Math.PI / 2.499, 0, 0]} position={[0, -1.6, 0]} />
+                    <GroundPlane scale={8} rotation={[Math.PI / 2.4, 0, 0]} position={[0, -1.42, 0]} />
 
                     <TestCube scale={0.2} position={[0, 0.5, 0]} />
                     {<MyAnimatedBox scale={0.25} position={[-1.0, 1, 0.0]} />}
