@@ -120,13 +120,16 @@ function Art(props) {
         //    ((active) ? mesh.current.rotation.y += delta : mesh.current.rotation.y -= delta);
         //});
         useFrame((state, delta) => {
-            if (active)
+            if (active) {
                 mesh.current.position.x += delta;
-            if (mesh.current.position.x > 25)
+            }
+            if (mesh.current.position.x > 25) {
                 mesh.current.position.x = -8;
+            }
 
-            if (active)
+            if (active) {
                 mixer.update(delta);
+            }
         });
         const { nodes, animations } = useGLTF("./horse.glb");
         let mixer = new AnimationMixer(nodes.Scene);
