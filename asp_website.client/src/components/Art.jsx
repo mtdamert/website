@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
-import { useGLTF, GradientTexture } from '@react-three/drei';
+import { useGLTF, GradientTexture, Sky } from '@react-three/drei';
 import { AnimationMixer, Color, DoubleSide } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
@@ -169,6 +169,8 @@ function Art(props) {
                     <ambientLight intensity={Math.PI / 4} />
                     {/*<spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />*/}
                     <pointLight position={[0, 4, 5]} decay={1} intensity={Math.PI * 2} />
+                    <Sky distance={10} sunPosition={[0, 5, 0]} inclination={0} azimuth={0.25} {...props} />
+
                     <Horse scale={0.5} position={[-6, -1.5, 0]} />
                     <GroundPlane scale={8} rotation={[Math.PI / 2.4, 0, 0]} position={[0, -1.42, 0]} />
 
@@ -177,7 +179,7 @@ function Art(props) {
 
                     {<Button3D scale={0.25} position={[-3.0, 1.6, 0]}
                         onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; setHideMenu(true); } }
-                        text={'Option 0'} />}
+                        text={'Hide Menu'} />}
                     {<Button3D scale={0.25} position={[-3.0, 1.2, 0]} text={'Option 1'} />}
                     {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 2'} />}
                     {<Button3D scale={0.25} position={[-3.0, 0.4, 0]} text={'Option 3'} />}
