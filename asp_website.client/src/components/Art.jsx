@@ -55,6 +55,7 @@ function Art(props) {
 
         return (
             <>
+                {/* Draw the button */}
                 <mesh
                     {...props}
                     ref={mesh}
@@ -74,9 +75,10 @@ function Art(props) {
 
                 </mesh>
                 
+                {/* Add text */}
                 <mesh
                     {...props}
-                    position={[props.position[0] - 0.2, props.position[1] - 0.05, props.position[2]]}
+                    position={[props.position[0] - props.textOffset, props.position[1] - 0.05, props.position[2]]}
                     visible={!hideMenu}>
                     <textGeometry args={[(props.text), { font, size: 0.4, depth: 0.1,  }]} />
                     <meshStandardMaterial color={ (active ? '#000000' : '#808080')} />
@@ -178,12 +180,12 @@ function Art(props) {
                     {<MyAnimatedBox scale={0.25} position={[-1.0, 1, 0.0]} />}
 
                     {<Button3D scale={0.25} position={[-3.0, 1.6, 0]}
-                        onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; setHideMenu(true); } }
-                        text={'Hide Menu'} />}
-                    {<Button3D scale={0.25} position={[-3.0, 1.2, 0]} text={'Option 1'} />}
-                    {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 2'} />}
-                    {<Button3D scale={0.25} position={[-3.0, 0.4, 0]} text={'Option 3'} />}
-                    {<Button3D scale={0.25} position={[-3.0, 0, 0]} text={'Option 4'} /> }
+                        onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; setHideMenu(true); }}
+                        text={'Hide Menu'} textOffset={0.3} />}
+                    {<Button3D scale={0.25} position={[-3.0, 1.2, 0]} text={'Option 1'} textOffset={0.23} />}
+                    {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 2'} textOffset={0.23} />}
+                    {<Button3D scale={0.25} position={[-3.0, 0.4, 0]} text={'Option 3'} textOffset={0.23} />}
+                    {<Button3D scale={0.25} position={[-3.0, 0, 0]} text={'Option 4'} textOffset={0.23} /> }
                 </Canvas>
             </div>
         </div>
