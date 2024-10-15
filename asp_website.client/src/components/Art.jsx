@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { useGLTF, GradientTexture, Sky } from '@react-three/drei';
 import { AnimationMixer, Color, DoubleSide } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
+
 import almendra from '../fonts/Almendra SC_Regular.json';
+//const vertexShader = require('raw-loader!glslify-loader!../shaders/waveTestVertexShader.glsl')
 
 extend({ TextGeometry });
 
@@ -12,6 +14,25 @@ function Art(props) {
 
     const font = new FontLoader().parse(almendra);
     const [hideMenu, setHideMenu] = useState(false);
+
+    const vertexShader = `
+uniform float u_time;
+
+varying vec2 vUv;
+
+void main() {
+  vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+  modelPosition.y += sin(modelPosition.x * 4.0 + u_time * 2.0) * 0.2;
+
+  // Uncomment the code and hit the refresh button below for a more complex effect
+  // modelPosition.y += sin(modelPosition.z * 6.0 + u_time * 2.0) * 0.1;
+
+  vec4 viewPosition = viewMatrix * modelPosition;
+  vec4 projectedPosition = projectionMatrix * viewPosition;
+
+  gl_Position = projectedPosition;
+}
+`;
 
     function GroundPlane(props) {
         const myMesh = useRef();
@@ -24,6 +45,35 @@ function Art(props) {
             <mesh {...props} ref={myMesh}>
                 <planeGeometry />
                 <meshBasicMaterial color={[0.4, 0.2, 0.1]} side={DoubleSide} />
+            </mesh>
+        )
+    }
+
+    function MovingPlane(props) {
+        // This reference will give us direct access to the mesh
+        const mesh = useRef();
+
+        const uniforms = useMemo(
+            () => ({
+                u_time: {
+                    value: 0.0,
+                },
+            }), []
+        );
+
+        useFrame((state) => {
+            const { clock } = state;
+            mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
+        });
+
+        return (
+            <mesh ref={mesh} position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={1.5}>
+                <planeGeometry args={[1, 1, 32, 32]} />
+                <shaderMaterial
+                    vertexShader={vertexShader}
+                    uniforms={uniforms}
+                    wireframe
+                />
             </mesh>
         )
     }
@@ -175,6 +225,8 @@ function Art(props) {
 
                     <Horse scale={0.5} position={[-6, -1.5, 0]} />
                     <GroundPlane scale={8} rotation={[Math.PI / 2.4, 0, 0]} position={[0, -1.42, 0]} />
+
+                    <MovingPlane />
 
                     <TestCube scale={0.2} position={[0, 0.5, 0]} />
                     {<MyAnimatedBox scale={0.25} position={[-1.0, 1, 0.0]} />}
