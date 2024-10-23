@@ -7,6 +7,7 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
 import almendra from '../fonts/Almendra SC_Regular.json';
 import vertShader from '../shaders/waveTestVertexShader.glsl';
+import fragShader from '../shaders/testFragmentShader.glsl';
 
 
 extend({ TextGeometry });
@@ -38,10 +39,15 @@ function Art(props) {
         const uniforms = useMemo(
             () => ({
                 u_time: {
-                    value: 0.0,
+                    value: 0,
                 },
             }), []
         );
+
+        useFrame(({ clock }) => {
+            uniforms.u_time.value = clock.getElapsedTime();
+        })
+
 
         useFrame((state) => {
             const { clock } = state;
@@ -52,6 +58,7 @@ function Art(props) {
             <mesh ref={mesh} position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={1.5}>
                 <planeGeometry args={[1, 1, 32, 32]} />
                 <shaderMaterial
+                    fragmentShader={fragShader}
                     vertexShader={vertShader}
                     uniforms={uniforms}
                     wireframe
