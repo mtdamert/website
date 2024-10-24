@@ -39,20 +39,14 @@ function Art(props) {
         const uniforms = useMemo(
             () => ({
                 u_time: {
-                    value: 0,
+                    value: 0.0,
                 },
             }), []
         );
 
         useFrame(({ clock }) => {
-            uniforms.u_time.value = clock.getElapsedTime();
+            mesh.current.material.uniforms.u_time.value = clock.getElapsedTime() * 2.0;
         })
-
-
-        useFrame((state) => {
-            const { clock } = state;
-            mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
-        });
 
         return (
             <mesh ref={mesh} position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={1.5}>
