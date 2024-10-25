@@ -1,6 +1,6 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
-import { useGLTF, GradientTexture, Sky } from '@react-three/drei';
+import { useGLTF, GradientTexture, Sky, OrbitControls } from '@react-three/drei';
 import { AnimationMixer, Color, DoubleSide } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
@@ -45,7 +45,7 @@ function Art(props) {
         );
 
         useFrame(({ clock }) => {
-            mesh.current.material.uniforms.u_time.value = clock.getElapsedTime() * 2.0;
+            mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
         })
 
         return (
@@ -210,6 +210,7 @@ function Art(props) {
                     <GroundPlane scale={8} rotation={[Math.PI / 2.4, 0, 0]} position={[0, -1.42, 0]} />
 
                     <MovingPlane />
+                    <OrbitControls />
 
                     <TestCube scale={0.2} position={[0, 0.5, 0]} />
                     {<MyAnimatedBox scale={0.25} position={[-1.0, 1, 0.0]} />}
