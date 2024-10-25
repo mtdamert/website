@@ -20,10 +20,6 @@ function Art(props) {
     function GroundPlane(props) {
         const myMesh = useRef();
 
-        //useFrame(({ clock }) => {
-        //    myMesh.current.rotation.x = clock.getElapsedTime();
-        //})
-
         return (
             <mesh {...props} ref={myMesh}>
                 <planeGeometry />
@@ -33,29 +29,40 @@ function Art(props) {
     }
 
     function MovingPlane(props) {
-        // This reference will give us direct access to the mesh
         const mesh = useRef();
+        const [mouseHovering, setMouseHovering] = useState(false);
 
         const uniforms = useMemo(
             () => ({
                 u_time: {
                     value: 0.0,
                 },
+                u_hover: {
+                    value: false,
+                },
             }), []
         );
 
         useFrame(({ clock }) => {
             mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
+            mesh.current.material.uniforms.u_hover.value = mouseHovering;
         })
 
         return (
-            <mesh ref={mesh} position={[0, 0, 0]} rotation={[-Math.PI / 2, 0, 0]} scale={1.5}>
+            <mesh
+                ref={mesh}
+                position={[0, 0, 0]}
+                rotation={[-Math.PI / 2, 0, 0]}
+                scale={3.5}
+                onPointerEnter={() => setMouseHovering(true)}
+                onPointerLeave={() => setMouseHovering(false)}
+                >
                 <planeGeometry args={[1, 1, 32, 32]} />
                 <shaderMaterial
                     fragmentShader={fragShader}
                     vertexShader={vertShader}
                     uniforms={uniforms}
-                    wireframe
+                    //wireframe
                 />
             </mesh>
         )
@@ -101,7 +108,7 @@ function Art(props) {
                     <meshBasicMaterial>
                         <GradientTexture
                             stops={[0, 0.4, 0.6, 1]}
-                            colors={hovered ? ['teal', 'fuchsia', 'fuchsia', 'teal'] : ['#66b2b2', 'hotpink', 'hotpink', '#66b2b2']}
+                            colors={hovered ? ['#ff69b4', 'fuchsia', 'fuchsia', '#ff69b4'] : ['#66b2b2', '#008080', '#008080', '#66b2b2']}
                             size={1024}
                         />
                     </meshBasicMaterial>
