@@ -1,3 +1,4 @@
+// This file doesn't seem to be used since we're using Vite instead of Webpack
 'use strict';
 
 const fs = require('fs');
