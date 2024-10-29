@@ -1,13 +1,15 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { useGLTF, GradientTexture, Sky, OrbitControls } from '@react-three/drei';
-import { AnimationMixer, Color, DoubleSide } from 'three';
+import { AnimationMixer, Color, BackSide } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
 import almendra from '../fonts/Almendra SC_Regular.json';
 import vertShader from '../shaders/waveTestVertexShader.glsl';
-import fragShader from '../shaders/testFragmentShader.glsl';
+import stillWaveVertShader from '../shaders/stillWaveVertexShader.glsl';
+import fragShader from '../shaders/waveTestFragmentShader.glsl';
+import sandFragShader from '../shaders/monochromeFragmentShader.glsl';
 
 
 extend({ TextGeometry });
@@ -22,8 +24,14 @@ function Art(props) {
 
         return (
             <mesh {...props} ref={myMesh}>
-                <planeGeometry />
-                <meshBasicMaterial color={[0.4, 0.2, 0.1]} side={DoubleSide} />
+                <planeGeometry args={[1, 1, 8, 8]} />
+                <meshBasicMaterial color={[0.93, 0.79, 0.69]} />
+                <shaderMaterial
+                    vertexShader={stillWaveVertShader}
+                    fragmentShader={sandFragShader}
+                    side={BackSide}
+                    //wireframe
+                />
             </mesh>
         )
     }
@@ -62,7 +70,7 @@ function Art(props) {
                     fragmentShader={fragShader}
                     vertexShader={vertShader}
                     uniforms={uniforms}
-                    //wireframe
+                    wireframe
                 />
             </mesh>
         )
@@ -161,6 +169,7 @@ function Art(props) {
     const Horse = (props) => {
         const mesh = useRef(null); // useRef is React's way of creating an object that can be held in memory 
         const [active, setActive] = useState(true);
+        // Spin horse around
         //useFrame((state, delta) => {
         //    ((active) ? mesh.current.rotation.y += delta : mesh.current.rotation.y -= delta);
         //});
@@ -205,7 +214,7 @@ function Art(props) {
     return (
         <div className="items-center border w-screen h-lvh">
             <div className="">(work in progress)</div>
-            <div id="hiddenDiv" className="invisible">Hello, World!</div>
+            <div id="hiddenDiv" className="invisible italic">Hide Menu button was pressed</div>
             <div className="flex w-full h-full">
                 <Canvas>
                     <ambientLight intensity={Math.PI / 4} />
