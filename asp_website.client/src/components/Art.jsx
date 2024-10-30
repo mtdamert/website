@@ -10,6 +10,8 @@ import vertShader from '../shaders/waveTestVertexShader.glsl';
 import stillWaveVertShader from '../shaders/stillWaveVertexShader.glsl';
 import fragShader from '../shaders/waveTestFragmentShader.glsl';
 import sandFragShader from '../shaders/monochromeFragmentShader.glsl';
+import blobFragmentShader from '../shaders/blobFragmentShader.glsl';
+import blobVertexShader from '../shaders/blobVertexShader.glsl';
 
 
 extend({ TextGeometry });
@@ -18,6 +20,18 @@ function Art(props) {
 
     const font = new FontLoader().parse(almendra);
     const [hideMenu, setHideMenu] = useState(false);
+
+    const uniforms = useMemo(
+        () => ({
+            u_time: {
+                value: 0.0,
+            },
+            u_hover: {
+                value: false,
+            },
+        }), []
+    );
+
 
     function GroundPlane(props) {
         const myMesh = useRef();
@@ -40,16 +54,6 @@ function Art(props) {
         const mesh = useRef();
         const [mouseHovering, setMouseHovering] = useState(false);
 
-        const uniforms = useMemo(
-            () => ({
-                u_time: {
-                    value: 0.0,
-                },
-                u_hover: {
-                    value: false,
-                },
-            }), []
-        );
 
         useFrame(({ clock }) => {
             mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
@@ -87,13 +91,64 @@ function Art(props) {
             <mesh {...props}
                 ref={myMesh}>
                 <boxGeometry />
-                <meshBasicMaterial color="royalblue" />
+                <meshBasicMaterial color="cornflowerblue" />
             </mesh>
         )
     }
 
+    const Blob = () => {
+        const mesh = useRef();
+        const hover = useRef(false);
+
+        //const uniforms = useMemo(
+        //    () => ({
+        //        u_intensity: {
+        //            value: 0.3,
+        //        },
+        //        u_time: {
+        //            value: 0.0,
+        //        },
+        //    }), []
+        //);
+
+        useFrame(({ clock }) => {
+            //mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
+            //mesh.current.material.uniforms.u_hover.value = mouseHovering;
+        })
+
+
+        //useFrame(({ clock }) => {
+        //    mesh.current.material.uniforms.u_time.value = 0.4 * clock.getElapsedTime();
+
+        //    mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(
+        //        mesh.current.material.uniforms.u_intensity.value,
+        //        hover.current ? 0.85 : 0.15,
+        //        0.02
+        //    );
+        //});
+
+        return (
+            <mesh
+                ref={mesh}
+                position={[0, 1.5, 0]}
+                onPointerOver={() => (hover.current = true)}
+                onPointerOut={() => (hover.current = false)}
+            >
+                <icosahedronGeometry args={[0.5, 20]} />
+                <shaderMaterial
+                    fragmentShader={blobFragmentShader}
+                    vertexShader={blobVertexShader}
+                    uniforms={uniforms}
+                />
+                <meshBasicMaterial color="mediumorchid" />
+
+            </mesh>
+        );
+    }
+
     function Button3D(props) {
         const mesh = useRef(null);
+        //const hover = useRef(false);
         const [hovered, setHover] = useState(false);
         const [active, setActive] = useState(false);
 
@@ -229,6 +284,7 @@ function Art(props) {
                     <OrbitControls />
 
                     <TestCube scale={0.2} position={[0, 0.5, 0]} />
+                    <Blob />
                     {<MyAnimatedBox scale={0.25} position={[-1.0, 1, 0.0]} />}
 
                     {<Button3D scale={0.25} position={[-3.0, 1.6, 0]}
