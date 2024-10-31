@@ -1,7 +1,7 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { useGLTF, GradientTexture, Sky, OrbitControls } from '@react-three/drei';
-import { AnimationMixer, Color, BackSide } from 'three';
+import { AnimationMixer, Color, BackSide, MathUtils } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
@@ -100,32 +100,25 @@ function Art(props) {
         const mesh = useRef();
         const hover = useRef(false);
 
-        //const uniforms = useMemo(
-        //    () => ({
-        //        u_intensity: {
-        //            value: 0.3,
-        //        },
-        //        u_time: {
-        //            value: 0.0,
-        //        },
-        //    }), []
-        //);
+        const uniforms = useMemo(
+            () => ({
+                u_intensity: {
+                    value: 0.3,
+                },
+                u_time: {
+                    value: 0.0,
+                },
+            }), []
+        );
 
         useFrame(({ clock }) => {
-            //mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
-            //mesh.current.material.uniforms.u_hover.value = mouseHovering;
+            mesh.current.material.uniforms.u_time.value = 0.4 * clock.getElapsedTime();
+                mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(
+                    mesh.current.material.uniforms.u_intensity.value,
+                    hover.current ? 0.85 : 0.15,
+                    0.02
+                );
         })
-
-
-        //useFrame(({ clock }) => {
-        //    mesh.current.material.uniforms.u_time.value = 0.4 * clock.getElapsedTime();
-
-        //    mesh.current.material.uniforms.u_intensity.value = MathUtils.lerp(
-        //        mesh.current.material.uniforms.u_intensity.value,
-        //        hover.current ? 0.85 : 0.15,
-        //        0.02
-        //    );
-        //});
 
         return (
             <mesh
@@ -140,10 +133,9 @@ function Art(props) {
                     vertexShader={blobVertexShader}
                     uniforms={uniforms}
                 />
-                <meshBasicMaterial color="mediumorchid" />
 
             </mesh>
-        );
+            );
     }
 
     function Button3D(props) {
