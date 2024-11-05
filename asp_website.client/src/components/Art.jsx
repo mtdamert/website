@@ -148,6 +148,7 @@ function Art(props) {
             setActive(true);
         }
 
+        // button color: teal by default, purple on mouseover
         return (
             <>
                 {/* Draw the button */}
@@ -163,7 +164,7 @@ function Art(props) {
                     <meshBasicMaterial>
                         <GradientTexture
                             stops={[0, 0.4, 0.6, 1]}
-                            colors={hovered ? ['#ff69b4', 'fuchsia', 'fuchsia', '#ff69b4'] : ['#66b2b2', '#008080', '#008080', '#66b2b2']}
+                            colors={hovered ? ['#76387b', '#e50cff', '#e50cff', '#76387b'] : ['#24b4c5', '#50d9ff', '#50d9ff', '#24b4c5']}
                             size={1024}
                         />
                     </meshBasicMaterial>
