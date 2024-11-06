@@ -1,7 +1,7 @@
 import React, { useRef, useState, useMemo } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
-import { useGLTF, GradientTexture, Sky, OrbitControls } from '@react-three/drei';
-import { AnimationMixer, Color, BackSide, MathUtils } from 'three';
+import { useGLTF, GradientTexture, Sky, OrbitControls, Clouds, Cloud } from '@react-three/drei';
+import { AnimationMixer, Color, BackSide, MathUtils, MeshBasicMaterial } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
@@ -268,7 +268,12 @@ function Art(props) {
                     <ambientLight intensity={Math.PI / 4} />
                     {/*<spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />*/}
                     <pointLight position={[0, 4, 5]} decay={1} intensity={Math.PI * 2} />
+
                     <Sky distance={10} sunPosition={[0, 5, 0]} inclination={0} azimuth={0.25} {...props} />
+                    <Clouds material={MeshBasicMaterial}>
+                        <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[15, 15, -30]} />
+                        <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />
+                    </Clouds>
 
                     <Horse scale={0.5} position={[-6, -1.5, 0]} />
                     <GroundPlane scale={8} rotation={[Math.PI / 2.4, 0, 0]} position={[0, -1.42, 0]} />
@@ -280,13 +285,13 @@ function Art(props) {
                     <Blob />
                     {<MyAnimatedBox scale={0.25} position={[-1.0, 1, 0.0]} />}
 
-                    {<Button3D scale={0.25} position={[-3.0, 1.6, 0]}
+                    {<Button3D scale={0.25} position={[-3.0, 2.0, 0]}
                         onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; setHideMenu(true); }}
                         text={'Hide Menu'} textOffset={0.3} />}
-                    {<Button3D scale={0.25} position={[-3.0, 1.2, 0]} text={'Option 1'} textOffset={0.23} />}
-                    {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 2'} textOffset={0.23} />}
-                    {<Button3D scale={0.25} position={[-3.0, 0.4, 0]} text={'Option 3'} textOffset={0.23} />}
-                    {<Button3D scale={0.25} position={[-3.0, 0, 0]} text={'Option 4'} textOffset={0.23} /> }
+                    {<Button3D scale={0.25} position={[-3.0, 1.7, 0]} text={'Option 1'} textOffset={0.23} />}
+                    {<Button3D scale={0.25} position={[-3.0, 1.4, 0]} text={'Option 2'} textOffset={0.23} />}
+                    {<Button3D scale={0.25} position={[-3.0, 1.1, 0]} text={'Option 3'} textOffset={0.23} />}
+                    {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 4'} textOffset={0.23} /> }
                 </Canvas>
             </div>
         </div>
