@@ -38,7 +38,7 @@ function Art(props) {
 
         return (
             <mesh {...props} ref={myMesh}>
-                <planeGeometry args={[1, 1, 8, 8]} />
+                <planeGeometry args={[2.5, 1, 8, 8]} />
                 <meshBasicMaterial color={[0.93, 0.79, 0.69]} />
                 <shaderMaterial
                     vertexShader={stillWaveVertShader}
@@ -168,7 +168,6 @@ function Art(props) {
                             size={1024}
                         />
                     </meshBasicMaterial>
-
                 </mesh>
                 
                 {/* Add text */}
@@ -225,8 +224,8 @@ function Art(props) {
             if (active) {
                 mesh.current.position.x += delta;
             }
-            if (mesh.current.position.x > 25) {
-                mesh.current.position.x = -8;
+            if (mesh.current.position.x > 22) {
+                mesh.current.position.x = -5;
             }
 
             if (active) {
@@ -253,7 +252,7 @@ function Art(props) {
         return (
             <group ref={ref} {...props} dispose={null}>
                 <group>
-                    <primitive ref={mesh} object={nodes.Scene} dispose={null} onClick={toggleHorseActive} rotation={[0, 90, 0]} />
+                    <primitive ref={mesh} object={nodes.Scene} dispose={null} onClick={toggleHorseActive} rotation={[0, Math.PI / 2, 0]} />
                 </group>
             </group>
         )
