@@ -52,12 +52,12 @@ function Art(props) {
 
     function MovingPlane(props) {
         const mesh = useRef();
-        const [mouseHovering, setMouseHovering] = useState(false);
+        const hover = useRef(false);
 
 
         useFrame(({ clock }) => {
             mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
-            mesh.current.material.uniforms.u_hover.value = mouseHovering;
+            mesh.current.material.uniforms.u_hover.value = hover.current;
         })
 
         return (
@@ -66,8 +66,8 @@ function Art(props) {
                 position={[0, 0, 0]}
                 rotation={[-Math.PI / 2, 0, 0]}
                 scale={3.5}
-                onPointerEnter={() => setMouseHovering(true)}
-                onPointerLeave={() => setMouseHovering(false)}
+                onPointerEnter={() => hover.current = true}
+                onPointerLeave={() => hover.current = false }
                 >
                 <planeGeometry args={[1, 1, 32, 32]} />
                 <shaderMaterial
@@ -76,6 +76,24 @@ function Art(props) {
                     uniforms={uniforms}
                     wireframe
                 />
+            </mesh>
+        )
+    }
+
+    function AppearingClouds(props) {
+        const myMesh = useRef();
+
+        useFrame(({ clock }) => {
+        //    mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
+        //    mesh.current.material.uniforms.u_hover.value = mouseHovering;
+        })
+
+        return (
+            <mesh {...props} ref={myMesh}>
+                <Clouds material={MeshBasicMaterial}>
+                    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[15, 15, -30]} />
+                    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />
+                </Clouds>
             </mesh>
         )
     }
@@ -268,11 +286,12 @@ function Art(props) {
                     {/*<spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />*/}
                     <pointLight position={[0, 4, 5]} decay={1} intensity={Math.PI * 2} />
 
-                    <Sky distance={10} sunPosition={[0, 5, 0]} inclination={0} azimuth={0.25} {...props} />
-                    <Clouds material={MeshBasicMaterial}>
-                        <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[15, 15, -30]} />
-                        <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />
-                    </Clouds>
+                    <Sky distance={100} inclination={0.51} azimuth={0.3} rayleigh={1} {...props} />
+                    {/*<Clouds material={MeshBasicMaterial}>*/}
+                    {/*    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[15, 15, -30]} />*/}
+                    {/*    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />*/}
+                    {/*</Clouds>*/}
+                    <AppearingClouds />
 
                     <Horse scale={0.5} position={[-6, -1.5, 0]} />
                     <GroundPlane scale={8} rotation={[Math.PI / 2.4, 0, 0]} position={[0, -1.42, 0]} />
