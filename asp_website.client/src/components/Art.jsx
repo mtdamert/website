@@ -81,17 +81,36 @@ function Art(props) {
     }
 
     function AppearingClouds(props) {
-        const myMesh = useRef();
+        const mesh = useRef();
+        const currentSize = useRef(0.0);
+        const currentSizeDirection = useRef(true);
 
-        useFrame(({ clock }) => {
-        //    mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
-        //    mesh.current.material.uniforms.u_hover.value = mouseHovering;
+        // Attempt to make the clouds bigger and smaller over time
+        // TODO: This isn't working - it looks like the 'Cloud' values can't change
+        useFrame((state, delta) => {
+            if (currentSizeDirection.current === true) {
+                currentSize.current += delta * 100;
+            } else {
+                currentSize.current -= delta * 100;
+            }
+
+            if (currentSize.current > 1000) {
+                currentSize.current = 1000;
+                currentSizeDirection.current = false;
+            }
+            if (currentSize.current < 0) {
+                currentSize.current = 0;
+                currentSizeDirection.current = true;
+            }
+
+            console.log("elapsed time: " + delta)
+            console.log("currentSize: " + currentSize.current)
         })
 
         return (
-            <mesh {...props} ref={myMesh}>
+            <mesh {...props} ref={mesh}>
                 <Clouds material={MeshBasicMaterial}>
-                    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[15, 15, -30]} />
+                    <Cloud segments={40} bounds={[15, 2, 2]} volume={15 + (Math.trunc(currentSize.current * 10))} color="pink" position={[15, 15, -30]} />
                     <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />
                 </Clouds>
             </mesh>
