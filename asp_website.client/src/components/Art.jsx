@@ -82,36 +82,42 @@ function Art(props) {
 
     function AppearingClouds(props) {
         const mesh = useRef();
+        const cloud1Ref = useRef();
+        const cloud2Ref = useRef();
         const currentSize = useRef(0.0);
         const currentSizeDirection = useRef(true);
 
-        // Attempt to make the clouds bigger and smaller over time
-        // TODO: This isn't working - it looks like the 'Cloud' values can't change
+        // Make the clouds bigger and smaller over time
         useFrame((state, delta) => {
             if (currentSizeDirection.current === true) {
-                currentSize.current += delta * 100;
+                currentSize.current += delta;
             } else {
-                currentSize.current -= delta * 100;
+                currentSize.current -= delta;
             }
 
-            if (currentSize.current > 1000) {
-                currentSize.current = 1000;
+            if (currentSize.current > 20) {
+                currentSize.current = 20;
                 currentSizeDirection.current = false;
             }
-            if (currentSize.current < 0) {
-                currentSize.current = 0;
+            if (currentSizeDirection.current === false && currentSize.current < 18) {
+                currentSize.current = 18;
                 currentSizeDirection.current = true;
             }
 
-            console.log("elapsed time: " + delta)
-            console.log("currentSize: " + currentSize.current)
+            cloud1Ref.current.scale.x = cloud1Ref.current.scale.y = cloud1Ref.current.scale.z = 0.0 + (currentSize.current / 20)
+            cloud2Ref.current.scale.x = cloud2Ref.current.scale.y = cloud2Ref.current.scale.z = 0.0 + (currentSize.current / 20)
+
+            //console.log("elapsed time: " + delta)
+            //console.log("currentSize: " + currentSize.current)
+        //    console.log('cloud ref')
+        //    console.log(cloudRef)
         })
 
         return (
             <mesh {...props} ref={mesh}>
                 <Clouds material={MeshBasicMaterial}>
-                    <Cloud segments={40} bounds={[15, 2, 2]} volume={15 + (Math.trunc(currentSize.current * 10))} color="pink" position={[15, 15, -30]} />
-                    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />
+                    <Cloud ref={cloud1Ref} segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[15, 15, -30]} />
+                    <Cloud ref={cloud2Ref} segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />
                 </Clouds>
             </mesh>
         )
