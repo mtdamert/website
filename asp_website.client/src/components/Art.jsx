@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useReducer } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { useGLTF, GradientTexture, Sky, OrbitControls, Clouds, Cloud } from '@react-three/drei';
 import { AnimationMixer, Color, BackSide, MathUtils, MeshBasicMaterial } from 'three';
@@ -76,6 +76,25 @@ function Art(props) {
                     uniforms={uniforms}
                     wireframe
                 />
+            </mesh>
+        )
+    }
+
+    function AnimatedSky(props) {
+        const mesh = useRef();
+        const skyRef = useRef();
+        const testRef = useRef(0.01);
+        const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+        useFrame((state, delta) => {
+            testRef.current += (delta / 8.0);
+            forceUpdate()
+        })
+
+
+        return (
+            <mesh ref={mesh}>
+                <Sky ref={skyRef} distance={100} inclination={0.55 + testRef.current} azimuth={0.3} rayleigh={1} {...props} />
             </mesh>
         )
     }
@@ -311,7 +330,7 @@ function Art(props) {
                     {/*<spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />*/}
                     <pointLight position={[0, 4, 5]} decay={1} intensity={Math.PI * 2} />
 
-                    <Sky distance={100} inclination={0.51} azimuth={0.3} rayleigh={1} {...props} />
+                    <AnimatedSky />
                     {/*<Clouds material={MeshBasicMaterial}>*/}
                     {/*    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[15, 15, -30]} />*/}
                     {/*    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />*/}
