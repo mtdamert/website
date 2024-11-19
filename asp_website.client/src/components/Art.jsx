@@ -87,7 +87,7 @@ function Art(props) {
         const [, forceUpdate] = useReducer(x => x + 1, 0);
 
         useFrame((state, delta) => {
-            testRef.current += (delta / 8.0);
+            testRef.current += (delta / 20.0);
             forceUpdate()
         })
 
