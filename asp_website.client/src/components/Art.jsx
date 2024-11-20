@@ -1,6 +1,6 @@
 import React, { useRef, useState, useMemo, useReducer } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
-import { useGLTF, GradientTexture, Sky, OrbitControls, Clouds, Cloud } from '@react-three/drei';
+import { useGLTF, GradientTexture, Sky, OrbitControls, Clouds, Cloud, Stars } from '@react-three/drei';
 import { AnimationMixer, Color, BackSide, MathUtils, MeshBasicMaterial } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
@@ -88,7 +88,13 @@ function Art(props) {
 
         useFrame((state, delta) => {
             testRef.current += (delta / 20.0);
-            forceUpdate()
+            forceUpdate();
+
+            const currentTimeSpan = document.getElementById("currentTimeSpan");
+            const currentTime = ((12 * (0.55 + testRef.current)) % 24);
+            const hour = Math.trunc(currentTime);
+            const minute = (currentTime % 1) * (6 / 10);
+            currentTimeSpan.innerText = "" + hour + ":" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
         })
 
 
@@ -322,7 +328,7 @@ function Art(props) {
 
     return (
         <div className="items-center border w-screen h-lvh">
-            <div className="">(work in progress)</div>
+            <div className="">(work in progress) - current time <span id="currentTimeSpan" /></div>
             <div id="hiddenDiv" className="invisible italic">Hide Menu button was pressed</div>
             <div className="flex w-full h-full">
                 <Canvas>
@@ -331,11 +337,8 @@ function Art(props) {
                     <pointLight position={[0, 4, 5]} decay={1} intensity={Math.PI * 2} />
 
                     <AnimatedSky />
-                    {/*<Clouds material={MeshBasicMaterial}>*/}
-                    {/*    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[15, 15, -30]} />*/}
-                    {/*    <Cloud segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />*/}
-                    {/*</Clouds>*/}
                     <AppearingClouds />
+                    <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
 
                     <Horse scale={0.5} position={[-6, -1.5, 0]} />
                     <GroundPlane scale={8} rotation={[Math.PI / 2.4, 0, 0]} position={[0, -1.42, 0]} />
@@ -353,7 +356,7 @@ function Art(props) {
                     {<Button3D scale={0.25} position={[-3.0, 1.7, 0]} text={'Option 1'} textOffset={0.23} />}
                     {<Button3D scale={0.25} position={[-3.0, 1.4, 0]} text={'Option 2'} textOffset={0.23} />}
                     {<Button3D scale={0.25} position={[-3.0, 1.1, 0]} text={'Option 3'} textOffset={0.23} />}
-                    {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 4'} textOffset={0.23} /> }
+                    {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 4'} textOffset={0.23} />}
                 </Canvas>
             </div>
         </div>
