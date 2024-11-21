@@ -20,6 +20,8 @@ function Art(props) {
 
     const font = new FontLoader().parse(almendra);
     const [hideMenu, setHideMenu] = useState(false);
+    let hour = 1;
+    let minute = 0;
 
     const uniforms = useMemo(
         () => ({
@@ -92,8 +94,8 @@ function Art(props) {
 
             const currentTimeSpan = document.getElementById("currentTimeSpan");
             const currentTime = ((12 * (0.55 + testRef.current)) % 24);
-            const hour = Math.trunc(currentTime);
-            const minute = (currentTime % 1) * (6 / 10);
+            hour = Math.trunc(currentTime);
+            minute = (currentTime % 1) * (6 / 10);
             currentTimeSpan.innerText = "" + hour + ":" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
         })
 
@@ -101,6 +103,7 @@ function Art(props) {
         return (
             <mesh ref={mesh}>
                 <Sky ref={skyRef} distance={100} inclination={0.55 + testRef.current} azimuth={0.3} rayleigh={1} {...props} />
+                <Stars radius={100} depth={50} count={(hour > 6 && hour < 18) ? 0 : 5000} factor={4} saturation={0} fade speed={1} />
             </mesh>
         )
     }
@@ -338,7 +341,6 @@ function Art(props) {
 
                     <AnimatedSky />
                     <AppearingClouds />
-                    <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
 
                     <Horse scale={0.5} position={[-6, -1.5, 0]} />
                     <GroundPlane scale={8} rotation={[Math.PI / 2.4, 0, 0]} position={[0, -1.42, 0]} />
