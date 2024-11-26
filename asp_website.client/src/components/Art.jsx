@@ -82,7 +82,7 @@ function Art(props) {
         )
     }
 
-    function AnimatedSky(props) {
+    function DayNightSky(props) {
         const mesh = useRef();
         const skyRef = useRef();
         const testRef = useRef(0.01);
@@ -339,7 +339,7 @@ function Art(props) {
                     {/*<spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />*/}
                     <pointLight position={[0, 4, 5]} decay={1} intensity={Math.PI * 2} />
 
-                    <AnimatedSky />
+                    <DayNightSky />
                     <AppearingClouds />
 
                     <Horse scale={0.5} position={[-6, -1.5, 0]} />
