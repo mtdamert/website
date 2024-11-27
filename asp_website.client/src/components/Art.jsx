@@ -92,6 +92,7 @@ function Art(props) {
             testRef.current += (delta / 20.0);
             forceUpdate();
 
+            // Update global clock and onscreen time
             const currentTimeSpan = document.getElementById("currentTimeSpan");
             const currentTime = ((12 * (0.55 + testRef.current)) % 24);
             hour = Math.trunc(currentTime);
@@ -104,6 +105,37 @@ function Art(props) {
             <mesh ref={mesh}>
                 <Sky ref={skyRef} distance={100} inclination={0.55 + testRef.current} azimuth={0.3} rayleigh={1} {...props} />
                 <Stars radius={100} depth={50} count={(hour > 6 && hour < 18) ? 0 : 5000} factor={4} saturation={0} fade speed={1} />
+            </mesh>
+        )
+    }
+
+    function DayNightLights(props) {
+        const mesh = useRef();
+        const ambientIntensity = useRef(Math.PI / 4);
+        const pointIntensity = useRef(Math.PI * 2);
+        const lightColor = useRef([1.0, 1.0, 1.0]);
+        const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+        useFrame((state, delta) => {
+
+            if (hour > 6 && hour < 18) { // day
+                ambientIntensity.current = Math.PI / 4;
+                pointIntensity.current = Math.PI * 2;
+                lightColor.current = [1.0, 1.0, 1.0];
+                forceUpdate();
+            } else { // night
+                ambientIntensity.current = Math.PI / 8;
+                pointIntensity.current = Math.PI;
+                lightColor.current = [0.35, 0.35, 0.67];
+                forceUpdate();
+            }
+        })
+
+        return (
+            <mesh {...props} ref={mesh}>
+                <ambientLight intensity={ambientIntensity.current} color={lightColor} />
+                {/*<spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />*/ }
+                <pointLight position={[0, 4, 5]} decay={1} intensity={pointIntensity.current} color={lightColor}  />
             </mesh>
         )
     }
@@ -335,9 +367,7 @@ function Art(props) {
             <div id="hiddenDiv" className="invisible italic">Hide Menu button was pressed</div>
             <div className="flex w-full h-full">
                 <Canvas>
-                    <ambientLight intensity={Math.PI / 4} />
-                    {/*<spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} decay={0} intensity={Math.PI} />*/}
-                    <pointLight position={[0, 4, 5]} decay={1} intensity={Math.PI * 2} />
+                    <DayNightLights />
 
                     <DayNightSky />
                     <AppearingClouds />
