@@ -85,16 +85,16 @@ function Art(props) {
     function DayNightSky(props) {
         const mesh = useRef();
         const skyRef = useRef();
-        const testRef = useRef(0.01);
+        const adjustedSunInclination = useRef(0.01);
         const [, forceUpdate] = useReducer(x => x + 1, 0);
 
         useFrame((state, delta) => {
-            testRef.current += (delta / 20.0);
+            adjustedSunInclination.current += (delta / 20.0);
             forceUpdate();
 
             // Update global clock and onscreen time
             const currentTimeSpan = document.getElementById("currentTimeSpan");
-            const currentTime = ((12 * (0.55 + testRef.current)) % 24);
+            const currentTime = ((12 * (0.55 + adjustedSunInclination.current)) % 24);
             hour = Math.trunc(currentTime);
             minute = (currentTime % 1) * (6 / 10);
             currentTimeSpan.innerText = "" + hour + ":" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
@@ -103,7 +103,7 @@ function Art(props) {
 
         return (
             <mesh ref={mesh}>
-                <Sky ref={skyRef} distance={100} inclination={0.55 + testRef.current} azimuth={0.3} rayleigh={1} {...props} />
+                <Sky ref={skyRef} distance={100} inclination={0.55 + adjustedSunInclination.current} azimuth={0.3} rayleigh={1} {...props} />
                 <Stars radius={100} depth={50} count={(hour > 6 && hour < 18) ? 0 : 5000} factor={4} saturation={0} fade speed={1} />
             </mesh>
         )
