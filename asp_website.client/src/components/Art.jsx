@@ -98,6 +98,12 @@ function Art(props) {
             hour = Math.trunc(currentTime);
             minute = (currentTime % 1) * (6 / 10);
             currentTimeSpan.innerText = "" + hour + ":" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
+
+            const currentHourInput = document.getElementById("currentHourInput");
+            currentHourInput.value = "" + hour;
+
+            const currentMinuteInput = document.getElementById("currentMinuteInput");
+            currentMinuteInput.value = "" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
         })
 
 
@@ -363,7 +369,10 @@ function Art(props) {
 
     return (
         <div className="items-center border w-screen h-lvh">
-            <div className="">(work in progress) - current time <span id="currentTimeSpan" /></div>
+            <div><span className="italic">(work in progress)</span> - current time:
+                <input id="currentHourInput" className="w-5 text-right" value="01" />:<input id="currentMinuteInput" className="w-5 text-right" value="09" />
+                <span className="invisible" id="currentTimeSpan" />
+            </div>
             <div id="hiddenDiv" className="invisible italic">Hide Menu button was pressed</div>
             <div className="flex w-full h-full">
                 <Canvas>
