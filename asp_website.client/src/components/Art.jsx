@@ -20,8 +20,12 @@ function Art(props) {
 
     const font = new FontLoader().parse(almendra);
     const [hideMenu, setHideMenu] = useState(false);
-    let hour = 1;
-    let minute = 0;
+    const [clockButton, setClockButton] = useState({ text: 'Stop Clock', textOffset: 0.3, age: 30 });
+    const [isClockRunning, setIsClockRunning] = useState(true);
+    const [savedHour, setSavedHour] = useState(1);
+    const [savedMinute, setSavedMinute] = useState(0);
+    let hour = savedHour;
+    let minute = savedMinute;
 
     const uniforms = useMemo(
         () => ({
@@ -34,6 +38,13 @@ function Art(props) {
         }), []
     );
 
+    function SetUiTime(hour, minute) {
+        const currentHourInput = document.getElementById("currentHourInput");
+        currentHourInput.value = "" + hour;
+
+        const currentMinuteInput = document.getElementById("currentMinuteInput");
+        currentMinuteInput.value = "" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
+    }
 
     function GroundPlane(props) {
         const myMesh = useRef();
@@ -89,21 +100,21 @@ function Art(props) {
         const [, forceUpdate] = useReducer(x => x + 1, 0);
 
         useFrame((state, delta) => {
-            adjustedSunInclination.current += (delta / 20.0);
-            forceUpdate();
+            if (isClockRunning) {
+                adjustedSunInclination.current += (delta / 20.0);
+                forceUpdate();
 
-            // Update global clock and onscreen time
-            const currentTimeSpan = document.getElementById("currentTimeSpan");
-            const currentTime = ((12 * (0.55 + adjustedSunInclination.current)) % 24);
-            hour = Math.trunc(currentTime);
-            minute = (currentTime % 1) * (6 / 10);
-            currentTimeSpan.innerText = "" + hour + ":" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
+                // Update global clock and onscreen time
+                const currentTimeSpan = document.getElementById("currentTimeSpan");
+                const currentTime = ((12 * (0.55 + adjustedSunInclination.current)) % 24);
+                hour = Math.trunc(currentTime);
+                minute = (currentTime % 1) * (6 / 10);
+                currentTimeSpan.innerText = "" + hour + ":" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
 
-            const currentHourInput = document.getElementById("currentHourInput");
-            currentHourInput.value = "" + hour;
-
-            const currentMinuteInput = document.getElementById("currentMinuteInput");
-            currentMinuteInput.value = "" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
+                SetUiTime(hour, minute);
+            } else {
+                SetUiTime(savedHour, savedMinute);
+            }
         })
 
 
@@ -381,8 +392,8 @@ function Art(props) {
                     <DayNightSky />
                     <AppearingClouds />
 
-                    <Horse scale={0.5} position={[-6, -1.5, 0]} />
-                    <GroundPlane scale={8} rotation={[Math.PI / 2.4, 0, 0]} position={[0, -1.42, 0]} />
+                    <Horse scale={0.5} position={[-6, -1.45, 0]} />
+                    <GroundPlane scale={8} rotation={[Math.PI / 2.1, 0, 0]} position={[0, -1.42, 0]} />
 
                     <MovingPlane />
                     <OrbitControls />
@@ -394,7 +405,21 @@ function Art(props) {
                     {<Button3D scale={0.25} position={[-3.0, 2.0, 0]}
                         onClick={(event) => { console.log("Hello World should appear"); document.getElementById('hiddenDiv').style.visibility = 'visible'; setHideMenu(true); }}
                         text={'Hide Menu'} textOffset={0.3} />}
-                    {<Button3D scale={0.25} position={[-3.0, 1.7, 0]} text={'Option 1'} textOffset={0.23} />}
+                    {<Button3D scale={0.25} position={[-3.0, 1.7, 0]} text={clockButton.text}
+                        onClick={(event) => {
+                            if (!isClockRunning) {
+                                setClockButton({ text: 'Stop Clock', textOffset: 0.3, age: 30 });
+                                hour = savedHour;
+                                minute = savedMinute;
+                            }
+                            else {
+                                setClockButton({ text: 'Restart Clock', textOffset: 0.4, age: 30 });
+                                setSavedHour(hour);
+                                setSavedMinute(minute);
+                            }
+                            setIsClockRunning(!isClockRunning);
+                        }}
+                        textOffset={clockButton.textOffset} />}
                     {<Button3D scale={0.25} position={[-3.0, 1.4, 0]} text={'Option 2'} textOffset={0.23} />}
                     {<Button3D scale={0.25} position={[-3.0, 1.1, 0]} text={'Option 3'} textOffset={0.23} />}
                     {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 4'} textOffset={0.23} />}
