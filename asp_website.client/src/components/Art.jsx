@@ -22,7 +22,7 @@ function Art(props) {
     const [hideMenu, setHideMenu] = useState(false);
     const [clockButton, setClockButton] = useState({ text: 'Stop Clock', textOffset: 0.3, age: 30 });
     const [isClockRunning, setIsClockRunning] = useState(true);
-    const [savedHour, setSavedHour] = useState(1);
+    const [savedHour, setSavedHour] = useState(5);
     const [savedMinute, setSavedMinute] = useState(0);
     let hour = savedHour;
     let minute = savedMinute;
@@ -96,8 +96,15 @@ function Art(props) {
     function DayNightSky(props) {
         const mesh = useRef();
         const skyRef = useRef();
-        const adjustedSunInclination = useRef(0.01);
+        const adjustedSunInclination = useRef(-0.11);
         const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+        // TODO: Call this when we return to normal time
+        const setCurrentTime = (currentHour, currentMinute) => {
+            const currentTime = currentHour + (currentMinute / 60.0);
+
+            adjustedSunInclination.current = (currentTime / 12.0) - 0.55; // in range of (0, 2)
+        }
 
         useFrame((state, delta) => {
             if (isClockRunning) {
@@ -381,7 +388,7 @@ function Art(props) {
     return (
         <div className="items-center border w-screen h-lvh">
             <div><span className="italic">(work in progress)</span> - current time:
-                <input id="currentHourInput" className="w-5 text-right" value="01" />:<input id="currentMinuteInput" className="w-5 text-right" value="09" />
+                <input id="currentHourInput" className="w-5 text-right" value="05" />:<input id="currentMinuteInput" className="w-5 text-right" value="20" />
                 <span className="invisible" id="currentTimeSpan" />
             </div>
             <div id="hiddenDiv" className="invisible italic">Hide Menu button was pressed</div>
@@ -409,8 +416,8 @@ function Art(props) {
                         onClick={(event) => {
                             if (!isClockRunning) {
                                 setClockButton({ text: 'Stop Clock', textOffset: 0.3, age: 30 });
-                                hour = savedHour;
-                                minute = savedMinute;
+                            //    hour = savedHour;
+                            //    minute = savedMinute;
                             }
                             else {
                                 setClockButton({ text: 'Restart Clock', textOffset: 0.4, age: 30 });
