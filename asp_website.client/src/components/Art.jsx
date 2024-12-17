@@ -164,10 +164,9 @@ function Art(props) {
         )
     }
 
-    function AppearingClouds(props) {
+    function AppearingCloud(props) {
         const mesh = useRef();
-        const cloud1Ref = useRef();
-        const cloud2Ref = useRef();
+        const cloudRef = useRef();
         const currentSize = useRef(0.0);
         const currentSizeDirection = useRef(true);
 
@@ -188,22 +187,25 @@ function Art(props) {
                 currentSizeDirection.current = true;
             }
 
-            cloud1Ref.current.scale.x = cloud1Ref.current.scale.y = cloud1Ref.current.scale.z = 0.0 + (currentSize.current / 20)
-            cloud2Ref.current.scale.x = cloud2Ref.current.scale.y = cloud2Ref.current.scale.z = 0.0 + (currentSize.current / 20)
+            cloudRef.current.scale.x = cloudRef.current.scale.y = cloudRef.current.scale.z = 0.0 + (currentSize.current / 40)
 
-            //console.log("elapsed time: " + delta)
-            //console.log("currentSize: " + currentSize.current)
-        //    console.log('cloud ref')
-        //    console.log(cloudRef)
         })
 
         return (
             <mesh {...props} ref={mesh}>
                 <Clouds material={MeshBasicMaterial}>
-                    <Cloud ref={cloud1Ref} segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[15, 15, -30]} />
-                    <Cloud ref={cloud2Ref} segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={[-15, 26, -35]} />
+                    <Cloud ref={cloudRef} segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={props.position} />
                 </Clouds>
             </mesh>
+        )
+    }
+
+    function AppearingClouds(props) {
+        return (
+            <>
+                <AppearingCloud position={[15, 15, -30]} />
+                <AppearingCloud position={[-15, 26, -35]} />
+            </>
         )
     }
 
