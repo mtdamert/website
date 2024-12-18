@@ -166,7 +166,7 @@ function Art(props) {
 
     function AppearingCloud(props) {
         const cloudRef = useRef();
-        const currentSize = useRef(0.0);
+        const currentSize = useRef((props.timeOffset !== undefined) ? props.timeOffset : 0.0);
         const currentSizeDirection = useRef(true);
 
         // if values aren't set manually, use defaults
@@ -206,7 +206,7 @@ function Art(props) {
         return (
             <mesh {...props} ref={mesh}>
                 <Clouds material={MeshBasicMaterial}>
-                    <AppearingCloud position={[15, 15, -30]} />
+                    <AppearingCloud position={[15, 15, -30]} timeOffset={0.5} />
                     <AppearingCloud position={[-15, 26, -35]} />
                 </Clouds>
             </mesh>
