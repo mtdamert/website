@@ -165,7 +165,6 @@ function Art(props) {
     }
 
     function AppearingCloud(props) {
-        const mesh = useRef();
         const cloudRef = useRef();
         const currentSize = useRef(0.0);
         const currentSizeDirection = useRef(true);
@@ -192,20 +191,20 @@ function Art(props) {
         })
 
         return (
-            <mesh {...props} ref={mesh}>
-                <Clouds material={MeshBasicMaterial}>
-                    <Cloud ref={cloudRef} segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={props.position} />
-                </Clouds>
-            </mesh>
+            <Cloud ref={cloudRef} segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={props.position} />
         )
     }
 
     function AppearingClouds(props) {
+        const mesh = useRef();
+
         return (
-            <>
-                <AppearingCloud position={[15, 15, -30]} />
-                <AppearingCloud position={[-15, 26, -35]} />
-            </>
+            <mesh {...props} ref={mesh}>
+                <Clouds material={MeshBasicMaterial}>
+                    <AppearingCloud position={[15, 15, -30]} />
+                    <AppearingCloud position={[-15, 26, -35]} />
+                </Clouds>
+            </mesh>
         )
     }
 
