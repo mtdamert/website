@@ -169,6 +169,11 @@ function Art(props) {
         const currentSize = useRef(0.0);
         const currentSizeDirection = useRef(true);
 
+        // if values aren't set manually, use defaults
+        const segments = (props.segments !== undefined) ? props.segments : 40;
+        const volume = (props.volume !== undefined) ? props.volume : 15;
+        const bounds = (props.bounds !== undefined) ? props.bounds : [15, 2, 2];
+
         // Make the clouds bigger and smaller over time
         useFrame((state, delta) => {
             if (currentSizeDirection.current === true) {
@@ -191,7 +196,7 @@ function Art(props) {
         })
 
         return (
-            <Cloud ref={cloudRef} segments={40} bounds={[15, 2, 2]} volume={15} color="pink" position={props.position} />
+            <Cloud ref={cloudRef} segments={segments} bounds={bounds} volume={volume} color='lightgray' position={props.position} />
         )
     }
 
