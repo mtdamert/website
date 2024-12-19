@@ -206,8 +206,11 @@ function Art(props) {
         return (
             <mesh {...props} ref={mesh}>
                 <Clouds material={MeshBasicMaterial}>
-                    <AppearingCloud position={[15, 15, -30]} timeOffset={0.5} />
+                    {/*<AppearingCloud position={[15, 15, -30]} timeOffset={0.5} />*/}
                     <AppearingCloud position={[-15, 26, -35]} />
+                    <AppearingCloud position={[-5, 21, -32]} timeOffset={0.3} />
+                    <AppearingCloud position={[-11, 20, -31]} timeOffset={0.5} />
+
                 </Clouds>
             </mesh>
         )
