@@ -7,6 +7,7 @@ import ArkanoidPage from './pages/ArkanoidPage.jsx';
 import RetirementCalcPage from './pages/RetirementCalcPage.jsx';
 import ArtPage from './pages/ArtPage.jsx';
 import DaysSincePage from './pages/DaysSincePage.jsx';
+import LogInPage from './pages/LogInPage.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CookieConsent from "react-cookie-consent";
 
@@ -59,6 +60,7 @@ function App() {
                             <Route path="/art" element={<ArtPage />} />
                             <Route path="/days-since" element={<DaysSincePage /> } />
                             <Route path="/about" element={<AboutPage />} />
+                            <Route path="/login" element={<LogInPage />} />
                         </Route>
                     </Routes>
                 </BrowserRouter>
