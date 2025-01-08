@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
-//import useToken from './useToken.jsx';
-//import "./Login.css";
 
 async function loginUser(credentials) {
     return fetch('http://localhost:8080/login', {
@@ -14,7 +12,7 @@ async function loginUser(credentials) {
         .then(data => data.json())
 }
 
-export default function Login({ setToken }) {
+export default function LogIn({ setToken }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -25,26 +23,24 @@ export default function Login({ setToken }) {
             password
         });
 
-
-        //const { setToken } = useToken();
         setToken(token);
     }
 
     return (
         <div className="login-wrapper">
-            <h1>Please Log In</h1>
+            <h1 className="font-bold">Please log in</h1>
             <form onSubmit={handleSubmit}>
                 <label>
                     <p>Username</p>
-                    <input type="text" onChange={e => setUsername(e.target.value)} />
+                    <input type="text" onChange={e => setUsername(e.target.value)} className="border-2" autoComplete="name" />
                 </label>
-                <label>
+                <label className="p-10">
                     <p>Password</p>
-                    <input type="password" onChange={e => setPassword(e.target.value)} />
+                    <input type="password" onChange={e => setPassword(e.target.value)} className="border-2" autoComplete="password" />
                 </label>
                 <label>
-                    <div>
-                        <button type="submit">Submit</button>
+                    <div className="">
+                        <button type="submit" className="bg-slate-300 p-1 px-2">Submit</button>
                     </div>
                 </label>
             </form>
@@ -52,6 +48,6 @@ export default function Login({ setToken }) {
     );
 }
 
-Login.propTypes = {
+LogIn.propTypes = {
     setToken: PropTypes.func.isRequired
 }
