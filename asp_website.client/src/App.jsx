@@ -8,7 +8,7 @@ import RetirementCalcPage from './pages/RetirementCalcPage.jsx';
 import ArtPage from './pages/ArtPage.jsx';
 import DaysSincePage from './pages/DaysSincePage.jsx';
 import LogInPage from './pages/LogInPage.jsx';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import CookieConsent from "react-cookie-consent";
 
 const headerText = [
@@ -41,16 +41,16 @@ function App() {
             >
                 This website uses cookies to enhance the user experience.
             </CookieConsent>
+            <BrowserRouter>
 
-            <div className="float-right px-4">
-                Log In
-            </div>
+                <div className="float-right px-4">
+                    <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
+                </div>
 
-            <div className="text-4xl py-4 px-4 text-center">
-                {getHeaderText()}
-            </div>
-            <div>
-                <BrowserRouter>
+                <div className="text-4xl py-4 px-4 text-center">
+                    {getHeaderText()}
+                </div>
+                <div>
                     <Routes>
                         <Route path="/" element={<Header />}>
                             <Route path="/test" element={<TestPage />} />
@@ -63,8 +63,9 @@ function App() {
                             <Route path="/login" element={<LogInPage />} />
                         </Route>
                     </Routes>
-                </BrowserRouter>
-            </div>
+                </div>
+
+            </BrowserRouter>
         </div>
     );
 }
