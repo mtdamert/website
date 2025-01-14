@@ -63,6 +63,10 @@ export default defineConfig({
             '^/testdata': {
                 target,
                 secure: false
+            },
+            '^/logoninfo': {
+                target,
+                secure: false
             }
         },
         port: 5173,

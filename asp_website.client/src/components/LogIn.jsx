@@ -2,14 +2,20 @@ import React, { useState } from "react";
 import PropTypes from 'prop-types';
 
 async function loginUser(credentials) {
-    return fetch('http://localhost:8080/login', {
+    console.log("sending to server: " + JSON.stringify(credentials));
+
+    const fetchToken = await fetch('logoninfo', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(credentials)
     })
-        .then(data => data.json())
+
+    const token = await fetchToken.text();
+
+    return await token;
 }
 
 export default function LogIn({ setToken }) {
@@ -23,7 +29,15 @@ export default function LogIn({ setToken }) {
             password
         });
 
-        setToken(token);
+        if (token != null && token !== "") {
+            console.log("received token from server: ");
+            console.log(token);
+            // TODO: Navigate to a success page
+            setToken(token);
+        } else {
+            // TODO: Not successful; log an attempt and let the user try again
+            console.log("logon unsuccessful");
+        }
     }
 
     return (
