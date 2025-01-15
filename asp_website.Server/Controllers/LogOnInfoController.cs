@@ -33,7 +33,8 @@ namespace asp_website.Server.Controllers
                 }
             }
 
-            return null;
+            this.HttpContext.Response.StatusCode = 401;
+            return "";
         }
     }
 }

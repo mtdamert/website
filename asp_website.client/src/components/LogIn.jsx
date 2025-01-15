@@ -11,11 +11,16 @@ async function loginUser(credentials) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(credentials)
-    })
+    });
+
+    if (fetchToken.status == 401) {
+        // TODO: Redirect to a 'bad logon' page
+        console.log("Bad username and/or password");
+        return "";
+    }
 
     const token = await fetchToken.text();
-
-    return await token;
+    return token;
 }
 
 export default function LogIn({ setToken }) {
@@ -30,19 +35,28 @@ export default function LogIn({ setToken }) {
         });
 
         if (token != null && token !== "") {
-            console.log("received token from server: ");
+            console.log("Logon successful. Received token from server: ");
             console.log(token);
+            const errorDiv = document.getElementById("errorMessage");
+            if (errorDiv != null) {
+                errorDiv.style.visibility = 'hidden';
+            }
+
             // TODO: Navigate to a success page
             setToken(token);
         } else {
-            // TODO: Not successful; log an attempt and let the user try again
-            console.log("logon unsuccessful");
+            // Not successful; log an attempt and let the user try again
+            const errorDiv = document.getElementById("errorMessage");
+            if (errorDiv != null) {
+                errorDiv.style.visibility = 'visible';
+            }
         }
     }
 
     return (
         <div className="login-wrapper">
             <h1 className="font-bold">Please log in</h1>
+            <div id="errorMessage" className="invisible text-rose-600">Logon unsuccessful. Please check your username and/or password</div>
             <form onSubmit={handleSubmit}>
                 <label>
                     <p>Username</p>
