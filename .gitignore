@@ -73,5 +73,7 @@ asp_website.Server/DaysSinceEvents.txt
 # all backup files
 *.bak
 
-# token file
+# TEMPORARY - token file and password file
 asp_website.client/token.txt
+asp_website.Server/passwords.txt
+
