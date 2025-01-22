@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 async function loginUser(credentials) {
@@ -27,7 +28,7 @@ export default function LogIn({ setToken }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const token = await loginUser({
             username,
@@ -57,20 +58,19 @@ export default function LogIn({ setToken }) {
         <div className="login-wrapper">
             <h1 className="font-bold">Please log in</h1>
             <div id="errorMessage" className="invisible text-rose-600">Logon unsuccessful. Please check your username and/or password</div>
-            <form onSubmit={handleSubmit}>
-                <label>
+            <form onSubmit={handleSubmit} className="p-2 bg-blue-200">
+                <div>
                     <p>Username</p>
                     <input type="text" onChange={e => setUsername(e.target.value)} className="border-2" autoComplete="name" />
-                </label>
-                <label className="p-10">
+                </div>
+                <div>
                     <p>Password</p>
                     <input type="password" onChange={e => setPassword(e.target.value)} className="border-2" autoComplete="password" />
-                </label>
-                <label>
-                    <div className="">
-                        <button type="submit" className="bg-slate-300 p-1 px-2">Submit</button>
-                    </div>
-                </label>
+                </div>
+                <div className="py-4">
+                    <span className="">No password? <Link to="/sign-up" className="mb-3 font-bold h-full text-blue-500">Sign up</Link></span>
+                    <button type="submit" className="bg-gray-100 p-1 px-2 float-right">Submit</button>
+                </div>
             </form>
         </div>
     );

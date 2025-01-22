@@ -8,6 +8,7 @@ import RetirementCalcPage from './pages/RetirementCalcPage.jsx';
 import ArtPage from './pages/ArtPage.jsx';
 import DaysSincePage from './pages/DaysSincePage.jsx';
 import LogInPage from './pages/LogInPage.jsx';
+import SignUpPage from './pages/SignUpPage.jsx';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import CookieConsent from "react-cookie-consent";
 
@@ -61,6 +62,7 @@ function App() {
                             <Route path="/days-since" element={<DaysSincePage /> } />
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/login" element={<LogInPage />} />
+                            <Route path="/sign-up" element={<SignUpPage />} />
                         </Route>
                     </Routes>
                 </div>
