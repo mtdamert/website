@@ -70,7 +70,7 @@ namespace asp_website.Server.Controllers
             string username = "fake@username.com";
 
             byte[] password = Encoding.UTF8.GetBytes("cu*ious54leopArd");
-            byte[] salt = Encoding.UTF8.GetBytes("random88");
+            byte[] salt = RandomNumberGenerator.GetBytes(16);
             byte[] saltedHash = GenerateSaltedHash(password, salt);
 
             using (StreamWriter writer = new StreamWriter(passwordFile))
