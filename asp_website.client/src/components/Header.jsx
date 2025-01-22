@@ -11,13 +11,13 @@ function Header() {
         { label: 'About', path: '/about' },
     ];
 
-    const renderedLinks = links.map((link) => {
-        return <span key={`${link.label} span`}><Link
+    const renderedLinks = links.map((link, index) => {
+        return <span key={`${link.label} span`} className="px-2 "><Link
             key={link.label}
             to={link.path}
             className="mb-3 font-bold h-full text-blue-500"
-        >{link.label}</Link> | </span>
-    })
+        >{link.label}</Link></span>
+    });
 
     return (
         <div className="container mx-auto gap-2 mt-2 mb-8">
