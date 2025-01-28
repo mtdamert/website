@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using System.Text;
+using asp_website.Server.Models;
 
 namespace asp_website.Server.Controllers
 {
@@ -8,78 +9,12 @@ namespace asp_website.Server.Controllers
     [Route("[controller]")]
     public class LogOnInfoController : ControllerBase
     {
-        // TODO: Move this to a database when I get one
-        const string passwordFile = "passwords.txt";
-        List<string?> usernames;
-        List<string?> passwords;
-        List<string?> salts;
+        User user;
 
         public LogOnInfoController()
         {
-            usernames = new List<string?>();
-            passwords = new List<string?>();
-            salts = new List<string?>();
-
+            user = new User();
             //Test();
-
-            try
-            {
-                using (StreamReader sr = new StreamReader(passwordFile))
-                {
-                    string? username = null, password = null, salt = null;
-                    string? line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        // username
-                        username = line;
-                        line = sr.ReadLine();
-                        usernames.Add(username);
-
-                        if (line != null)
-                        {
-                            // password
-                            password = line;
-                            line = sr.ReadLine();
-                            passwords.Add(password);
-
-                            if (line != null)
-                            {
-                                // salt
-                                salt = line;
-                                line = sr.ReadLine();
-                                salts.Add(salt);
-
-                                if (line != null)
-                                {
-                                    // blank line
-                                    line = sr.ReadLine();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // TODO
-            }
-        }
-
-        public void Test()
-        {
-            string username = "fake@username.com";
-
-            byte[] password = Encoding.UTF8.GetBytes("cu*ious54leopArd");
-            byte[] salt = RandomNumberGenerator.GetBytes(16);
-            byte[] saltedHash = GenerateSaltedHash(password, salt);
-
-            using (StreamWriter writer = new StreamWriter(passwordFile))
-            {
-                writer.WriteLine(username);
-                writer.WriteLine(Convert.ToBase64String(saltedHash));
-                writer.WriteLine(Convert.ToBase64String(salt));
-                //writer.WriteLine();
-            }
         }
 
         public static byte[] GenerateSaltedHash(byte[] plainText, byte[] salt)
@@ -134,26 +69,11 @@ namespace asp_website.Server.Controllers
         [HttpPost(Name = "TryToLogIn")]
         public string Post([FromBody] LogonCredentials credentials)
         {
-            if (credentials != null)
+            if (credentials != null && credentials.username != null && credentials.password != null)
             {
-                if (!string.IsNullOrEmpty(credentials.username) && !string.IsNullOrEmpty(credentials.password))
+                if (user.IsUserValid(credentials.username, credentials.password))
                 {
-                    // TODO: Verify credentials
-                    int userIndex = usernames.IndexOf(credentials.username);
-                    if (userIndex >= 0)
-                    {
-                        byte[] actualPassword = Convert.FromBase64String(passwords[userIndex]);
-
-                        byte[] passwordBytes = Convert.FromBase64String(Base64Encode(credentials.password));
-                        byte[] saltBytes = Convert.FromBase64String(salts[userIndex]);
-                        byte[] inputPassword = GenerateSaltedHash(passwordBytes, saltBytes);
-
-                        if (CompareByteArrays(actualPassword, inputPassword))
-                        {
-                            // Successful match
-                            return "asdf1234";
-                        }
-                    }
+                    return "asdf1234";
                 }
             }
 
