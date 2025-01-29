@@ -31,18 +31,31 @@ function SignUp(credentials) {
             password
         });
 
+        console.log("result from server: ");
+        console.log(userAdded.status);
+
         // TODO: Redirect to the previous page? Or to the logon page?
-        if (userAdded === true) {
+        if (userAdded.status == 200) {
+            const errorDiv = document.getElementById("errorMessage");
+            if (errorDiv != null) {
+                errorDiv.style.visibility = 'hidden';
+            }
+
             navigate('/about');
 
-        } else {
+        } else { // probably 401
             console.log("Adding new user unsuccessful. Does this user already exist?");
+            const errorDiv = document.getElementById("errorMessage");
+            if (errorDiv != null) {
+                errorDiv.style.visibility = 'visible';
+            }
         }
     }
 
     return (
         <div>
             <h1 className="font-bold">Add a New User</h1>
+            <div id="errorMessage" className="invisible text-rose-600">Unable to create new user. Is this user already in the system?</div>
             <form onSubmit={handleSubmit} className="p-2 pb-6 bg-blue-200">
                 <div className="pb-2">Enter a new username and password</div>
                 <div>
