@@ -14,16 +14,10 @@ namespace asp_website.Server.Controllers
             user = new User();
         }
 
-        [HttpGet(Name = "AddUserInfo")]
-        public string Get()
-        {
-            return "Add user test GET from ASP.NET successful";
-        }
-
         [HttpPost(Name = "AddNewUser")]
         public bool Post([FromBody] LogonCredentials newCredentials)
         {
-            if (newCredentials != null && newCredentials.username != null && newCredentials.password != null)
+            if (newCredentials != null && !string.IsNullOrWhiteSpace(newCredentials.username) && !string.IsNullOrWhiteSpace(newCredentials.password))
             {
                 int newUserNumber = user.AddUser(newCredentials.username, newCredentials.password);
                 if (newUserNumber > 0)
