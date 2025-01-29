@@ -67,6 +67,10 @@ export default defineConfig({
             '^/logoninfo': {
                 target,
                 secure: false
+            },
+            '^/adduser': {
+                target,
+                secure: false
             }
         },
         port: 5173,

@@ -1,13 +1,30 @@
-function SignUp() {
+import React, { useState } from "react";
+
+async function addNewUser(credentials) {
+    console.log("sending to server: " + JSON.stringify(credentials));
+
+    const success = await fetch('adduser', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(credentials)
+    });
+}
+
+function SignUp(credentials) {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         // TODO: Add a new user
-        const success = await addUser({
+        const token = await addNewUser({
             username,
             password
         });
-
 
         // TODO: Redirect to the previous page? Or to the logon page?
     }
