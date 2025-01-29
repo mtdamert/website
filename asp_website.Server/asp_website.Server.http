@@ -1,5 +1,7 @@
 @asp_website.Server_HostAddress = http://localhost:5129
 
+# For testing only
+
 GET {{asp_website.Server_HostAddress}}/tetrishighscores/
 Accept: application/json
 
