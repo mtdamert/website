@@ -14,7 +14,6 @@ namespace asp_website.Server.Controllers
         public LogOnInfoController()
         {
             user = new User();
-            //Test();
         }
 
         public static byte[] GenerateSaltedHash(byte[] plainText, byte[] salt)
