@@ -6,64 +6,12 @@ namespace asp_website.Server.Models
 {
     public class User
     {
-        const string passwordFile = "passwords.txt";
-        //List<string?> usernames;
-        //List<string?> saltedHashes;
-        //List<string?> salts;
-
         const string passwordFileXml = "passwordsXml.txt";
         List<UserInfo> usersInfo;
 
         public User()
         {
-            //usernames = new List<string?>();
-            //saltedHashes = new List<string?>();
-            //salts = new List<string?>();
-
-            Test();
-
-            // TODO: Remove this - we're switching to the XML code
-            //try
-            //{
-            //    using (StreamReader sr = new StreamReader(passwordFile))
-            //    {
-            //        string? username = null, password = null, salt = null;
-            //        string? line = sr.ReadLine();
-            //        while (line != null)
-            //        {
-            //            // username
-            //            username = line;
-            //            line = sr.ReadLine();
-            //            usernames.Add(username);
-
-            //            if (line != null)
-            //            {
-            //                // password
-            //                password = line;
-            //                line = sr.ReadLine();
-            //                saltedHashes.Add(password);
-
-            //                if (line != null)
-            //                {
-            //                    // salt
-            //                    salt = line;
-            //                    line = sr.ReadLine();
-            //                    salts.Add(salt);
-
-            //                    if (line != null)
-            //                    {
-            //                        // blank line
-            //                        line = sr.ReadLine();
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    // TODO
-            //}
+            //Test();
 
             XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
             using (StreamReader reader = new StreamReader(passwordFileXml))
@@ -83,14 +31,6 @@ namespace asp_website.Server.Models
             byte[] salt2 = RandomNumberGenerator.GetBytes(16);
             byte[] saltedHash = GenerateSaltedHash(password, salt);
             byte[] saltedHash2 = GenerateSaltedHash(password2, salt2);
-
-            //using (StreamWriter writer = new StreamWriter(passwordFile))
-            //{
-            //    writer.WriteLine(username);
-            //    writer.WriteLine(Convert.ToBase64String(saltedHash));
-            //    writer.WriteLine(Convert.ToBase64String(salt));
-            //    //writer.WriteLine();
-            //}
 
             using (StreamWriter writer = new StreamWriter(passwordFileXml))
             {
@@ -155,47 +95,6 @@ namespace asp_website.Server.Models
 
         public int AddUser(string username, string password)
         {
-            //if (!usernames.Contains(username))
-            //{
-            //    usernames.Add(username);
-
-            //    byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-            //    byte[] salt = RandomNumberGenerator.GetBytes(16);
-            //    byte[] saltedHash = GenerateSaltedHash(passwordBytes, salt);
-
-            //    saltedHashes.Add(Convert.ToBase64String(saltedHash));
-            //    salts.Add(Convert.ToBase64String(salt));
-
-            //    using (StreamWriter writer = new StreamWriter(passwordFile, true))
-            //    {
-            //        writer.WriteLine();
-            //        writer.WriteLine(username);
-            //        writer.WriteLine(Convert.ToBase64String(saltedHash));
-            //        writer.WriteLine(Convert.ToBase64String(salt));
-
-            //        // TODO: Save latest data to database
-            //        using (StreamWriter xmlWriter = new StreamWriter(passwordFileXml))
-            //        {
-            //            List<UserInfo> userInfoList = new List<UserInfo>();
-            //            for (int i=0; i<usernames.Count; i++)
-            //            {
-            //                UserInfo userInfo = new UserInfo();
-            //                userInfo.Username = usernames[i];
-            //                userInfo.SaltedHash = Encoding.UTF8.GetBytes(saltedHashes[i]);
-            //                userInfo.Salt = Encoding.UTF8.GetBytes(salts[i]);
-
-            //                userInfoList.Add(userInfo);
-            //            }
-
-            //            XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
-            //            serializer.Serialize(xmlWriter, userInfoList);
-            //        }
-
-
-            //        return usernames.Count - 1;
-            //    }
-            //}
-
             if (!usersInfo.Any(userInfo => userInfo.Username == username))
             {
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
@@ -233,23 +132,6 @@ namespace asp_website.Server.Models
         {
             if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
             {
-                // Verify credentials
-                //int userIndex = usernames.IndexOf(username);
-                //if (userIndex >= 0)
-                //{
-                //    byte[] actualPassword = Convert.FromBase64String(saltedHashes[userIndex]);
-
-                //    byte[] passwordBytes = Convert.FromBase64String(Base64Encode(password));
-                //    byte[] saltBytes = Convert.FromBase64String(salts[userIndex]);
-                //    byte[] inputPassword = GenerateSaltedHash(passwordBytes, saltBytes);
-
-                //    if (User.CompareByteArrays(actualPassword, inputPassword))
-                //    {
-                //        // Successful match
-                //        return true;
-                //    }
-                //}
-
                 UserInfo? userInfo = usersInfo.FirstOrDefault(info => info.Username == username);
                 if (userInfo != null)
                 {
