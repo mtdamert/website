@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 async function addNewUser(credentials) {
     console.log("sending to server: " + JSON.stringify(credentials));

@@ -9,6 +9,7 @@ import ArtPage from './pages/ArtPage.jsx';
 import DaysSincePage from './pages/DaysSincePage.jsx';
 import LogInPage from './pages/LogInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
+import LoginSuccessfulPage from './pages/LoginSuccessfulPage.jsx';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import CookieConsent from "react-cookie-consent";
 
@@ -63,6 +64,7 @@ function App() {
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/login" element={<LogInPage />} />
                             <Route path="/sign-up" element={<SignUpPage />} />
+                            <Route path="/login-successful" element={<LoginSuccessfulPage />} />
                         </Route>
                     </Routes>
                 </div>
