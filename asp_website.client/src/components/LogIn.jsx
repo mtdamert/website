@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 async function loginUser(credentials) {
@@ -28,6 +28,8 @@ export default function LogIn({ setToken }) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
+    const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = await loginUser({
@@ -43,7 +45,10 @@ export default function LogIn({ setToken }) {
                 errorDiv.style.visibility = 'hidden';
             }
 
-            // TODO: Navigate to a success page
+            // Navigate to a success page
+            const successData = { message: 'Login successful', username: username };
+            navigate('/login-successful', { state: successData });
+
             setToken(token);
         } else {
             // Not successful; log an attempt and let the user try again
