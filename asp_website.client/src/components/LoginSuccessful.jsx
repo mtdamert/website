@@ -7,17 +7,19 @@ function LoginSuccessful() {
     console.log('data.username: ');
     console.log(data.username);
 
-    // TODO: This isn't rendering properly
     const getIntro = (username) => {
         if (username !== '')
-            return 'Hi ' + <b>username</b> + '. ';
+            return <div>Hi <b>{username}</b></div>;
         else
             return <></>;
     }
 
     return (
         <div>
-            {getIntro(data.username)}{data.message}
+            <div>
+                {data.message}
+            </div>
+                {getIntro(data.username)}
         </div>
     );
 }
