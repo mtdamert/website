@@ -35,16 +35,16 @@ namespace asp_website.Server.Models
             using (StreamWriter writer = new StreamWriter(passwordFileXml))
             {
                 UserInfo userInfo = new UserInfo();
-                userInfo.Username = username;
-                userInfo.SaltedHash = saltedHash;
-                userInfo.Salt = salt;
-                userInfo.UserRole = UserInfo.Admin;
+                userInfo.username = username;
+                userInfo.saltedHash = saltedHash;
+                userInfo.salt = salt;
+                userInfo.userRole = UserInfo.Admin;
 
                 UserInfo userInfo2 = new UserInfo();
-                userInfo2.Username = username2;
-                userInfo2.SaltedHash = saltedHash2;
-                userInfo2.Salt = salt2;
-                userInfo2.UserRole = UserInfo.Client;
+                userInfo2.username = username2;
+                userInfo2.saltedHash = saltedHash2;
+                userInfo2.salt = salt2;
+                userInfo2.userRole = UserInfo.Client;
 
                 List<UserInfo> userInfoList = new List<UserInfo> { userInfo, userInfo2 };
 
@@ -97,17 +97,17 @@ namespace asp_website.Server.Models
 
         public int AddUser(string username, string password)
         {
-            if (!usersInfo.Any(userInfo => userInfo.Username == username))
+            if (!usersInfo.Any(userInfo => userInfo.username == username))
             {
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
                 byte[] salt = RandomNumberGenerator.GetBytes(16);
                 byte[] saltedHash = GenerateSaltedHash(passwordBytes, salt);
 
                 UserInfo newUserInfo = new UserInfo();
-                newUserInfo.Username = username;
-                newUserInfo.SaltedHash = saltedHash;
-                newUserInfo.Salt = salt;
-                newUserInfo.UserRole = UserInfo.Client;
+                newUserInfo.username = username;
+                newUserInfo.saltedHash = saltedHash;
+                newUserInfo.salt = salt;
+                newUserInfo.userRole = UserInfo.Client;
 
                 usersInfo.Add(newUserInfo);
 
@@ -131,17 +131,22 @@ namespace asp_website.Server.Models
             return false;
         }
 
+        public UserInfo? GetUserInfo(string username)
+        {
+            return usersInfo.FirstOrDefault(info => info.username == username);
+        }
+
         public bool IsUserValid(string username, string password)
         {
             if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
             {
-                UserInfo? userInfo = usersInfo.FirstOrDefault(info => info.Username == username);
+                UserInfo? userInfo = usersInfo.FirstOrDefault(info => info.username == username);
                 if (userInfo != null)
                 {
                     byte[] passwordBytes = Convert.FromBase64String(Base64Encode(password));
-                    byte[] inputPassword = GenerateSaltedHash(passwordBytes, userInfo.Salt);
+                    byte[] inputPassword = GenerateSaltedHash(passwordBytes, userInfo.salt);
 
-                    if (User.CompareByteArrays(userInfo.SaltedHash, inputPassword))
+                    if (User.CompareByteArrays(userInfo.saltedHash, inputPassword))
                     {
                         return true;
                     }

@@ -4,12 +4,13 @@ namespace asp_website.Server.Models
     [Serializable()]
     public class UserInfo
     {
-        public static readonly int Admin = 1;
-        public static readonly int Client = 2;
+        public static readonly string NotValid = "NotValid";
+        public static readonly string Admin = "Admin";
+        public static readonly string Client = "Client";
 
-        public string Username { get; set; }
-        public byte[] SaltedHash { get; set; }
-        public byte[] Salt { get; set; }
-        public int UserRole { get; set; }
+        public string username { get; set; }
+        public byte[] saltedHash { get; set; }
+        public byte[] salt { get; set; }
+        public string userRole { get; set; }
     }
 }
