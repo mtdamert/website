@@ -38,11 +38,13 @@ namespace asp_website.Server.Models
                 userInfo.Username = username;
                 userInfo.SaltedHash = saltedHash;
                 userInfo.Salt = salt;
+                userInfo.UserRole = UserInfo.Admin;
 
                 UserInfo userInfo2 = new UserInfo();
                 userInfo2.Username = username2;
                 userInfo2.SaltedHash = saltedHash2;
                 userInfo2.Salt = salt2;
+                userInfo2.UserRole = UserInfo.Client;
 
                 List<UserInfo> userInfoList = new List<UserInfo> { userInfo, userInfo2 };
 
@@ -105,10 +107,11 @@ namespace asp_website.Server.Models
                 newUserInfo.Username = username;
                 newUserInfo.SaltedHash = saltedHash;
                 newUserInfo.Salt = salt;
+                newUserInfo.UserRole = UserInfo.Client;
 
                 usersInfo.Add(newUserInfo);
 
-                // TODO: Save latest data to database
+                // Save latest data to database
                 using (StreamWriter xmlWriter = new StreamWriter(passwordFileXml))
                 {
                     XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
