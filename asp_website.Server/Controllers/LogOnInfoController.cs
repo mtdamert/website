@@ -1,7 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
+using System.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using asp_website.Server.Models;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 
 namespace asp_website.Server.Controllers
 {
@@ -64,15 +70,40 @@ namespace asp_website.Server.Controllers
             return "Logon test GET from ASP.NET successful";
         }
 
+        private string CreateToken(string username, string userRole)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Role, userRole)
+             };
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                    "aVeryVeryLongSecretKeyThatIsAtLeast512BytesLong,WhichMeansAtLeast64CharactersLong")); // TODO: Move this to an external file
+            SigningCredentials cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            JwtSecurityToken token = new JwtSecurityToken(
+                                   claims: claims,
+                                   expires: DateTime.UtcNow.AddDays(1),
+                                   signingCredentials: cred
+            );
+            string jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
+        }
 
         [HttpPost(Name = "TryToLogIn")]
         public string Post([FromBody] LogonCredentials credentials)
         {
+            // If the user is verified, return a token for them
             if (credentials != null && credentials.username != null && credentials.password != null)
             {
-                if (user.IsUserValid(credentials.username, credentials.password))
+                if (user.IsUserValid(credentials.username, credentials.password) != false)
                 {
-                    return "asdf1234";
+                    UserInfo? userInfo = user.GetUserInfo(credentials.username);
+                    if (userInfo != null)
+                    {
+                        return CreateToken(credentials.username, userInfo.userRole);
+                    }
                 }
             }
 

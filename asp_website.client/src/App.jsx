@@ -1,5 +1,5 @@
 import Header from './components/Header.jsx';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AboutPage from './pages/AboutPage.jsx'
 import TestPage from './pages/TestPage.jsx';
 import TetrisPage from './pages/TetrisPage.jsx';
@@ -21,14 +21,26 @@ const headerText = [
 ];
 
 function App() {
+    const [token, setToken] = useState('');
+
     const getHeaderText = () => {
         const random = Math.floor(Math.random() * headerText.length);
         return headerText[random];
     }
 
     useEffect(() => {
+        const token = localStorage.getItem('jwt-token');
+        setToken(token);
+
         document.title = 'mtdamert.com';
-        }, []);
+    }, []);
+
+    const renderLogInLink = (render) => {
+        if (render)
+            return <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
+        else
+            return <Link key="Log Out" className="mb-3 font-bold h-full text-blue-500" to="/">Log Out - TODO</Link>
+    }
     
     return (
         <div className="justify-center">
@@ -46,7 +58,7 @@ function App() {
             <BrowserRouter>
 
                 <div className="float-right px-4">
-                    <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
+                    { renderLogInLink(token) }
                 </div>
 
                 <div className="text-4xl py-4 px-4 text-center">
