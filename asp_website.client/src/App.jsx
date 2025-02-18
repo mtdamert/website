@@ -29,17 +29,27 @@ function App() {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem('jwt-token');
+        const token = localStorage.getItem('token');
         setToken(token);
 
         document.title = 'mtdamert.com';
     }, []);
 
+    const logOut = () => {
+        localStorage.clear();
+        this.forceUpdate();
+    }
+
     const renderLogInLink = (render) => {
-        if (render)
+        if (!render)
             return <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
         else
-            return <Link key="Log Out" className="mb-3 font-bold h-full text-blue-500" to="/">Log Out - TODO</Link>
+            return <Link key="Log Out" className="mb-3 font-bold h-full text-blue-500" to="/" onClick={logOut}>Log Out</Link>
+    }
+
+    const updateLogInLink = () => {
+        const token = localStorage.getItem('token');
+        setToken(token);
     }
     
     return (
@@ -57,7 +67,7 @@ function App() {
             </CookieConsent>
             <BrowserRouter>
 
-                <div className="float-right px-4">
+                <div id="logInLink" className="float-right px-4">
                     { renderLogInLink(token) }
                 </div>
 
@@ -76,7 +86,7 @@ function App() {
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/login" element={<LogInPage />} />
                             <Route path="/sign-up" element={<SignUpPage />} />
-                            <Route path="/login-successful" element={<LoginSuccessfulPage />} />
+                            <Route path="/login-successful" element={<LoginSuccessfulPage onLoad={ updateLogInLink } />} />
                         </Route>
                     </Routes>
                 </div>

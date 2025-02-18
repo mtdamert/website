@@ -1,9 +1,9 @@
 import LoginSuccessful from '../components/LoginSuccessful';
 
-function LoginSuccessfulPage() {
+function LoginSuccessfulPage(e) {
     return (
         <div className="flex">
-            <LoginSuccessful />
+            <LoginSuccessful onLoad={e.onLoad} />
         </div>
     )
 }

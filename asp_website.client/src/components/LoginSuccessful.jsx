@@ -1,11 +1,16 @@
+import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-function LoginSuccessful() {
+function LoginSuccessful({onLoad}) {
     const location = useLocation();
     const data = location.state;
 
     console.log('data.username: ');
     console.log(data.username);
+
+    useEffect(() => {
+        onLoad();
+    });
 
     const getIntro = (username) => {
         if (username !== '')
