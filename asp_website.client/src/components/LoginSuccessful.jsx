@@ -5,9 +5,6 @@ function LoginSuccessful({onLoad}) {
     const location = useLocation();
     const data = location.state;
 
-    console.log('data.username: ');
-    console.log(data.username);
-
     useEffect(() => {
         onLoad();
     });
