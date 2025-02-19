@@ -11,6 +11,7 @@ import LogInPage from './pages/LogInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import LoginSuccessfulPage from './pages/LoginSuccessfulPage.jsx';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { jwtDecode } from "jwt-decode";
 import CookieConsent from "react-cookie-consent";
 
 const headerText = [
@@ -40,8 +41,20 @@ function App() {
         this.forceUpdate();
     }
 
-    const renderLogInLink = (render) => {
-        if (!render)
+    const isAdmin = (token) => {
+        if (!token)
+            return false;
+        else {
+            const decodedToken = jwtDecode(token);
+            const userRoles = decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+            if (userRoles && userRoles.includes("Admin"))
+                return true;
+        }
+            return false;
+    }
+
+    const renderLogInLink = (token) => {
+        if (!token)
             return <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
         else
             return <Link key="Log Out" className="mb-3 font-bold h-full text-blue-500" to="/" onClick={logOut}>Log Out</Link>
@@ -76,7 +89,7 @@ function App() {
                 </div>
                 <div>
                     <Routes>
-                        <Route path="/" element={<Header />}>
+                        <Route path="/" element={<Header isAdmin={isAdmin(token)} />}>
                             <Route path="/test" element={<TestPage />} />
                             <Route path="/tetris" element={<TetrisPage />} />
                             <Route path="/arkanoid" element={<ArkanoidPage />} />

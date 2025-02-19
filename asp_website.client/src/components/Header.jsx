@@ -1,22 +1,22 @@
 import { Outlet, Link } from "react-router-dom";
 
-function Header() {
+function Header(props) {
     const links = [
-        { label: 'Uninteresting Tests', path: '/test' },
-        { label: 'Tetris', path: '/tetris' },
-        { label: 'Arkanoid', path: '/arkanoid' },
-        { label: 'Retirement Calculator', path: '/retirement-calc' },
-        { label: 'Art', path: '/art' },
-        { label: 'Days Since App', path: 'days-since'},
-        { label: 'About', path: '/about' },
+        { label: 'Tetris', path: '/tetris', adminOnly: false },
+        { label: 'Arkanoid', path: '/arkanoid', adminOnly: false },
+        { label: 'Retirement Calculator', path: '/retirement-calc', adminOnly: false },
+        { label: 'Art', path: '/art', adminOnly: false },
+        { label: 'Days Since App', path: 'days-since', adminOnly: false },
+        { label: 'Mike\'s Tests', path: '/test', adminOnly: true },
+        { label: 'About', path: '/about', adminOnly: false },
     ];
 
     const renderedLinks = links.map((link, index) => {
-        return <span key={`${link.label} span`} className="px-2 "><Link
+        return (!(link.adminOnly && !props.isAdmin)) ? <span key={`${link.label} span`} className="px-2 "><Link
             key={link.label}
             to={link.path}
             className="mb-3 font-bold h-full text-blue-500"
-        >{link.label}</Link></span>
+        >{link.label}</Link></span> : <></>;
     });
 
     return (
