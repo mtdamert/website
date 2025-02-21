@@ -70,11 +70,12 @@ namespace asp_website.Server.Controllers
             return "Logon test GET from ASP.NET successful";
         }
 
-        private string CreateToken(string username, string userRole)
+        private string CreateToken(string username, string emailAddress, string userRole)
         {
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Email, emailAddress),
                 new Claim(ClaimTypes.Role, userRole)
              };
 
@@ -95,14 +96,14 @@ namespace asp_website.Server.Controllers
         public string Post([FromBody] LogonCredentials credentials)
         {
             // If the user is verified, return a token for them
-            if (credentials != null && credentials.username != null && credentials.password != null)
+            if (credentials != null && credentials.emailAddress != null && credentials.password != null)
             {
-                if (user.IsUserValid(credentials.username, credentials.password) != false)
+                if (user.IsUserValid(credentials.emailAddress, credentials.password) != false)
                 {
-                    UserInfo? userInfo = user.GetUserInfo(credentials.username);
+                    UserInfo? userInfo = user.GetUserInfo(credentials.emailAddress);
                     if (userInfo != null)
                     {
-                        return CreateToken(credentials.username, userInfo.userRole);
+                        return CreateToken(userInfo.username, credentials.emailAddress, userInfo.userRole);
                     }
                 }
             }

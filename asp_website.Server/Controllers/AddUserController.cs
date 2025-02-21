@@ -17,9 +17,11 @@ namespace asp_website.Server.Controllers
         [HttpPost(Name = "AddNewUser")]
         public bool Post([FromBody] LogonCredentials newCredentials)
         {
-            if (newCredentials != null && !string.IsNullOrWhiteSpace(newCredentials.username) && !string.IsNullOrWhiteSpace(newCredentials.password))
+            if (newCredentials != null && !string.IsNullOrWhiteSpace(newCredentials.username)
+                && !string.IsNullOrWhiteSpace(newCredentials.emailAddress)
+                && !string.IsNullOrWhiteSpace(newCredentials.password))
             {
-                int newUserNumber = user.AddUser(newCredentials.username, newCredentials.password);
+                int newUserNumber = user.AddUser(newCredentials.username, newCredentials.emailAddress, newCredentials.password);
                 if (newUserNumber > 0)
                 {
                     return true;

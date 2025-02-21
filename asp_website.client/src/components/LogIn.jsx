@@ -25,7 +25,8 @@ async function loginUser(credentials) {
 }
 
 export default function LogIn({ setToken }) {
-    const [username, setUsername] = useState("");
+    const username = "";
+    const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
@@ -34,6 +35,7 @@ export default function LogIn({ setToken }) {
         e.preventDefault();
         const token = await loginUser({
             username,
+            emailAddress,
             password
         });
 
@@ -46,7 +48,7 @@ export default function LogIn({ setToken }) {
             }
 
             // Navigate to a success page
-            const successData = { message: 'Login successful', username: username };
+            const successData = { message: 'Login successful', username: emailAddress };
             navigate('/login-successful', { state: successData });
 
             setToken(token);
@@ -65,16 +67,21 @@ export default function LogIn({ setToken }) {
             <div id="errorMessage" className="invisible text-rose-600">Logon unsuccessful. Please check your username and/or password</div>
             <form onSubmit={handleSubmit} className="p-2 bg-blue-200">
                 <div>
-                    <p>Username</p>
-                    <input type="text" onChange={e => setUsername(e.target.value)} className="border-2" autoComplete="name" />
+                    <p>Email Address</p>
+                    <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="name" />
                 </div>
                 <div>
                     <p>Password</p>
                     <input type="password" onChange={e => setPassword(e.target.value)} className="border-2" autoComplete="password" />
                 </div>
-                <div className="py-4">
-                    <span className="">No password? <Link to="/sign-up" className="mb-3 font-bold h-full text-blue-500">Sign up</Link></span>
-                    <button type="submit" className="bg-gray-100 p-1 px-2 float-right">Submit</button>
+                <div className="py-2">
+                    <p className="float-right justify-baseline text-sm">Forgot password? (TODO)</p>
+                </div>
+                <div className="pt-4">
+                    <span className="float-right text-sm">No password? <Link to="/sign-up" className="mb-3 font-bold h-full text-blue-500">Sign up</Link></span>
+                </div>
+                <div className="pt-8 float-center">
+                    <button type="submit" className="bg-gray-100 p-1 px-2 float-center rounded-md">Submit</button>
                 </div>
             </form>
         </div>

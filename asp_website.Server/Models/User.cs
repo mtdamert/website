@@ -11,19 +11,25 @@ namespace asp_website.Server.Models
 
         public User()
         {
-            //Test();
+            Test();
 
             XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
             using (StreamReader reader = new StreamReader(passwordFileXml))
             {
-                usersInfo = (List<UserInfo>)serializer.Deserialize(reader);
+                var deserializedFile = serializer.Deserialize(reader);
+                if (deserializedFile != null)
+                    usersInfo = (List<UserInfo>)deserializedFile;
+                else
+                    usersInfo = new List<UserInfo>();
             }
         }
 
         public void Test()
         {
-            string username = "fake@username.com";
-            string username2 = "fake2@username.com";
+            string username = "Test User Admin";
+            string username2 = "Test User NonAdmin";
+            string emailAddress = "fake@username.com";
+            string emailAddress2 = "fake2@username.com";
 
             byte[] password = Encoding.UTF8.GetBytes("cu*ious54leopArd");
             byte[] password2 = Encoding.UTF8.GetBytes("Password");
@@ -36,12 +42,14 @@ namespace asp_website.Server.Models
             {
                 UserInfo userInfo = new UserInfo();
                 userInfo.username = username;
+                userInfo.emailAddress = emailAddress;
                 userInfo.saltedHash = saltedHash;
                 userInfo.salt = salt;
                 userInfo.userRole = UserInfo.Admin;
 
                 UserInfo userInfo2 = new UserInfo();
                 userInfo2.username = username2;
+                userInfo2.emailAddress = emailAddress2;
                 userInfo2.saltedHash = saltedHash2;
                 userInfo2.salt = salt2;
                 userInfo2.userRole = UserInfo.Client;
@@ -95,7 +103,7 @@ namespace asp_website.Server.Models
             return Convert.ToBase64String(plainTextBytes);
         }
 
-        public int AddUser(string username, string password)
+        public int AddUser(string username, string emailAddress, string password)
         {
             if (!usersInfo.Any(userInfo => userInfo.username == username))
             {
@@ -105,6 +113,7 @@ namespace asp_website.Server.Models
 
                 UserInfo newUserInfo = new UserInfo();
                 newUserInfo.username = username;
+                newUserInfo.emailAddress = emailAddress;
                 newUserInfo.saltedHash = saltedHash;
                 newUserInfo.salt = salt;
                 newUserInfo.userRole = UserInfo.Client;
@@ -131,16 +140,16 @@ namespace asp_website.Server.Models
             return false;
         }
 
-        public UserInfo? GetUserInfo(string username)
+        public UserInfo? GetUserInfo(string emailAddress)
         {
-            return usersInfo.FirstOrDefault(info => info.username == username);
+            return usersInfo.FirstOrDefault(info => info.emailAddress == emailAddress);
         }
 
-        public bool IsUserValid(string username, string password)
+        public bool IsUserValid(string emailAddress, string password)
         {
-            if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+            if (!string.IsNullOrWhiteSpace(emailAddress) && !string.IsNullOrWhiteSpace(password))
             {
-                UserInfo? userInfo = usersInfo.FirstOrDefault(info => info.username == username);
+                UserInfo? userInfo = usersInfo.FirstOrDefault(info => info.emailAddress == emailAddress);
                 if (userInfo != null)
                 {
                     byte[] passwordBytes = Convert.FromBase64String(Base64Encode(password));
