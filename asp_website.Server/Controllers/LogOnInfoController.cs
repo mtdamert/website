@@ -70,8 +70,11 @@ namespace asp_website.Server.Controllers
             return "Logon test GET from ASP.NET successful";
         }
 
-        private string CreateToken(string username, string emailAddress, string userRole)
+        private string CreateToken(string? username, string emailAddress, string? userRole)
         {
+            if (username == null) username = string.Empty;
+            if (userRole == null) userRole = string.Empty;
+
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, username),
