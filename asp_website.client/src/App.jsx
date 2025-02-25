@@ -1,6 +1,7 @@
 import Header from './components/Header.jsx';
 import { useEffect, useState } from "react";
-import AboutPage from './pages/AboutPage.jsx'
+import AboutPage from './pages/AboutPage.jsx';
+import ContactPage from './pages/ContactPage.jsx';
 import TestPage from './pages/TestPage.jsx';
 import TetrisPage from './pages/TetrisPage.jsx';
 import ArkanoidPage from './pages/ArkanoidPage.jsx';
@@ -95,7 +96,8 @@ function App() {
                             <Route path="/arkanoid" element={<ArkanoidPage />} />
                             <Route path="/retirement-calc" element={<RetirementCalcPage />} />
                             <Route path="/art" element={<ArtPage />} />
-                            <Route path="/days-since" element={<DaysSincePage /> } />
+                            <Route path="/days-since" element={<DaysSincePage />} />
+                            <Route path="/contact" element={<ContactPage />} />
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/login" element={<LogInPage />} />
                             <Route path="/sign-up" element={<SignUpPage />} />

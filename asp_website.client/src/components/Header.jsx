@@ -8,6 +8,7 @@ function Header(props) {
         { label: 'Art', path: '/art', adminOnly: false },
         { label: 'Days Since App', path: 'days-since', adminOnly: false },
         { label: 'Mike\'s Tests', path: '/test', adminOnly: true },
+        { label: 'Contact', path: '/contact', adminOnly: false },
         { label: 'About', path: '/about', adminOnly: false },
     ];
 
