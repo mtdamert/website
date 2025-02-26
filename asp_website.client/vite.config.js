@@ -71,6 +71,10 @@ export default defineConfig({
             '^/adduser': {
                 target,
                 secure: false
+            },
+            '^/contact': {
+                target,
+                secure: false
             }
         },
         port: 5173,
