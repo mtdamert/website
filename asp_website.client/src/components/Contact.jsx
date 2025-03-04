@@ -46,7 +46,6 @@ function Contact() {
                 </div>
                 <div className="pt-8 float-center">
                     <button type="submit" className="bg-gray-100 p-1 px-2 float-center">Submit</button>
-                    <span>(form not implemented yet)</span>
                 </div>
             </form>
         </div>
