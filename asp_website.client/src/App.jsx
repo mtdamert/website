@@ -54,6 +54,28 @@ function App() {
             return false;
     }
 
+    const getUsername = (token) => {
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            const username = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+            if (username)
+                return username;
+        }
+
+        return "";
+    }
+
+    const getEmailAddress = (token) => {
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            const emailAddress = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
+            if (emailAddress)
+                return emailAddress;
+        }
+
+        return "";
+    }
+
     const renderLogInLink = (token) => {
         if (!token)
             return <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
@@ -97,7 +119,7 @@ function App() {
                             <Route path="/retirement-calc" element={<RetirementCalcPage />} />
                             <Route path="/art" element={<ArtPage />} />
                             <Route path="/days-since" element={<DaysSincePage />} />
-                            <Route path="/contact" element={<ContactPage />} />
+                            <Route path="/contact" element={<ContactPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/login" element={<LogInPage />} />
                             <Route path="/sign-up" element={<SignUpPage />} />

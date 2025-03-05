@@ -3,6 +3,7 @@
     public class EmailInfo
     {
         public string? sender {  get; set; }
+        public string? email { get; set; }
         public string? body { get; set; }
     }
 }

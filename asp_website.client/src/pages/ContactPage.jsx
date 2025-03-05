@@ -1,9 +1,9 @@
 import Contact from '../components/Contact';
 
-function ContactPage() {
+function ContactPage(props) {
     return (
         <div className="flex">
-            <Contact />
+            <Contact username={props.username} emailAddress={props.emailAddress} />
         </div>
     )
 }

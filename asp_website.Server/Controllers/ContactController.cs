@@ -30,7 +30,7 @@ namespace asp_website.Server.Controllers
             string? apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
             SendGridClient client = new SendGridClient(apiKey);
             EmailAddress from_email = new EmailAddress("mike@mtdamert.com", "Contact Mike Form");
-            string subject = "Received Contact Form feedback from " + emailInfo.sender;
+            string subject = "Received Contact Form feedback from " + emailInfo.sender + " (" + emailInfo.email + ")";
             EmailAddress to_email = new EmailAddress("mtdamert@gmail.com", "MTDamert Webmaster");
 
             // TODO: Sanitize email body
