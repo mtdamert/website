@@ -13,5 +13,6 @@ namespace asp_website.Server.Models
         public byte[]? saltedHash { get; set; }
         public byte[]? salt { get; set; }
         public string? userRole { get; set; }
+        public bool emailConfirmed { get; set; }
     }
 }

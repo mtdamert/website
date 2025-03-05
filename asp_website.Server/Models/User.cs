@@ -46,6 +46,7 @@ namespace asp_website.Server.Models
                 userInfo.saltedHash = saltedHash;
                 userInfo.salt = salt;
                 userInfo.userRole = UserInfo.Admin;
+                userInfo.emailConfirmed = true;
 
                 UserInfo userInfo2 = new UserInfo();
                 userInfo2.username = username2;
@@ -53,6 +54,7 @@ namespace asp_website.Server.Models
                 userInfo2.saltedHash = saltedHash2;
                 userInfo2.salt = salt2;
                 userInfo2.userRole = UserInfo.Client;
+                userInfo2.emailConfirmed = true;
 
                 List<UserInfo> userInfoList = new List<UserInfo> { userInfo, userInfo2 };
 
@@ -117,6 +119,7 @@ namespace asp_website.Server.Models
                 newUserInfo.saltedHash = saltedHash;
                 newUserInfo.salt = salt;
                 newUserInfo.userRole = UserInfo.Client;
+                newUserInfo.emailConfirmed = false;
 
                 usersInfo.Add(newUserInfo);
 
