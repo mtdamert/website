@@ -9,9 +9,9 @@ function LoginSuccessful({onLoad}) {
         onLoad();
     });
 
-    const getIntro = (username) => {
-        if (username !== '')
-            return <div>Hi <b>{username}</b></div>;
+    const getIntro = (email) => {
+        if (email !== '')
+            return <div>Hi <b>{email}</b></div>;
         else
             return <></>;
     }
@@ -21,7 +21,7 @@ function LoginSuccessful({onLoad}) {
             <div>
                 {data.message}
             </div>
-                {getIntro(data.username)}
+            {getIntro(data.email)}
         </div>
     );
 }

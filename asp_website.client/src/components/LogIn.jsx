@@ -48,7 +48,7 @@ export default function LogIn({ setToken }) {
             }
 
             // Navigate to a success page
-            const successData = { message: 'Login successful', username: emailAddress };
+            const successData = { message: 'Login successful', email: emailAddress };
             navigate('/login-successful', { state: successData });
 
             setToken(token);

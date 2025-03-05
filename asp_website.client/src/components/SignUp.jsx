@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 async function addNewUser(credentials) {
     console.log("sending to server: " + JSON.stringify(credentials));
 
-    const success = await fetch('adduser', {
+    const fetchToken = await fetch('adduser', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -13,10 +13,11 @@ async function addNewUser(credentials) {
         body: JSON.stringify(credentials)
     });
 
-    return success;
+    const token = await fetchToken.text();
+    return token;
 }
 
-function SignUp(credentials) {
+function SignUp({ setToken }) {
     const [username, setUsername] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
     const [password, setPassword] = useState("");
@@ -27,24 +28,29 @@ function SignUp(credentials) {
         e.preventDefault();
 
         // TODO: Add a new user
-        const userAdded = await addNewUser({
+        const token = await addNewUser({
             username,
             emailAddress,
             password
         });
 
         console.log("result from server: ");
-        console.log(userAdded.status);
+        console.log(token);
 
         // TODO: Redirect to the previous page? Or to the logon page?
-        if (userAdded.status == 200) {
+        if (token != null && token !== "") {
+            console.log("User created. Received token from server: ");
+            console.log(token);
             const errorDiv = document.getElementById("errorMessage");
             if (errorDiv != null) {
                 errorDiv.style.visibility = 'hidden';
             }
 
-            navigate('/about');
+            // TODO: Move to a different page
+            const successData = { message: 'Login successful', email: emailAddress };
+            navigate('/login-successful', { state: successData });
 
+            setToken(token);
         } else { // probably 401
             console.log("Adding new user unsuccessful. Does this user already exist?");
             const errorDiv = document.getElementById("errorMessage");

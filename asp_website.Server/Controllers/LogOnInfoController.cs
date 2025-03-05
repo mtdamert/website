@@ -67,6 +67,7 @@ namespace asp_website.Server.Controllers
             return "Logon test GET from ASP.NET successful";
         }
 
+        // TODO: Move this to an external file that is referenced by both this file and the AddUserController 
         private string CreateToken(string? username, string emailAddress, string? userRole, string? authentication)
         {
             if (username == null) username = string.Empty;
