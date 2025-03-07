@@ -14,9 +14,14 @@ namespace asp_website.Server.Controllers
     [Route("[controller]")]
     public class ContactController : ControllerBase
     {
+        private IConfiguration appSetting;
+
         public ContactController()
         {
-            
+            appSetting = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
         }
 
         [HttpPost]
@@ -26,8 +31,7 @@ namespace asp_website.Server.Controllers
                 return false;
 
             // This needs to be set for the email to work
-            // TODO: Put this in a requirements file; make sure this isn't used more than a couple times a day
-            string? apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+            string? apiKey = appSetting.GetValue<string>("SENDGRID_API_KEY", string.Empty);
             SendGridClient client = new SendGridClient(apiKey);
             EmailAddress from_email = new EmailAddress("mike@mtdamert.com", "Contact Mike Form");
             string subject = "Received Contact Form feedback from " + emailInfo.sender + " (" + emailInfo.email + ")";

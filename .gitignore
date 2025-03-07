@@ -78,3 +78,5 @@ asp_website.client/token.txt
 asp_website.Server/passwords.txt
 asp_website.Server/passwordsXml.txt
 
+# server-side config file
+asp_website.Server/appsettings.json
