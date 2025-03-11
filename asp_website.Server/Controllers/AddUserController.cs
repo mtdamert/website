@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using SendGrid.Helpers.Mail;
+using SendGrid;
 
 namespace asp_website.Server.Controllers
 {
@@ -11,11 +13,16 @@ namespace asp_website.Server.Controllers
     [Route("[controller]")]
     public class AddUserController : ControllerBase
     {
-        User user;
+        private User user;
+        private IConfiguration appSetting;
 
         public AddUserController()
         {
             user = new User();
+            appSetting = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
         }
 
         private string CreateToken(string? username, string emailAddress, string? userRole, string? authentication)
@@ -46,15 +53,32 @@ namespace asp_website.Server.Controllers
         }
 
         [HttpPost(Name = "AddNewUser")]
-        public string Post([FromBody] LogonCredentials newCredentials)
+        public async Task<string> Post([FromBody] LogonCredentials newCredentials)
         {
             if (newCredentials != null && !string.IsNullOrWhiteSpace(newCredentials.username)
                 && !string.IsNullOrWhiteSpace(newCredentials.emailAddress)
                 && !string.IsNullOrWhiteSpace(newCredentials.password))
             {
-                int newUserNumber = user.AddUser(newCredentials.username, newCredentials.emailAddress, newCredentials.password);
-                if (newUserNumber > 0)
+                UserInfo? newUserInfo = user.AddUser(newCredentials.username, newCredentials.emailAddress, newCredentials.password);
+                if (newUserInfo != null)
                 {
+                    // Send confirmation email. Include GUID and userID
+                    string? apiKey = appSetting.GetValue<string>("SENDGRID_API_KEY", string.Empty);
+                    SendGridClient client = new SendGridClient(apiKey);
+                    EmailAddress from_email = new EmailAddress("mike@mtdamert.com", "mtdamert.com");
+
+                    string subject = "Welcome to mtdamert.com!";
+                    EmailAddress to_email = new EmailAddress(newCredentials.emailAddress);
+
+                    string emailText = string.Empty;
+                    // TODO: Add email body
+                    emailText += "http://mtdamert.com/ConfirmEmail?id=" + newUserInfo.userId + "&emailConfirmationGuid=" + newUserInfo.emailConfirmationGuid;
+
+                    string plainTextContent = emailText;
+                    string htmlContent = emailText;
+                    SendGridMessage msg = MailHelper.CreateSingleEmail(from_email, to_email, subject, plainTextContent, htmlContent);
+                    Response response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+
                     return CreateToken(newCredentials.username, newCredentials.emailAddress, UserInfo.Client, string.Empty);
                 }
             }

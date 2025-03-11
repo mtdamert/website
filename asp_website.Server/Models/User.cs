@@ -41,25 +41,40 @@ namespace asp_website.Server.Models
             using (StreamWriter writer = new StreamWriter(passwordFileXml))
             {
                 UserInfo userInfo = new UserInfo();
+                userInfo.userId = 1;
                 userInfo.username = username;
                 userInfo.emailAddress = emailAddress;
                 userInfo.saltedHash = saltedHash;
                 userInfo.salt = salt;
                 userInfo.userRole = UserInfo.Admin;
+                userInfo.emailConfirmationGuid = string.Empty;
                 userInfo.emailConfirmed = true;
 
                 UserInfo userInfo2 = new UserInfo();
+                userInfo2.userId = 2;
                 userInfo2.username = username2;
                 userInfo2.emailAddress = emailAddress2;
                 userInfo2.saltedHash = saltedHash2;
                 userInfo2.salt = salt2;
                 userInfo2.userRole = UserInfo.Client;
+                userInfo2.emailConfirmationGuid = string.Empty;
                 userInfo2.emailConfirmed = true;
 
                 List<UserInfo> userInfoList = new List<UserInfo> { userInfo, userInfo2 };
 
                 XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
                 serializer.Serialize(writer, userInfoList);
+            }
+        }
+
+        // TODO: When this is saved to the database, only save the updated user info
+        private void SaveUserInfo(UserInfo userInfo)
+        {
+            // Currently saves all user info because the entire file needs to be rewritten
+            using (StreamWriter xmlWriter = new StreamWriter(passwordFileXml))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
+                serializer.Serialize(xmlWriter, usersInfo);
             }
         }
 
@@ -105,7 +120,7 @@ namespace asp_website.Server.Models
             return Convert.ToBase64String(plainTextBytes);
         }
 
-        public int AddUser(string username, string emailAddress, string password)
+        public UserInfo? AddUser(string username, string emailAddress, string password)
         {
             if (!usersInfo.Any(userInfo => userInfo.username == username))
             {
@@ -114,26 +129,38 @@ namespace asp_website.Server.Models
                 byte[] saltedHash = GenerateSaltedHash(passwordBytes, salt);
 
                 UserInfo newUserInfo = new UserInfo();
+                newUserInfo.userId = usersInfo.Count + 1;
                 newUserInfo.username = username;
                 newUserInfo.emailAddress = emailAddress;
                 newUserInfo.saltedHash = saltedHash;
                 newUserInfo.salt = salt;
                 newUserInfo.userRole = UserInfo.Client;
+                newUserInfo.emailConfirmationGuid = Guid.NewGuid().ToString();
                 newUserInfo.emailConfirmed = false;
 
                 usersInfo.Add(newUserInfo);
 
                 // Save latest data to database
-                using (StreamWriter xmlWriter = new StreamWriter(passwordFileXml))
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
-                    serializer.Serialize(xmlWriter, usersInfo);
-                }
+                SaveUserInfo(newUserInfo);
 
-                return usersInfo.Count - 1;
+                return newUserInfo;
             }
 
-            return -1;
+            return null;
+        }
+
+        public bool ConfirmUserEmail(string guid)
+        {
+            UserInfo? userInfo = usersInfo.FirstOrDefault(userInfo => userInfo.emailConfirmationGuid == guid);
+            if (userInfo != null)
+            {
+                userInfo.emailConfirmed = true;
+                SaveUserInfo(userInfo);
+
+                return true;
+            }
+
+            return false;
         }
 
         public bool DeleteUser(string userIndex)
