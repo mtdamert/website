@@ -13,11 +13,11 @@ function Header(props) {
     ];
 
     const renderedLinks = links.map((link, index) => {
-        return (!(link.adminOnly && !props.isAdmin)) ? <span key={`${link.label} span`} className="px-2 "><Link
+        return (!(link.adminOnly && !props.isAdmin)) ? <span key={`${link.label}_span`} className="px-2 "><Link
             key={link.label}
             to={link.path}
             className="mb-3 font-bold h-full text-blue-500"
-        >{link.label}</Link></span> : <></>;
+        >{link.label}</Link></span> : <span key={`${link.id}_span`}></span>;
     });
 
     return (
