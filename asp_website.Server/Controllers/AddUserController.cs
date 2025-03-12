@@ -71,8 +71,11 @@ namespace asp_website.Server.Controllers
                     EmailAddress to_email = new EmailAddress(newCredentials.emailAddress);
 
                     string emailText = string.Empty;
-                    // TODO: Add email body
-                    emailText += "http://mtdamert.com/ConfirmEmail?id=" + newUserInfo.userId + "&emailConfirmationGuid=" + newUserInfo.emailConfirmationGuid;
+                    emailText += "Thank you for signing up for mtdamert.com. If you have received this email in error, please ignore it.<br /><br />";
+                    emailText += "Please click the following link to confirm your account:<br />";
+                    emailText += "http://mtdamert.com/confirm-email?id=" + newUserInfo.userId + "&emailConfirmationGuid=" + newUserInfo.emailConfirmationGuid + " <br /><br />";
+                    emailText += "Thanks,<br />";
+                    emailText += "Mike";
 
                     string plainTextContent = emailText;
                     string htmlContent = emailText;
