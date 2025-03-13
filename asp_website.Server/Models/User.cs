@@ -11,8 +11,9 @@ namespace asp_website.Server.Models
 
         public User()
         {
-            Test();
+            //Test();
 
+            // Load all UserInfo objects from a file
             XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
             using (StreamReader reader = new StreamReader(passwordFileXml))
             {
@@ -180,7 +181,7 @@ namespace asp_website.Server.Models
             if (!string.IsNullOrWhiteSpace(emailAddress) && !string.IsNullOrWhiteSpace(password))
             {
                 UserInfo? userInfo = usersInfo.FirstOrDefault(info => info.emailAddress == emailAddress);
-                if (userInfo != null)
+                if (userInfo != null && userInfo.salt != null && userInfo.saltedHash != null)
                 {
                     byte[] passwordBytes = Convert.FromBase64String(Base64Encode(password));
                     byte[] inputPassword = GenerateSaltedHash(passwordBytes, userInfo.salt);
