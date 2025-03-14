@@ -11,6 +11,7 @@ import DaysSincePage from './pages/DaysSincePage.jsx';
 import LogInPage from './pages/LogInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import LoginSuccessfulPage from './pages/LoginSuccessfulPage.jsx';
+import ConfirmEmailPage from './pages/ConfirmEmailPage.jsx';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import CookieConsent from "react-cookie-consent";
@@ -123,7 +124,8 @@ function App() {
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/login" element={<LogInPage />} />
                             <Route path="/sign-up" element={<SignUpPage />} />
-                            <Route path="/login-successful" element={<LoginSuccessfulPage onLoad={ updateLogInLink } />} />
+                            <Route path="/login-successful" element={<LoginSuccessfulPage onLoad={updateLogInLink} />} />
+                            <Route path="/confirm-email" element={<ConfirmEmailPage username={getUsername(token)} />} />
                         </Route>
                     </Routes>
                 </div>
