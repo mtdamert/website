@@ -77,6 +77,17 @@ function App() {
         return "";
     }
 
+    const emailIsVerified = (token) => {
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            const accountAuthenticated = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/authentication"];
+            if (accountAuthenticated && accountAuthenticated === "Authenticated")
+                return true;
+            else
+                return false;
+        }
+    }
+
     const renderLogInLink = (token) => {
         if (!token)
             return <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
@@ -113,7 +124,7 @@ function App() {
                 </div>
                 <div>
                     <Routes>
-                        <Route path="/" element={<Header isAdmin={isAdmin(token)} />}>
+                        <Route path="/" element={<Header isAdmin={isAdmin(token)} verifiedEmail={emailIsVerified(token)} />}>
                             <Route path="/test" element={<TestPage />} />
                             <Route path="/tetris" element={<TetrisPage />} />
                             <Route path="/arkanoid" element={<ArkanoidPage />} />
