@@ -20,7 +20,7 @@ function Header(props) {
             to={link.path}
             className="mb-3 font-bold h-full text-blue-500"
             >{link.label}</Link></span>
-            : <span key={`${link.id}_span`}></span>;
+            : <span key={`${link.label}_span`}></span>;
     });
 
     return (
