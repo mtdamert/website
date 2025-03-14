@@ -36,7 +36,7 @@ function ConfirmEmail({ username }) {
 
             const data = await response.text();
             if (data.startsWith("No")) {
-                console.log('Success! Message from server:', data);
+                console.log('Email confirmation process successfully ran. Message from server:', data);
             } else {
                 console.log('Account not found:', data);
             }
