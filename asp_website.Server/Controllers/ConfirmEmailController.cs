@@ -1,5 +1,9 @@
 ﻿using asp_website.Server.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace asp_website.Server.Controllers
@@ -33,6 +37,35 @@ namespace asp_website.Server.Controllers
                 }
             }
 
+            // TODO: Move this into an external file
+            private string CreateToken(string? username, string? emailAddress, string? userRole, string? authentication)
+            {
+                if (username == null) username = string.Empty;
+                if (emailAddress == null) emailAddress = string.Empty;
+                if (userRole == null) userRole = string.Empty;
+                if (authentication == null) authentication = string.Empty;
+
+                List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.Email, emailAddress),
+                new Claim(ClaimTypes.Role, userRole),
+                new Claim(ClaimTypes.Authentication, authentication)
+             };
+
+                SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                        "aVeryVeryLongSecretKeyThatIsAtLeast512BytesLong,WhichMeansAtLeast64CharactersLong")); // TODO: Move this to an external file
+                SigningCredentials cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+                JwtSecurityToken token = new JwtSecurityToken(
+                                       claims: claims,
+                                       expires: DateTime.UtcNow.AddDays(1),
+                                       signingCredentials: cred
+                );
+                string jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+                return jwt;
+            }
+
             [HttpPost]
             public string ConfirmEmailAddress([FromBody] EmailConfirmationInfo confirmationInfo)
             {
@@ -45,11 +78,12 @@ namespace asp_website.Server.Controllers
                     usersInfo[confirmationInfo.userId.Value - 1].emailConfirmed = true;
 
                     // TODO: Save usersInfo
-                    // TODO: Redirect
-                    return "Account confirmed";
+                    // TODO: Update JWT Token
+                    UserInfo userInfo = usersInfo[confirmationInfo.userId.Value - 1];
+                    return CreateToken(userInfo.username, userInfo.emailAddress, userInfo.userRole, "Authenticated");
                 }
 
-                return "No such account found";
+                return string.Empty;
             }
         }
     }

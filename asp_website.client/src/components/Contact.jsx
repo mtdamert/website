@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 async function emailServer(emailContents) {
     console.log("Attempting to send request to server");
@@ -19,7 +19,7 @@ async function emailServer(emailContents) {
 
 function Contact({ username, emailAddress }) {
     const [sender, setSender] = useState(username);
-    const [email, setEmail] = useState(emailAddress);
+    const email = useRef(emailAddress);
     const [body, setBody] = useState("");
 
     const handleSubmit = async (e) => {

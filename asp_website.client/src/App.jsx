@@ -31,6 +31,11 @@ function App() {
         return headerText[random];
     }
 
+    const updateAppToken = (newToken) => {
+        console.log("attempting to force an update of the App component by setting the token to: " + newToken);
+        setToken(newToken);
+    }
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         setToken(token);
@@ -133,10 +138,10 @@ function App() {
                             <Route path="/days-since" element={<DaysSincePage />} />
                             <Route path="/contact" element={<ContactPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />
                             <Route path="/about" element={<AboutPage />} />
-                            <Route path="/login" element={<LogInPage />} />
-                            <Route path="/sign-up" element={<SignUpPage />} />
+                            <Route path="/login" element={<LogInPage updateAppToken={updateAppToken} />} />
+                            <Route path="/sign-up" element={<SignUpPage updateAppToken={updateAppToken} />} />
                             <Route path="/login-successful" element={<LoginSuccessfulPage onLoad={updateLogInLink} />} />
-                            <Route path="/confirm-email" element={<ConfirmEmailPage username={getUsername(token)} />} />
+                            <Route path="/confirm-email" element={<ConfirmEmailPage username={getUsername(token)} updateAppToken={updateAppToken} />} />
                         </Route>
                     </Routes>
                 </div>

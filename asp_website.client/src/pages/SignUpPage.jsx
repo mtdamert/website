@@ -1,8 +1,9 @@
 import SignUp from '../components/SignUp';
 import useToken from '../components/useToken';
 
-function SignUpPage() {
-    const { setToken } = useToken();
+function SignUpPage(props) {
+    console.log("In SignUpPage, I see that props.updateApp type is: " + typeof props.updateApp);
+    const { setToken } = useToken(props.updateAppToken);
 
     return (
         <div className="flex">

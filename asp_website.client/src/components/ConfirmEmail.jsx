@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-function ConfirmEmail({ username }) {
+function ConfirmEmail({ username, setToken }) {
 
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -18,10 +18,6 @@ function ConfirmEmail({ username }) {
 
     const postData = async () => {
         try {
-            console.log("attempted to POST");
-            console.log("id: " + id);
-            console.log("guid: " + guid);
-
             const response = await fetch('confirmemail', {
                 method: 'POST',
                 headers: {
@@ -34,11 +30,12 @@ function ConfirmEmail({ username }) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const data = await response.text();
-            if (data.startsWith("No")) {
-                console.log('Email confirmation process successfully ran. Message from server:', data);
+            const token = await response.text();
+            if (!token == "") {
+                console.log('Email confirmation process successfully ran. Message from server:', token);
+                setToken(token);
             } else {
-                console.log('Account not found:', data);
+                console.log('Email confirmation unsuccessful. Was this account valid?');
             }
         } catch (error) {
             console.error('Error! Message from server:', error);
