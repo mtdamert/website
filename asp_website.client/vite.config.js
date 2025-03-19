@@ -72,7 +72,7 @@ export default defineConfig({
                 target,
                 secure: false
             },
-            '^/contact': {
+            '^/contact$': {
                 target,
                 secure: false
             },

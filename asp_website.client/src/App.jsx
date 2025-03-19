@@ -136,7 +136,7 @@ function App() {
                             <Route path="/retirement-calc" element={<RetirementCalcPage />} />
                             <Route path="/art" element={<ArtPage />} />
                             <Route path="/days-since" element={<DaysSincePage />} />
-                            <Route path="/contact" element={<ContactPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />
+                            <Route path="/contact-page" element={<ContactPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />
                             <Route path="/about" element={<AboutPage />} />
                             <Route path="/login" element={<LogInPage updateAppToken={updateAppToken} />} />
                             <Route path="/sign-up" element={<SignUpPage updateAppToken={updateAppToken} />} />
