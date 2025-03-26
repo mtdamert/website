@@ -13,18 +13,19 @@ namespace asp_website.Server.Controllers
     [Route("[controller]")]
     public class AddUserController : ControllerBase
     {
-        private User user;
+        private WebsiteUser user;
         private IConfiguration appSetting;
 
         public AddUserController()
         {
-            user = new User();
+            user = new WebsiteUser();
             appSetting = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json")
                     .Build();
         }
 
+        // TODO: Move this into an external file
         private string CreateToken(string? username, string emailAddress, string? userRole, string? authentication)
         {
             if (username == null) username = string.Empty;

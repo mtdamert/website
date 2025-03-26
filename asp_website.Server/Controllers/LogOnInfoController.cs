@@ -12,11 +12,11 @@ namespace asp_website.Server.Controllers
     [Route("[controller]")]
     public class LogOnInfoController : ControllerBase
     {
-        User user;
+        WebsiteUser user;
 
         public LogOnInfoController()
         {
-            user = new User();
+            user = new WebsiteUser();
         }
 
         public static byte[] GenerateSaltedHash(byte[] plainText, byte[] salt)
