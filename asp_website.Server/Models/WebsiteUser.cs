@@ -4,12 +4,12 @@ using System.Xml.Serialization;
 
 namespace asp_website.Server.Models
 {
-    public class User
+    public class WebsiteUser
     {
         const string passwordFileXml = "passwordsXml.txt";
         List<UserInfo> usersInfo;
 
-        public User()
+        public WebsiteUser()
         {
             //Test();
 
@@ -65,6 +65,17 @@ namespace asp_website.Server.Models
 
                 XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
                 serializer.Serialize(writer, userInfoList);
+            }
+        }
+
+        public static void SaveAllUserInfo(List<UserInfo> userInfoList)
+        {
+            // Currently saves all user info because the entire file needs to be rewritten
+            // DEBUG: Is passwordFileXml set when this is called statically?
+            using (StreamWriter xmlWriter = new StreamWriter(passwordFileXml))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
+                serializer.Serialize(xmlWriter, userInfoList);
             }
         }
 
@@ -186,7 +197,7 @@ namespace asp_website.Server.Models
                     byte[] passwordBytes = Convert.FromBase64String(Base64Encode(password));
                     byte[] inputPassword = GenerateSaltedHash(passwordBytes, userInfo.salt);
 
-                    if (User.CompareByteArrays(userInfo.saltedHash, inputPassword))
+                    if (WebsiteUser.CompareByteArrays(userInfo.saltedHash, inputPassword))
                     {
                         return true;
                     }
