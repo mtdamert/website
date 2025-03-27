@@ -44,31 +44,31 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/tetrishighscores': {
+            '^/tetrishighscores$': {
                 target,
                 secure: false
             },
-            '^/arkanoidhighscores': {
+            '^/arkanoidhighscores$': {
                 target,
                 secure: false
             },
-            '^/arkanoidlevel': {
+            '^/arkanoidlevel$': {
                 target,
                 secure: false
             },
-            '^/dayssinceevents': {
+            '^/dayssinceevents$': {
                 target,
                 secure: false
             },
-            '^/testdata': {
+            '^/testdata$': {
                 target,
                 secure: false
             },
-            '^/logoninfo': {
+            '^/logoninfo$': {
                 target,
                 secure: false
             },
-            '^/adduser': {
+            '^/adduser$': {
                 target,
                 secure: false
             },
@@ -76,10 +76,14 @@ export default defineConfig({
                 target,
                 secure: false
             },
-            '^/confirmemail': {
+            '^/confirmemail$': {
                 target,
                 secure: false
-            }
+            },
+            '^/updateuserinfo$': {
+                target,
+                secure: false
+            },
         },
         port: 5173,
         https: {
