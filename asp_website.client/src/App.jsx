@@ -12,6 +12,7 @@ import LogInPage from './pages/LogInPage.jsx';
 import SignUpPage from './pages/SignUpPage.jsx';
 import LoginSuccessfulPage from './pages/LoginSuccessfulPage.jsx';
 import ConfirmEmailPage from './pages/ConfirmEmailPage.jsx';
+import MyAccountPage from './pages/MyAccountPage.jsx';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import CookieConsent from "react-cookie-consent";
@@ -95,9 +96,14 @@ function App() {
 
     const renderLogInLink = (token) => {
         if (!token)
-            return <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
+            return <div>
+                <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
+            </div>;
         else
-            return <Link key="Log Out" className="mb-3 font-bold h-full text-blue-500" to="/" onClick={logOut}>Log Out</Link>
+            return <div>
+                <Link key="My Account" to='/myaccount' className="mb-3 font-bold h-full text-blue-500">⚙️</Link><span>   </span>
+                <Link key="Log Out" className="mb-3 font-bold h-full text-blue-500" to="/" onClick={logOut}>Log Out</Link>
+            </div>;
     }
 
     const updateLogInLink = () => {
@@ -142,6 +148,7 @@ function App() {
                             <Route path="/sign-up" element={<SignUpPage updateAppToken={updateAppToken} />} />
                             <Route path="/login-successful" element={<LoginSuccessfulPage onLoad={updateLogInLink} />} />
                             <Route path="/confirm-email" element={<ConfirmEmailPage username={getUsername(token)} updateAppToken={updateAppToken} />} />
+                            <Route path="/myaccount" element={<MyAccountPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />
                         </Route>
                     </Routes>
                 </div>

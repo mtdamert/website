@@ -26,7 +26,7 @@ function Header(props) {
     return (
         <div className="container mx-auto gap-2 mt-2 mb-8">
             <div className="top-0 text-center">
-                {renderedLinks} | <span><Link key="UniqueKey" to="/confirm-email" className="mb-3 font-bold h-full text-blue-500">Confirm Email (test)</Link></span>
+                {renderedLinks}
             </div>
             <div>
                 <Outlet />
