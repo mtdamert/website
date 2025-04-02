@@ -19,6 +19,8 @@ function RetirementCalc() {
     const [zeroSavingsAge, setZeroSavingsAge] = useState(40);
     const [data, setData] = useState([]);
 
+    const [zeroSavingsAgeColor, setZeroSavingsAgeColor] = useState('text-black');
+
     const handleSubmit = (event) => {
         event.preventDefault();
     }
@@ -117,13 +119,16 @@ function RetirementCalc() {
             currentYear += 1;
         }
 
-        if (ageCounter === ageOfDeath && remainingSavings > 0) {
+        if (ageCounter == ageOfDeath && remainingSavings > 0) {
             // ERROR: We can't set this, because it re-runs this loop             //setDeathAge(100); // TEST TEST TEST
             // console.log("STILL SOME MONEY LEFT AT DEATH");
             // console.log("ageCounter: " + ageCounter);
             // console.log("ageOfDeath: " + ageOfDeath);
             // console.log("remainingSavings: " + remainingSavings);
             // console.log("============");
+            setZeroSavingsAgeColor('font-bold text-green-800');
+        } else {
+            setZeroSavingsAgeColor('font-bold text-red-800');
         }
 
         console.log("Total earlyWithdrawalPenalty: " + earlyWithdrawalPenalty);
@@ -305,7 +310,7 @@ function RetirementCalc() {
                 />
             </div>
 
-            <div className="pt-6"><span className="font-semibold">At the current rate, your savings will run out when you reach age:</span> {zeroSavingsAge}</div>
+                <div className="pt-6"><span className="font-semibold">At the current rate, your savings will run out when you reach age:</span> <span className={zeroSavingsAgeColor}>{zeroSavingsAge}</span></div>
             <div className="pt-6"><span className="font-semibold"></span></div>
 
             </form>
