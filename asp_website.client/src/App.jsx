@@ -114,16 +114,16 @@ function App() {
     return (
         <div className="justify-center">
 
-            <CookieConsent
-                location="bottom"
-                buttonText="I agree"
-                cookieName="myAppCookieConsent"
-                style={{ background: "#2B373B" }}
-                buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
-                expires={150}
-            >
-                This website uses cookies to enhance the user experience.
-            </CookieConsent>
+            {/*<CookieConsent*/}
+            {/*    location="bottom"*/}
+            {/*    buttonText="I agree"*/}
+            {/*    cookieName="myAppCookieConsent"*/}
+            {/*    style={{ background: "#2B373B" }}*/}
+            {/*    buttonStyle={{ color: "#4e503b", fontSize: "13px" }}*/}
+            {/*    expires={150}*/}
+            {/*>*/}
+            {/*    This website uses cookies to enhance the user experience.*/}
+            {/*</CookieConsent>*/}
             <BrowserRouter>
 
                 <div id="logInLink" className="float-right px-4">
