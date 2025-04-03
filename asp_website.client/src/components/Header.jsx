@@ -18,7 +18,7 @@ function Header(props) {
             ? <span key={`${link.label}_span`} className="px-2 "><Link
             key={link.label}
             to={link.path}
-            className="mb-3 font-bold h-full text-blue-500"
+            className="mb-3 font-bold h-full text-blue-500 hover:underline"
             >{link.label}</Link></span>
             : <span key={`${link.label}_span`}></span>;
     });
