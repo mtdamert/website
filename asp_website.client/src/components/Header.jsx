@@ -5,11 +5,11 @@ function Header(props) {
         { label: 'Tetris', path: '/tetris', adminOnly: false, verifiedOnly: false },
         { label: 'Arkanoid', path: '/arkanoid', adminOnly: false, verifiedOnly: false },
         { label: 'Retirement Calculator', path: '/retirement-calc', adminOnly: false, verifiedOnly: false },
-        { label: 'Art', path: '/art', adminOnly: false, verifiedOnly: false },
+        { label: '3D Graphics', path: '/art', adminOnly: false, verifiedOnly: false },
         { label: 'Days Since App', path: 'days-since', adminOnly: false, verifiedOnly: false },
         { label: 'Mike\'s Tests', path: '/test', adminOnly: true, verifiedOnly: false },
         { label: 'Contact', path: '/contact-page', adminOnly: false, verifiedOnly: true },
-        { label: 'About', path: '/about', adminOnly: false, verifiedOnly: false },
+        { label: 'Home', path: '/about', adminOnly: false, verifiedOnly: false },
     ];
 
     const renderedLinks = links.map((link, index) => {

@@ -15,7 +15,7 @@ import ConfirmEmailPage from './pages/ConfirmEmailPage.jsx';
 import MyAccountPage from './pages/MyAccountPage.jsx';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
-import CookieConsent from "react-cookie-consent";
+//import CookieConsent from "react-cookie-consent";
 
 const headerText = [
     "mtdamert.com",
@@ -134,22 +134,24 @@ function App() {
                     {getHeaderText()}
                 </div>
                 <div>
+                    <Header isAdmin={isAdmin(token)} verifiedEmail={emailIsVerified(token)} />
+                </div>
+                <div>
                     <Routes>
-                        <Route path="/" element={<Header isAdmin={isAdmin(token)} verifiedEmail={emailIsVerified(token)} />}>
-                            <Route path="/test" element={<TestPage />} />
-                            <Route path="/tetris" element={<TetrisPage />} />
-                            <Route path="/arkanoid" element={<ArkanoidPage />} />
-                            <Route path="/retirement-calc" element={<RetirementCalcPage />} />
-                            <Route path="/art" element={<ArtPage />} />
-                            <Route path="/days-since" element={<DaysSincePage />} />
-                            <Route path="/contact-page" element={<ContactPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />
-                            <Route path="/about" element={<AboutPage />} />
-                            <Route path="/login" element={<LogInPage updateAppToken={updateAppToken} />} />
-                            <Route path="/sign-up" element={<SignUpPage updateAppToken={updateAppToken} />} />
-                            <Route path="/login-successful" element={<LoginSuccessfulPage onLoad={updateLogInLink} />} />
-                            <Route path="/confirm-email" element={<ConfirmEmailPage username={getUsername(token)} updateAppToken={updateAppToken} />} />
-                            <Route path="/myaccount" element={<MyAccountPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />
-                        </Route>
+                        <Route path="/" element={<AboutPage />} />
+                        <Route path="/test" element={<TestPage />} />
+                        <Route path="/tetris" element={<TetrisPage />} />
+                        <Route path="/arkanoid" element={<ArkanoidPage />} />
+                        <Route path="/retirement-calc" element={<RetirementCalcPage />} />
+                        <Route path="/art" element={<ArtPage />} />
+                        <Route path="/days-since" element={<DaysSincePage />} />
+                        <Route path="/contact-page" element={<ContactPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />
+                        <Route path="/about" element={<AboutPage />} />
+                        <Route path="/login" element={<LogInPage updateAppToken={updateAppToken} />} />
+                        <Route path="/sign-up" element={<SignUpPage updateAppToken={updateAppToken} />} />
+                        <Route path="/login-successful" element={<LoginSuccessfulPage onLoad={updateLogInLink} />} />
+                        <Route path="/confirm-email" element={<ConfirmEmailPage username={getUsername(token)} updateAppToken={updateAppToken} />} />
+                        <Route path="/myaccount" element={<MyAccountPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />
                     </Routes>
                 </div>
 
