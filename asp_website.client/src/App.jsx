@@ -16,6 +16,7 @@ import MyAccountPage from './pages/MyAccountPage.jsx';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 //import CookieConsent from "react-cookie-consent";
+import './App.css';
 
 const headerText = [
     "mtdamert.com",
