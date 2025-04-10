@@ -36,3 +36,13 @@ Content-Type: application/json
   "test": "hello"
 }
 ###
+
+POST {{asp_website.Server_HostAddress}}/contact/
+Accept: application/json
+Content-Type: application/json
+
+{
+    "sender": "me",
+    "email": "foo@bar.com",
+    "body": "test test test"
+}
