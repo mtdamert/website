@@ -12,14 +12,13 @@ async function emailServer(emailContents) {
         body: JSON.stringify(emailContents)
     });
 
-
     console.log("Finished attempting to send request to server");
 }
 
 
 function Contact({ username, emailAddress }) {
     const [sender, setSender] = useState(username);
-    const email = useRef(emailAddress);
+    const email = useRef(emailAddress).current;
     const [body, setBody] = useState("");
 
     const handleSubmit = async (e) => {
@@ -39,7 +38,7 @@ function Contact({ username, emailAddress }) {
     return (
         <div>
             <div>
-                <h1>Send Mike an Email</h1>
+                <h1 className="text-xl">Send Mike an Email</h1>
             </div>
             <form onSubmit={handleSubmit} className="p-2 bg-blue-200">
                 <div>
