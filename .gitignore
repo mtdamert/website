@@ -62,8 +62,8 @@ asp_website.Server/obj/
 
 asp_website.Server/.config/*
 
-# deploy profiles
-/asp_website.Server/Properties/PublishProfiles/*
+# deployment settings
+/asp_website.Server/Properties/*
 
 # save files
 asp_website.Server/TetrisHighScores.txt
@@ -80,3 +80,5 @@ asp_website.Server/passwordsXml.txt
 
 # server-side config file
 asp_website.Server/appsettings.json
+
+
