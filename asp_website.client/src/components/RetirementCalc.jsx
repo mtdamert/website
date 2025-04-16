@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { BarChart, Bar, Rectangle, XAxis, Tooltip } from 'recharts';
 
-function RetirementCalc() {
+function RetirementCalc({ emailAddress }) {
+    // TODO: If emailAddress exists, we are logged in and can save data
     const [savings, setSavings] = useState(0);
     const [postTaxSavings, setPostTaxSavings] = useState(0);
     const [retirementSavings, setRetirementSavings] = useState(0);
@@ -141,6 +142,7 @@ function RetirementCalc() {
     }
 
     // If you can spend more than you're spending, calculate that difference
+    // This would only affect Living Expenses - try increasing them by... 10%?
     // const getExtraSpending() {
 
     // }
@@ -177,7 +179,7 @@ function RetirementCalc() {
                 />
             </div>
 
-            <div className="border pt-2 px-2 py-1">
+            <div className="border pt-2 py-1 pl-4">
 
                 <div>
                     <label className="font-semibold">
@@ -301,7 +303,7 @@ function RetirementCalc() {
 
             <div className="pt-8">
                 <label className="font-semibold">
-                    Use CPI to Extrapolate Capital Gains based on 2024 Rate
+                    Use CPI to Extrapolate Capital Gains based on 2025 Rate
                 </label>
                 <input type="checkbox"
                     value={extrapolateCapGains}
