@@ -143,7 +143,7 @@ function App() {
                         <Route path="/test" element={<TestPage />} />
                         <Route path="/tetris" element={<TetrisPage />} />
                         <Route path="/arkanoid" element={<ArkanoidPage />} />
-                        <Route path="/retirement-calc" element={<RetirementCalcPage />} />
+                        <Route path="/retirement-calc" element={<RetirementCalcPage emailAddress={getEmailAddress(token)} />} />
                         <Route path="/art" element={<ArtPage />} />
                         <Route path="/days-since" element={<DaysSincePage />} />
                         <Route path="/contact-page" element={<ContactPage username={getUsername(token)} emailAddress={getEmailAddress(token)} />} />

@@ -1,9 +1,9 @@
 import RetirementCalc from '../components/RetirementCalc';
 
-function RetirementCalcPage() {
+function RetirementCalcPage(props) {
     return (
         <div className="flex">
-            <RetirementCalc />
+            <RetirementCalc emailAddress={props.emailAddress} />
         </div>
     )
 }
