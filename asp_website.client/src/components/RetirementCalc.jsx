@@ -30,7 +30,7 @@ function RetirementCalc({ emailAddress }) {
     const [estSocialSecurityIncome, setEstSocialSecurityIncome] = useState(0);
     const [predictedYieldPct, setPredictedYieldPct] = useState(8);
     const [cpiPct, setCpiPct] = useState(3);
-    const [ageAtDeath, setAgeAtDeath] = useState(80);
+    const [ageAtDeath, setAgeAtDeath] = useState(90);
     const [extrapolateCapGains, setExtrapolateCapGains] = useState(false);
     const [zeroSavingsAge, setZeroSavingsAge] = useState(40);
     const [data, setData] = useState([]);
@@ -75,7 +75,7 @@ function RetirementCalc({ emailAddress }) {
 
     async function getSavingsZeroAge() {
         let ageCounter = currentAge;
-        let remainingSavings = (currentPostTaxSavings !== 0) ? currentPostTaxSavings : savings;
+        let remainingSavings = (currentPostTaxSavings !== 0) ? currentPostTaxSavings : currentSavings;
         let remainingPreTaxSavings = currentRetirementSavings;
         let yearlyExpenses = livingExpenses;
         let sSIncome = estSocialSecurityIncome;
@@ -179,187 +179,190 @@ function RetirementCalc({ emailAddress }) {
     // }
 
     return (
-        <div className="flex items-center px-3 py-1.5 border">
-            <form onSubmit={handleSubmit}>
-                <div className="pt-2 pl-16">
+        <div>
+            <div>
+                <h1 className="text-xl">Retirement Calculator</h1>
+                <div className="pl-8">
                     <label className="italic">
                         For use with US taxes
                     </label>
                 </div>
-
-                <div className="pt-2">
-                    <label className="font-semibold">
-                        Current Age: 
-                        </label>
-                        <input type="number"
-                            value={currentAge}
-                            onChange={(e) => { setCurrentAge(Number(e.target.value)); } }
-                            className="float-right border text-right"
-                        />
-                </div>
-
-
-                <div className="pt-4">
-                    <label className="font-semibold">
-                        Current Savings:
-                    </label>{/* todo: sanitize input */}
-                    <input type="text"
-                        value={currentSavings}
-                        onChange={(e) => { setCurrentSavings(e.target.value); setCurrentPostTaxSavings(0); setCurrentRetirementSavings(0); } } 
-                        className="float-right border text-right"
-                    />
-                </div>
-
-                <div className="border pt-2 py-1 pl-4">
-
-                    <div>
+            </div>
+            <div className="flex items-center px-3 py-1.5 border bg-blue-200 rounded-md">
+                <form onSubmit={handleSubmit}>
+                    <div className="pt-2">
                         <label className="font-semibold">
-                            Current Post-Tax Savings:
+                            Current Age: 
+                            </label>
+                            <input type="number"
+                                value={currentAge}
+                                onChange={(e) => { setCurrentAge(Number(e.target.value)); } }
+                                className="float-right border text-right w-12"
+                            />
+                    </div>
+
+                    <div className="pt-4 pb-2">
+                        <label className="font-semibold">
+                            Current Savings:
                         </label>{/* todo: sanitize input */}
                         <input type="text"
-                            value={[currentPostTaxSavings]}
-                            onChange={
-                                (e) => { setCurrentPostTaxSavings(e.target.value); setSavings(Number(e.target.value) + Number(currentRetirementSavings)); }
-                            } 
-                            className="float-right border text-right"
+                            value={currentSavings}
+                            onChange={(e) => { setCurrentSavings(e.target.value); setCurrentPostTaxSavings(0); setCurrentRetirementSavings(0); } } 
+                            className="float-right border text-right w-30"
+                        />
+                    </div>
+
+                    <div className="border border-black pt-2 py-1 pl-4">
+
+                        <div>
+                            <label className="font-semibold">
+                                Current Post-Tax Savings:
+                            </label>{/* todo: sanitize input */}
+                            <input type="text"
+                                value={[currentPostTaxSavings]}
+                                onChange={
+                                    (e) => { setCurrentPostTaxSavings(e.target.value); setSavings(Number(e.target.value) + Number(currentRetirementSavings)); }
+                                } 
+                                className="float-right border text-right w-30"
+                            />
+                        </div>
+
+                        <div className="pt-2">
+                            <label className="font-semibold">
+                                Current Retirement Savings:
+                            </label>{/* todo: sanitize input */}
+                            <input type="text"
+                                value={currentRetirementSavings}
+                                onChange={
+                                    (e) => { setCurrentRetirementSavings(e.target.value); setSavings(Number(e.target.value) + Number(currentPostTaxSavings)); }
+                                } 
+                                className="float-right border text-right w-30"
+                            />
+                        </div>
+
+                    </div>
+
+                    <div className="pt-2">
+                        <label className="font-semibold">
+                            Current Income:
+                        </label>
+                        <input type="text"
+                            value={currentIncome}
+                            onChange={(e) => { setCurrentIncome(e.target.value); } }
+                            className="float-right border text-right w-30"
                         />
                     </div>
 
                     <div className="pt-2">
                         <label className="font-semibold">
-                            Current Retirement Savings:
+                            Living Expenses:
                         </label>{/* todo: sanitize input */}
                         <input type="text"
-                            value={currentRetirementSavings}
-                            onChange={
-                                (e) => { setCurrentRetirementSavings(e.target.value); setSavings(Number(e.target.value) + Number(currentPostTaxSavings)); }
-                            } 
+                            value={livingExpenses}
+                                onChange={(e) => { console.log("living expenses - e.target.value: " + e.target.value); setLivingExpenses(e.target.value); }}
+                            className="float-right border text-right w-24"
+                        />
+                    </div>
+
+                    <div className="pt-2">
+                        <label className="font-semibold">
+                            Retirement Age:
+                        </label>
+                        <input type="number"
+                            value={retirementAge}
+                            onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); }}
+                            className="float-right border text-right w-12"
+                        />
+                    </div>{/* todo: Use this value, and also add a 'yearly income' value */}
+
+                    <div className="pt-2">
+                        <label className="font-semibold">
+                            Age to Start Social Security:
+                        </label>
+                        <input type="number"
+                            value={startSocialSecurityAge}
+                            onChange={(e) => { setStartSocialSecurityAge(e.target.value); } }
+                            className="float-right border text-right w-12"
+                        />
+                    </div>{/* TODO: Create a tooltip that leads to: https://www.ssa.gov/OACT/quickcalc/ */}
+
+                    <div className="pt-2">
+                        <label className="font-semibold">
+                            Estimated Social Security Income (in today's dollars)
+                        </label>
+                        <input type="text"
+                            value={estSocialSecurityIncome}
+                            onChange={(e) => { setEstSocialSecurityIncome(e.target.value); } }
+                            className="float-right border text-right w-24"
+                        />
+                    </div>
+
+
+                    <div className="pt-2">
+                        <label className="font-semibold">
+                            Predicted Yield:
+                        </label>
+                        <span className="float-right">%</span>
+                        <input type="number"
+                            value={predictedYieldPct}
+                            onChange={(e) => { setPredictedYieldPct(e.target.value); } }
+                            className="float-right border text-right w-12"
+                        />
+                    </div>
+
+                    <div className="pt-2">
+                        <label className="font-semibold">
+                            CPI:
+                        </label>
+                        <span className="float-right">%</span>
+                        <input type="number"
+                            value={cpiPct}
+                            onChange={(e) => { setCpiPct(e.target.value); } }
+                            className="float-right border text-right w-12"
+                        />
+                    </div>
+
+
+                    <div className="pt-2">
+                        <label className="font-semibold">
+                            Age at Death:
+                        </label>
+                        <input type="number"
+                            value={ageAtDeath}
+                            onChange={(e) => { setAgeAtDeath(e.target.value); } }
+                            className="float-right border text-right w-12"
+                        />
+                    </div>
+
+                    <div className="pt-8">
+                        <label className="font-semibold">
+                            Use CPI to Extrapolate Capital Gains based on 2025 Rate
+                        </label>
+                        <input type="checkbox"
+                            value={extrapolateCapGains}
+                            onChange={(e) => { setExtrapolateCapGains(e.target.value); } }
                             className="float-right border text-right"
                         />
                     </div>
 
-                </div>
+                    <div className="pt-6"><span className="font-semibold">At the current rate, your savings will run out when you reach age:</span> <span className={zeroSavingsAgeColor}>{zeroSavingsAge}</span></div>
+                    <div className="pt-6"><span className="font-semibold"></span></div>
 
-                <div className="pt-2">
-                    <label className="font-semibold">
-                        Current Income:
-                    </label>
-                    <input type="text"
-                        value={currentIncome}
-                        onChange={(e) => { setCurrentIncome(e.target.value); } }
-                        className="float-right border text-right"
-                    />
-                </div>
+                    <div>
+                        <button type="submit" className="rounded-md px-4 py-2 outline-2 outline-black outline-offset-2 bg-orange-200 ">Save Data for Next Use</button>
+                    </div>
 
-                <div className="pt-2">
-                    <label className="font-semibold">
-                        Living Expenses:
-                    </label>{/* todo: sanitize input */}
-                    <input type="text"
-                        value={livingExpenses}
-                            onChange={(e) => { console.log("living expenses - e.target.value: " + e.target.value); setLivingExpenses(e.target.value); }}
-                        className="float-right border text-right"
-                    />
-                </div>
-
-                <div className="pt-2">
-                    <label className="font-semibold">
-                        Retirement Age:
-                    </label>
-                    <input type="number"
-                        value={retirementAge}
-                        onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); }}
-                        className="float-right border text-right"
-                    />
-                </div>{/* todo: Use this value, and also add a 'yearly income' value */}
-
-                <div className="pt-2">
-                    <label className="font-semibold">
-                        Age to Start Social Security:
-                    </label>
-                    <input type="number"
-                        value={startSocialSecurityAge}
-                        onChange={(e) => { setStartSocialSecurityAge(e.target.value); } }
-                        className="float-right border text-right"
-                    />
-                </div>{/* TODO: Create a tooltip that leads to: https://www.ssa.gov/OACT/quickcalc/ */}
-
-                <div className="pt-2">
-                    <label className="font-semibold">
-                        Estimated Social Security Income (in today's dollars)
-                    </label>
-                    <input type="text"
-                        value={estSocialSecurityIncome}
-                        onChange={(e) => { setEstSocialSecurityIncome(e.target.value); } }
-                        className="float-right border text-right"
-                    />
-                </div>
-
-
-                <div className="pt-2">
-                    <label className="font-semibold">
-                        Predicted Yield:
-                    </label>
-                    <span className="float-right">%</span>
-                    <input type="number"
-                        value={predictedYieldPct}
-                        onChange={(e) => { setPredictedYieldPct(e.target.value); } }
-                        className="float-right border text-right"
-                    />
-                </div>
-
-                <div className="pt-2">
-                    <label className="font-semibold">
-                        CPI:
-                    </label>
-                    <span className="float-right">%</span>
-                    <input type="number"
-                        value={cpiPct}
-                        onChange={(e) => { setCpiPct(e.target.value); } }
-                        className="float-right border text-right"
-                    />
-                </div>
-
-
-                <div className="pt-2">
-                    <label className="font-semibold">
-                        Age at Death:
-                    </label>
-                    <input type="number"
-                        value={ageAtDeath}
-                        onChange={(e) => { setAgeAtDeath(e.target.value); } }
-                        className="float-right border text-right"
-                    />
-                </div>
-
-                <div className="pt-8">
-                    <label className="font-semibold">
-                        Use CPI to Extrapolate Capital Gains based on 2025 Rate
-                    </label>
-                    <input type="checkbox"
-                        value={extrapolateCapGains}
-                        onChange={(e) => { setExtrapolateCapGains(e.target.value); } }
-                        className="float-right border text-right"
-                    />
-                </div>
-
-                <div className="pt-6"><span className="font-semibold">At the current rate, your savings will run out when you reach age:</span> <span className={zeroSavingsAgeColor}>{zeroSavingsAge}</span></div>
-                <div className="pt-6"><span className="font-semibold"></span></div>
+                </form>
 
                 <div>
-                    <button type="submit" className="rounded-md px-4 py-2 outline-2 outline-offset-2 bg-blue-300 ">Save for Next Use</button>
+                    <BarChart id="barGraph" width={400} height={300} data={data}>
+                        <Bar dataKey="pv" fill="#c58847" activeBar={<Rectangle fill="red" stroke="red" />} />
+                        <XAxis dataKey="name" />
+                        <Tooltip />
+                    </BarChart>
                 </div>
 
-            </form>
-
-            <div>
-                <BarChart id="barGraph" width={400} height={300} data={data}>
-                    <Bar dataKey="pv" fill="#4494e5" activeBar={<Rectangle fill="red" stroke="red" />} />
-                    <XAxis dataKey="name" />
-                    <Tooltip />
-                </BarChart>
             </div>
-
         </div>
     );
 }
