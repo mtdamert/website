@@ -40,17 +40,17 @@ function Contact({ username, emailAddress }) {
             <div>
                 <h1 className="text-xl">Send Mike an Email</h1>
             </div>
-            <form onSubmit={handleSubmit} className="p-2 bg-blue-200">
+            <form onSubmit={handleSubmit} className="p-4 bg-blue-200 rounded-md">
                 <div>
                     <p>Your Name</p>
                     { showUsername(username) }
                 </div>
                 <div>
                     <p>Message</p>
-                    <textarea rows="5" cols="80" id="body" className="border-2" onChange={e => setBody(e.target.value)} />
+                    <textarea rows="8" cols="100" id="body" className="border-2" onChange={e => setBody(e.target.value)} />
                 </div>
                 <div className="pt-8 float-center">
-                    <button type="submit" className="bg-gray-100 p-1 px-2 float-center">Submit</button>
+                    <button type="submit" className="rounded-md px-4 py-2 outline-2 outline-black outline-offset-2 bg-orange-200">Send</button>
                 </div>
             </form>
         </div>
