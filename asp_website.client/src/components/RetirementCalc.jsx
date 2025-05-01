@@ -212,7 +212,7 @@ function RetirementCalc({ emailAddress }) {
                         />
                     </div>
 
-                    <div className="border border-black pt-2 py-1 pl-4">
+                    <div className="border ml-2 border-gray-500 p-2">
 
                         <div>
                             <label className="font-semibold">
@@ -345,7 +345,7 @@ function RetirementCalc({ emailAddress }) {
                         />
                     </div>
 
-                    <div className="pt-6"><span className="font-semibold">At the current rate, your savings will run out when you reach age:</span> <span className={zeroSavingsAgeColor}>{zeroSavingsAge}</span></div>
+                    <div className="pt-6"><span className={zeroSavingsAgeColor}>At the current rate, your savings will run out when you reach age {zeroSavingsAge}</span></div>
                     <div className="pt-6"><span className="font-semibold"></span></div>
 
                     <div>
