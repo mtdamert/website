@@ -46,6 +46,14 @@ function Art(props) {
         currentMinuteInput.value = "" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
     }
 
+    const changeTime = () => {
+        // TODO
+        const currentHourInput = document.getElementById("currentHourInput");
+        const currentMinuteInput = document.getElementById("currentMinuteInput");
+
+
+    }
+
     function GroundPlane(props) {
         const myMesh = useRef();
 
@@ -357,14 +365,14 @@ function Art(props) {
         //    ((active) ? mesh.current.rotation.y += delta : mesh.current.rotation.y -= delta);
         //});
         useFrame((state, delta) => {
-            if (active) {
+            if (active && isClockRunning) {
                 mesh.current.position.x += delta;
             }
             if (mesh.current.position.x > 22) {
                 mesh.current.position.x = -5;
             }
 
-            if (active) {
+            if (active && isClockRunning) {
                 mixer.update(delta);
             }
         });
@@ -395,9 +403,11 @@ function Art(props) {
     };
 
     return (
-        <div className="items-center border w-screen h-lvh">
+        <div className="items-center w-full h-lvh">
             <div><span className="italic">(work in progress)</span> - current time:
-                <input id="currentHourInput" className="w-5 text-right" value="05" />:<input id="currentMinuteInput" className="w-5 text-right" value="20" />
+                <input id="currentHourInput" className="w-5 text-right" value="05" onChange={changeTime} />
+                :
+                <input id="currentMinuteInput" className="w-5 text-right" value="20" onChange={changeTime} />
                 <span className="invisible" id="currentTimeSpan" />
             </div>
             <div id="hiddenDiv" className="invisible italic">Hide Menu button was pressed</div>
@@ -436,9 +446,7 @@ function Art(props) {
                             setIsClockRunning(!isClockRunning);
                         }}
                         textOffset={clockButton.textOffset} />}
-                    {<Button3D scale={0.25} position={[-3.0, 1.4, 0]} text={'Option 2'} textOffset={0.23} />}
-                    {<Button3D scale={0.25} position={[-3.0, 1.1, 0]} text={'Option 3'} textOffset={0.23} />}
-                    {<Button3D scale={0.25} position={[-3.0, 0.8, 0]} text={'Option 4'} textOffset={0.23} />}
+                    {<Button3D scale={0.25} position={[-3.0, 1.4, 0]} text={'Option 3'} textOffset={0.23} />}
                 </Canvas>
             </div>
         </div>
