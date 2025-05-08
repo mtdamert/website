@@ -1,6 +1,7 @@
 ﻿using asp_website.Server.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.Xml.Serialization;
 
 namespace asp_website.Server.Controllers
 {
@@ -8,7 +9,7 @@ namespace asp_website.Server.Controllers
     [Route("[controller]")]
     public class RetirementCalcController : ControllerBase
     {
-        List<RetirementCalcData>? allRetirementCalcData;
+        List<RetirementCalcData>? retirementCalcDataList;
         const string retirementCalcDataPath = "RetirementCalcData.txt";
 
         // TODO: Handle in database
@@ -22,7 +23,7 @@ namespace asp_website.Server.Controllers
                 {
                     List<RetirementCalcData>? items = JsonSerializer.Deserialize<List<RetirementCalcData>>(json);
                     if (items != null && items.Count > 0)
-                        allRetirementCalcData = items;
+                        retirementCalcDataList = items;
                 }
             }
 
@@ -31,14 +32,19 @@ namespace asp_website.Server.Controllers
         private void Save()
         {
             // TODO: Write this
+            using (StreamWriter xmlWriter = new StreamWriter(retirementCalcDataPath))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
+                serializer.Serialize(xmlWriter, retirementCalcDataList);
+            }
         }
 
         [HttpGet]
         public RetirementCalcData? Get(string emailAddress)
         {
-            if (emailAddress != null && allRetirementCalcData != null)
+            if (emailAddress != null && retirementCalcDataList != null)
             {
-                RetirementCalcData? data = allRetirementCalcData.FirstOrDefault(data => data.emailAddress == emailAddress);
+                RetirementCalcData? data = retirementCalcDataList.FirstOrDefault(data => data.emailAddress == emailAddress);
                 return data;
             }
 
@@ -48,12 +54,12 @@ namespace asp_website.Server.Controllers
         [HttpPost]
         public void Post([FromBody] RetirementCalcData updatedData)
         {
-            if (allRetirementCalcData == null)
+            if (retirementCalcDataList == null)
             {
-                allRetirementCalcData = new List<RetirementCalcData>();
+                retirementCalcDataList = new List<RetirementCalcData>();
             }
 
-            RetirementCalcData? data = allRetirementCalcData.FirstOrDefault(data => data.emailAddress == updatedData.emailAddress);
+            RetirementCalcData? data = retirementCalcDataList.FirstOrDefault(data => data.emailAddress == updatedData.emailAddress);
             if (data != null)
             {
                 // Update this data. TODO: Test this line
@@ -61,7 +67,7 @@ namespace asp_website.Server.Controllers
             }
             else
             {
-                allRetirementCalcData.Add(updatedData);
+                retirementCalcDataList.Add(updatedData);
             }
 
             Save();
