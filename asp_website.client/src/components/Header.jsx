@@ -24,7 +24,7 @@ function Header(props) {
     });
 
     return (
-        <div className="container mx-auto gap-2 mt-2 mb-8">
+        <div className="container mx-auto gap-2 mt-4 mb-6">
             <div className="top-0 text-center">
                 {renderedLinks}
             </div>
