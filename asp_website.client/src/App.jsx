@@ -126,16 +126,17 @@ function App() {
             {/*    This website uses cookies to enhance the user experience.*/}
             {/*</CookieConsent>*/}
             <BrowserRouter>
+                <div id="top" className="bg-gray-900 py-1 mb-2">
+                    <div id="logInLink" className="float-right px-4">
+                        { renderLogInLink(token) }
+                    </div>
 
-                <div id="logInLink" className="float-right px-4">
-                    { renderLogInLink(token) }
-                </div>
-
-                <div className="text-4xl py-4 px-4 text-center">
-                    {getHeaderText()}
-                </div>
-                <div>
-                    <Header isAdmin={isAdmin(token)} verifiedEmail={emailIsVerified(token)} />
+                    {/*<div className="text-4xl py-4 px-4 text-center">*/}
+                    {/*    {getHeaderText()}*/}
+                    {/*</div>*/}
+                    <div>
+                        <Header isAdmin={isAdmin(token)} verifiedEmail={emailIsVerified(token)} />
+                    </div>
                 </div>
                 <div>
                     <Routes>
