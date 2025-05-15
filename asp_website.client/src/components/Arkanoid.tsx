@@ -1202,6 +1202,7 @@ export default function Arkanoid() {
     // the playing area is 640 x 640 (BOARD_WIDTH x BOARD_HEIGHT)
     return (
         <div>
+            <div class="title">Arkanoid</div>
             <span className="italic absolute top-[140px] left-[100px]">Press ESC to pause</span>
 
             <div id="fullArea">

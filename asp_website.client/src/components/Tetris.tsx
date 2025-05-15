@@ -2234,6 +2234,7 @@ export default function Tetris() {
 	  //  i.e. 320 x 704
     return (
         <div>
+            <div class="title">Tetris</div>
             <span className="italic absolute top-[140px] left-[100px]">Press up arrow to rotate.<br/>Press ESC to pause.</span>
 
             <div id="fullArea">

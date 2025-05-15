@@ -404,6 +404,7 @@ function Art(props) {
 
     return (
         <div className="items-center w-full h-lvh">
+            <div class="title">3D Graphics</div>
             <div><span className="italic">(work in progress)</span> - current time:
                 <input id="currentHourInput" className="w-5 text-right" value="05" onChange={changeTime} />
                 :

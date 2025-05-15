@@ -181,7 +181,7 @@ function RetirementCalc({ emailAddress }) {
     return (
         <div>
             <div>
-                <h1 className="text-xl">Retirement Calculator</h1>
+                <div class="title">Retirement Calculator</div>
                 <div className="pl-8">
                     <label className="italic">
                         For use with US taxes
