@@ -138,7 +138,7 @@ function App() {
                         <Header isAdmin={isAdmin(token)} verifiedEmail={emailIsVerified(token)} />
                     </div>
                 </div>
-                <div>
+                <div className="px-8">
                     <Routes>
                         <Route path="/" element={<AboutPage />} />
                         <Route path="/test" element={<TestPage />} />
