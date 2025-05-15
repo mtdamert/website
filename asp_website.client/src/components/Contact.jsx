@@ -37,10 +37,8 @@ function Contact({ username, emailAddress }) {
 
     return (
         <div>
-            <div>
-                <h1 className="text-xl">Send Mike an Email</h1>
-            </div>
-            <form onSubmit={handleSubmit} className="p-4 bg-blue-200 rounded-md">
+            <div class="title">Send Mike an Email</div>
+            <form onSubmit={handleSubmit} className="my-2 p-4 bg-blue-200 rounded-md">
                 <div>
                     <p>Your Name</p>
                     { showUsername(username) }
