@@ -348,9 +348,11 @@ function RetirementCalc({ emailAddress }) {
                     <div className="pt-6"><span className={zeroSavingsAgeColor}>At the current rate, your savings will run out when you reach age {zeroSavingsAge}</span></div>
                     <div className="pt-6"><span className="font-semibold"></span></div>
 
-                    <div>
-                        <button type="submit" className="rounded-md px-4 py-2 outline-2 outline-black outline-offset-2 bg-orange-200">Save Data for Next Use</button>
-                    </div>
+                    {
+                        (emailAddress != null && emailAddress != "")
+                            ? <div><div><button type="submit" className="rounded-md px-4 py-2 outline-2 outline-black outline-offset-2 bg-orange-200">Save Data for Next Use</button></div></div>
+                            : <div></div>
+                    }
 
                 </form>
 
