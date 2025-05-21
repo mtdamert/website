@@ -350,7 +350,7 @@ function RetirementCalc({ emailAddress }) {
 
                     {
                         (emailAddress != null && emailAddress != "")
-                            ? <div><div><button type="submit" className="rounded-md px-4 py-2 outline-2 outline-black outline-offset-2 bg-orange-200">Save Data for Next Use</button></div></div>
+                            ? <div><button type="submit" className="bg-orange-100">Save Data for Next Use</button></div>
                             : <div></div>
                     }
 

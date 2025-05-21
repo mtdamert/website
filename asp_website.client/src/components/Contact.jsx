@@ -48,7 +48,7 @@ function Contact({ username, emailAddress }) {
                     <textarea rows="8" cols="100" id="body" className="border-2" onChange={e => setBody(e.target.value)} />
                 </div>
                 <div className="pt-8 float-center">
-                    <button type="submit" className="rounded-md px-4 py-2 outline-2 outline-black outline-offset-2 bg-orange-200">Send</button>
+                    <button type="submit" className="bg-orange-100">Send</button>
                 </div>
             </form>
         </div>
