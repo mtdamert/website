@@ -7,11 +7,12 @@ module.exports = {
       extend: {},
     },
     plugins: [],
+    corePlugins: {
+        preflight: false,
+    },
     variants: {
       extend: {
           display: ["group-hover"],
       },
   },
-  }
-  
-  
+}

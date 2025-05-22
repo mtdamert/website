@@ -2,8 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 body {
     background-color: #f0f0f0;
+    margin: 0px;
+}
+
+input, textarea {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    font-size: 16px;
+    line-height: 24px;
 }
 
 #root {
@@ -34,4 +47,10 @@ button {
     border-radius: 0.375rem;
     padding: 4px 8px;
     background-color: #ffedd5;
+    border: 0px;
+    font-size: 16px;
+}
+
+p {
+    margin: 0px;
 }
