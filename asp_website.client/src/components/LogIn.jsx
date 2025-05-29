@@ -44,7 +44,7 @@ export default function LogIn({ setToken }) {
             console.log(token);
             const errorDiv = document.getElementById("errorMessage");
             if (errorDiv != null) {
-                errorDiv.style.visibility = 'hidden';
+                errorDiv.style.display = 'none';
             }
 
             // Navigate to a success page
@@ -56,7 +56,7 @@ export default function LogIn({ setToken }) {
             // Not successful; log an attempt and let the user try again
             const errorDiv = document.getElementById("errorMessage");
             if (errorDiv != null) {
-                errorDiv.style.visibility = 'visible';
+                errorDiv.style.display = 'block';
             }
         }
     }
@@ -64,8 +64,8 @@ export default function LogIn({ setToken }) {
     return (
         <div className="login-wrapper">
             <div class="title">Please Log In</div>
-            <div id="errorMessage" className="invisible text-rose-600">Logon unsuccessful. Please check your username and/or password</div>
-            <form onSubmit={handleSubmit} className="p-2 bg-blue-200">
+            <div id="errorMessage" className="hidden text-rose-600">Logon unsuccessful. Please check your username and/or password</div>
+            <form onSubmit={handleSubmit} className="p-2 bg-blue-200 w-[500px]">
                 <div>
                     <p>Email Address</p>
                     <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="name" />
