@@ -81,7 +81,7 @@ export default function LogIn({ setToken }) {
                     <span className="float-right text-sm">No password? <Link to="/sign-up" className="mb-3 font-bold h-full text-blue-500">Sign up</Link></span>
                 </div>
                 <div className="pt-8 float-center">
-                    <button type="submit" className="bg-gray-100 p-1 px-2 float-center rounded-md">Submit</button>
+                    <button type="submit">Submit</button>
                 </div>
             </form>
         </div>
