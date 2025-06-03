@@ -28,6 +28,7 @@ input, textarea {
     font-size: 1.5rem;
     font-weight: 600;
     line-height: calc(2 / 1.5);
+    text-align: center;
 }
 
 tr:nth-child(even) {
@@ -46,9 +47,14 @@ th, td {
 button {
     border-radius: 0.375rem;
     padding: 4px 8px;
-    background-color: #ffedd5;
+    background-color: #ffffff;
     border: 0px;
     font-size: 16px;
+}
+
+button:hover {
+    background-color: #ffedd5;
+    cursor: pointer;
 }
 
 p {
