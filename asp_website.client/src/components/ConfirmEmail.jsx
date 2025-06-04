@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 function ConfirmEmail({ username, setToken }) {
@@ -11,6 +11,8 @@ function ConfirmEmail({ username, setToken }) {
     let guid = searchParams.get('emailConfirmationGuid');
     if (guid === null || guid === "")
         guid = "nope";
+
+    const confirmMessage = useRef("");
 
     //const postData = async () => {
     //    console.log("attempted to POST");
@@ -33,12 +35,14 @@ function ConfirmEmail({ username, setToken }) {
             const token = await response.text();
             if (!token == "") {
                 console.log('Email confirmation process successfully ran. Message from server:', token);
+                confirmMessage.current = "Thank you. Your account has been successfully confirmed";
                 setToken(token);
             } else {
                 console.log('Email confirmation unsuccessful. Was this account valid?');
             }
         } catch (error) {
             console.error('Error! Message from server:', error);
+            confirmMessage.current = "I'm sorry. There was an error trying to confirm your account";
         }
     };
 
@@ -47,7 +51,12 @@ function ConfirmEmail({ username, setToken }) {
     }, []);
 
 
-    return <div>Confirm Email page reached for {username}</div>
+    return (
+        <div>
+            <div className="mb-4">Confirm Email page reached for {username}</div>
+            <div>{confirmMessage.current}</div>
+        </div>
+    );
 }
 
 export default ConfirmEmail;
