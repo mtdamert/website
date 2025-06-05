@@ -101,8 +101,11 @@ function App() {
             </div>;
         else
             return <div>
-                <Link key="My Account" to='/myaccount' className="mb-3 font-bold h-full text-blue-500">⚙️</Link><span>   </span>
-                <Link key="Log Out" className="mb-3 font-bold h-full text-blue-500" to="/" onClick={logOut}>Log Out</Link>
+                <div className="float-left text-gray-200 text-sm">Hi, {getUsername(token)}</div>
+                <div className="float-right">
+                    <Link key="My Account" to='/myaccount' className="mb-3 font-bold h-full text-blue-500 no-underline">⚙️</Link><span>   </span>
+                    <Link key="Log Out" className="mb-3 font-bold h-full text-blue-500" to="/" onClick={logOut}>Log Out</Link>
+                </div>
             </div>;
     }
 
@@ -126,7 +129,7 @@ function App() {
             {/*</CookieConsent>*/}
             <BrowserRouter>
                 <div id="top" className="bg-gray-900 py-1 mb-2">
-                    <div id="logInLink" className="float-right px-4">
+                    <div id="logInLink" className="px-4">
                         { renderLogInLink(token) }
                     </div>
 
