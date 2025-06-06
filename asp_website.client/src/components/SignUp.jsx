@@ -27,7 +27,7 @@ function SignUp({ setToken }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // TODO: Add a new user
+        // Add a new user
         const token = await addNewUser({
             username,
             emailAddress,
@@ -37,35 +37,35 @@ function SignUp({ setToken }) {
         console.log("result from server: ");
         console.log(token);
 
-        // TODO: Redirect to the previous page? Or to the logon page?
-        if (token != null && token !== "") {
+        // Redirect to a different page if adding the new user is successful
+        if (token != null && token !== "" && token.replaceAll("\"", "") !== "") {
             console.log("User created. Received token from server: ");
             console.log(token);
             const errorDiv = document.getElementById("errorMessage");
             if (errorDiv != null) {
-                errorDiv.style.visibility = 'hidden';
+                errorDiv.style.display = 'none';
             }
 
-            // TODO: Move to a different page
+            // Move to a different page
             const successData = { message: 'Login successful', email: emailAddress };
             navigate('/login-successful', { state: successData });
 
             setToken(token);
-        } else { // probably 401
+        } else { // Fail; just show a client-side error
             console.log("Adding new user unsuccessful. Does this user already exist?");
             const errorDiv = document.getElementById("errorMessage");
             if (errorDiv != null) {
-                errorDiv.style.visibility = 'visible';
+                errorDiv.style.display = 'block';
             }
         }
     }
 
     return (
-        <div>
-            <h1 className="font-bold">Add a New User</h1>
-            <div id="errorMessage" className="invisible text-rose-600">Unable to create new user. Is this user already in the system?</div>
+        <div class="content">
+            <div class="title">Add a New User</div>
+            <div id="errorMessage" className="hidden text-rose-600">Unable to create new user. Is this user already in the system?</div>
             <form onSubmit={handleSubmit} className="p-2 pb-6 bg-blue-200">
-                <div className="pb-2">Enter your info here:</div>
+                <div className="pb-2 w-[480px]">Enter your info here:</div>
                 <div>
                     <p>Username</p>
                     <input type="text" onChange={e => setUsername(e.target.value)} className="border-2" autoComplete="name" />
