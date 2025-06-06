@@ -11,6 +11,10 @@ body {
     margin: 0px;
 }
 
+.content {
+    margin: auto;
+}
+
 input, textarea {
     border: 0px;
     margin: 0px;
@@ -29,6 +33,7 @@ input, textarea {
     font-weight: 600;
     line-height: calc(2 / 1.5);
     text-align: center;
+    padding: 0px 0px 4px 0px;
 }
 
 tr:nth-child(even) {
