@@ -36,10 +36,10 @@ function Contact({ username, emailAddress }) {
     }
 
     return (
-        <div>
+        <div class="content">
             <div class="title">Send Mike an Email</div>
             <form onSubmit={handleSubmit} className="my-2 p-4 bg-blue-200 rounded-md">
-                <div>
+                <div className="pb-2">
                     <p>Your Name</p>
                     { showUsername(username) }
                 </div>

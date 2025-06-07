@@ -179,7 +179,7 @@ function RetirementCalc({ emailAddress }) {
     // }
 
     return (
-        <div>
+        <div class="content">
             <div>
                 <div class="title">Retirement Calculator</div>
                 <div className="pl-8">
