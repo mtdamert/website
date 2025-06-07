@@ -96,7 +96,7 @@ function App() {
 
     const renderLogInLink = (token) => {
         if (!token)
-            return <div>
+            return <div className="float-right mb-3">
                 <Link key="Log In" to='/login' className="mb-3 font-bold h-full text-blue-500">Log In</Link>
             </div>;
         else
