@@ -62,17 +62,19 @@ export default function LogIn({ setToken }) {
     }
 
     return (
-        <div className="login-wrapper">
+        <div class="content">
             <div class="title">Please Log In</div>
             <div id="errorMessage" className="hidden text-rose-600">Logon unsuccessful. Please check your username and/or password</div>
             <form onSubmit={handleSubmit} className="p-2 bg-blue-200 w-[500px]">
-                <div>
-                    <p>Email Address</p>
-                    <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="name" />
-                </div>
-                <div>
-                    <p>Password</p>
-                    <input type="password" onChange={e => setPassword(e.target.value)} className="border-2" autoComplete="password" />
+                <div className="pb-20">
+                    <div className="pb-2">
+                        <p>Email Address</p>
+                        <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="name" />
+                    </div>
+                    <div>
+                        <p>Password</p>
+                        <input type="password" onChange={e => setPassword(e.target.value)} className="border-2" autoComplete="password" />
+                    </div>
                 </div>
                 <div className="py-2">
                     <p className="float-right justify-baseline text-sm">Forgot password? (TODO)</p>
