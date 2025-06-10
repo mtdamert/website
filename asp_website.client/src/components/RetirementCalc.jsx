@@ -188,9 +188,9 @@ function RetirementCalc({ emailAddress }) {
                     </label>
                 </div>
             </div>
-            <div className="flex items-center px-3 py-1.5 border bg-blue-200 rounded-md">
+            <div className="flex items-center px-8 py-1.5 border bg-blue-200 rounded-md">
                 <form onSubmit={handleSubmit}>
-                    <div className="pt-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             Current Age: 
                             </label>
@@ -201,7 +201,7 @@ function RetirementCalc({ emailAddress }) {
                             />
                     </div>
 
-                    <div className="pt-4 pb-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             Current Savings:
                         </label>{/* todo: sanitize input */}
@@ -212,7 +212,7 @@ function RetirementCalc({ emailAddress }) {
                         />
                     </div>
 
-                    <div className="border ml-2 border-gray-500 p-2">
+                    <div className="border ml-2 border-gray-500 p-4">
 
                         <div>
                             <label className="font-semibold">
@@ -227,7 +227,7 @@ function RetirementCalc({ emailAddress }) {
                             />
                         </div>
 
-                        <div className="pt-2">
+                        <div className="pt-4">
                             <label className="font-semibold">
                                 Current Retirement Savings:
                             </label>{/* todo: sanitize input */}
@@ -242,7 +242,7 @@ function RetirementCalc({ emailAddress }) {
 
                     </div>
 
-                    <div className="pt-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             Current Income:
                         </label>
@@ -253,7 +253,7 @@ function RetirementCalc({ emailAddress }) {
                         />
                     </div>
 
-                    <div className="pt-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             Living Expenses:
                         </label>{/* todo: sanitize input */}
@@ -264,7 +264,7 @@ function RetirementCalc({ emailAddress }) {
                         />
                     </div>
 
-                    <div className="pt-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             Retirement Age:
                         </label>
@@ -275,7 +275,7 @@ function RetirementCalc({ emailAddress }) {
                         />
                     </div>{/* todo: Use this value, and also add a 'yearly income' value */}
 
-                    <div className="pt-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             Age to Start Social Security:
                         </label>
@@ -286,7 +286,7 @@ function RetirementCalc({ emailAddress }) {
                         />
                     </div>{/* TODO: Create a tooltip that leads to: https://www.ssa.gov/OACT/quickcalc/ */}
 
-                    <div className="pt-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             Estimated Social Security Income (in today's dollars)
                         </label>
@@ -298,7 +298,7 @@ function RetirementCalc({ emailAddress }) {
                     </div>
 
 
-                    <div className="pt-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             Predicted Yield:
                         </label>
@@ -310,7 +310,7 @@ function RetirementCalc({ emailAddress }) {
                         />
                     </div>
 
-                    <div className="pt-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             CPI:
                         </label>
@@ -323,7 +323,7 @@ function RetirementCalc({ emailAddress }) {
                     </div>
 
 
-                    <div className="pt-2">
+                    <div className="pt-4">
                         <label className="font-semibold">
                             Age at Death:
                         </label>
