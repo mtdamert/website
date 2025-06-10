@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 
@@ -65,24 +65,24 @@ export default function LogIn({ setToken }) {
         <div class="content">
             <div class="title">Please Log In</div>
             <div id="errorMessage" className="hidden text-rose-600">Logon unsuccessful. Please check your username and/or password</div>
-            <form onSubmit={handleSubmit} className="p-2 bg-blue-200 w-[500px]">
+            <form onSubmit={handleSubmit} className="p-8 rounded-[0.25rem] bg-blue-200">
                 <div className="pb-20">
                     <div className="pb-2">
                         <p>Email Address</p>
-                        <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="name" />
+                        <p>📧 <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="name" /></p>
                     </div>
                     <div>
                         <p>Password</p>
-                        <input type="password" onChange={e => setPassword(e.target.value)} className="border-2" autoComplete="password" />
+                        <p>🔐 <input type="password" onChange={e => setPassword(e.target.value)} className="border-2" autoComplete="password" /></p>
                     </div>
                 </div>
                 <div className="py-2">
-                    <p className="float-right justify-baseline text-sm">Forgot password? (TODO)</p>
+                    <p className="float-right justify-baseline text-sm italic">Forgot password? (TODO)</p>
                 </div>
                 <div className="pt-4">
-                    <span className="float-right text-sm">No password? <Link to="/sign-up" className="mb-3 font-bold h-full text-blue-500">Sign up</Link></span>
+                    <span className="float-right text-sm italic">No password? <Link to="/sign-up" className="mb-3 font-bold h-full">Sign up</Link></span>
                 </div>
-                <div className="pt-8 float-center">
+                <div className="pt-8 place-self-center">
                     <button type="submit">Submit</button>
                 </div>
             </form>
