@@ -11,6 +11,12 @@ body {
     margin: 0px;
 }
 
+.form-background {
+    background-image: linear-gradient(#bfdbfe, #8ab3e6, #bfdbfe);
+    padding: 16px;
+    border-radius: 8px;
+}
+
 .content {
     margin: auto;
 }

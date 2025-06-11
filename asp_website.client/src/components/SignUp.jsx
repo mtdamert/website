@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 async function addNewUser(credentials) {
@@ -64,22 +64,22 @@ function SignUp({ setToken }) {
         <div class="content">
             <div class="title">Add a New User</div>
             <div id="errorMessage" className="hidden text-rose-600">Unable to create new user. Is this user already in the system?</div>
-            <form onSubmit={handleSubmit} className="p-2 pb-6 bg-blue-200">
+            <form onSubmit={handleSubmit} class="form-background">
                 <div className="pb-2 w-[480px]">Enter your info here:</div>
                 <div>
                     <p>Username</p>
-                    <input type="text" onChange={e => setUsername(e.target.value)} className="border-2" autoComplete="name" />
+                    <p>👤 <input type="text" onChange={e => setUsername(e.target.value)} className="border-2" autoComplete="name" /></p>
                 </div>
                 <div>
                     <p>Email Address</p>
-                    <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="email" />
+                    <p>📧 <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="email" /></p>
                 </div>
                 <div>
                     <p>Password</p>
-                    <input type="password" onChange={e => setPassword(e.target.value)} className="border-2" autoComplete="password" />
+                    <p>🔐 <input type="password" onChange={e => setPassword(e.target.value)} className="border-2" autoComplete="password" /></p>
                 </div>
-                <div className="py-4">
-                    <button type="submit" className="bg-gray-100 p-1 px-2 float-right rounded-md">Submit</button>
+                <div className="py-4 place-self-center">
+                    <button type="submit">Submit</button>
                 </div>
             </form>
         </div>

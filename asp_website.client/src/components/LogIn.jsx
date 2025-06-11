@@ -65,7 +65,7 @@ export default function LogIn({ setToken }) {
         <div class="content">
             <div class="title">Please Log In</div>
             <div id="errorMessage" className="hidden text-rose-600">Logon unsuccessful. Please check your username and/or password</div>
-            <form onSubmit={handleSubmit} className="p-8 rounded-[0.25rem] bg-blue-200">
+            <form onSubmit={handleSubmit} class="form-background">
                 <div className="pb-20">
                     <div className="pb-2">
                         <p>Email Address</p>

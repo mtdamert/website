@@ -188,8 +188,8 @@ function RetirementCalc({ emailAddress }) {
                     </label>
                 </div>
             </div>
-            <div className="flex items-center px-8 py-1.5 border bg-blue-200 rounded-md">
-                <form onSubmit={handleSubmit}>
+            <div class="form-background">
+                <form onSubmit={handleSubmit} className="inline-block">
                     <div className="pt-4">
                         <label className="font-semibold">
                             Current Age: 
@@ -356,9 +356,9 @@ function RetirementCalc({ emailAddress }) {
 
                 </form>
 
-                <div>
+                <div className="inline-block">
                     <BarChart id="barGraph" width={400} height={300} data={data}>
-                        <Bar dataKey="pv" fill="#c58847" activeBar={<Rectangle fill="red" stroke="red" />} />
+                        <Bar dataKey="pv" fill="#c58847" activeBar={<Rectangle stroke="red" />} />
                         <XAxis dataKey="name" />
                         <Tooltip />
                     </BarChart>

@@ -38,7 +38,7 @@ function Contact({ username, emailAddress }) {
     return (
         <div class="content">
             <div class="title">Send Mike an Email</div>
-            <form onSubmit={handleSubmit} className="my-2 p-4 bg-blue-200 rounded-md">
+            <form onSubmit={handleSubmit} class="form-background">
                 <div className="pb-2">
                     <p>Your Name</p>
                     { showUsername(username) }
@@ -47,7 +47,7 @@ function Contact({ username, emailAddress }) {
                     <p>Message</p>
                     <textarea rows="8" cols="100" id="body" className="border-2" onChange={e => setBody(e.target.value)} />
                 </div>
-                <div className="pt-8 float-center">
+                <div className="pt-8 place-self-center">
                     <button type="submit">Send</button>
                 </div>
             </form>
