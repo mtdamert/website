@@ -7,13 +7,13 @@ namespace asp_website.Server.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class RetirementCalcController : ControllerBase
+    public class RetirementCalcDataController : ControllerBase
     {
         List<RetirementCalcData>? retirementCalcDataList;
         const string retirementCalcDataPath = "RetirementCalcData.txt";
 
         // TODO: Handle in database
-        public RetirementCalcController()
+        public RetirementCalcDataController()
         {
             if (System.IO.File.Exists(retirementCalcDataPath))
             {
@@ -34,7 +34,7 @@ namespace asp_website.Server.Controllers
             // TODO: Write this
             using (StreamWriter xmlWriter = new StreamWriter(retirementCalcDataPath))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<UserInfo>));
+                XmlSerializer serializer = new XmlSerializer(typeof(List<RetirementCalcData>));
                 serializer.Serialize(xmlWriter, retirementCalcDataList);
             }
         }
