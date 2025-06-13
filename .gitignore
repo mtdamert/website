@@ -69,6 +69,7 @@ asp_website.Server/.config/*
 asp_website.Server/TetrisHighScores.txt
 asp_website.Server/ArkanoidHighScores.txt
 asp_website.Server/DaysSinceEvents.txt
+asp_website.Server/RetirementCalcData.txt
 
 # all backup files
 *.bak
