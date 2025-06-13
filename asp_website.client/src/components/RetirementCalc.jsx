@@ -4,7 +4,7 @@ import { BarChart, Bar, Rectangle, XAxis, Tooltip } from 'recharts';
 async function saveData(retirementData) {
     console.log("Attempting to send request to server");
 
-    const fetchToken = await fetch('retirementcalc', {
+    const fetchToken = await fetch('retirementcalcdata', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
