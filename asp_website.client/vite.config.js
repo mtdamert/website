@@ -84,6 +84,10 @@ export default defineConfig({
                 target,
                 secure: false
             },
+            '^/retirementcalcdata$': {
+                target,
+                secure: false
+            },
         },
         port: 5173,
         https: {
