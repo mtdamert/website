@@ -84,7 +84,11 @@ export default defineConfig({
                 target,
                 secure: false
             },
-            '^/retirementcalcdata$': {
+            '^/retirementcalcdata/savedata$': {
+                target,
+                secure: false
+            },
+            '^/retirementcalcdata/loaddata$': {
                 target,
                 secure: false
             },

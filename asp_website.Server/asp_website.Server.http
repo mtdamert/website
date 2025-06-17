@@ -46,3 +46,12 @@ Content-Type: application/json
     "email": "foo@bar.com",
     "body": "test test test"
 }
+###
+
+POST {{asp_website.Server_HostAddress}}/retirementcalcdata/LoadData
+Accept: application/json
+Content-Type: application/json
+
+{
+    "emailAddress": "foo@bar.com"
+}

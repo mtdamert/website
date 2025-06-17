@@ -6,7 +6,6 @@ using System.Xml.Serialization;
 namespace asp_website.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class RetirementCalcDataController : ControllerBase
     {
         List<RetirementCalcData>? retirementCalcDataList;
@@ -18,20 +17,21 @@ namespace asp_website.Server.Controllers
             if (System.IO.File.Exists(retirementCalcDataPath))
             {
                 // Load all retirement calc data from file 
-                string json = System.IO.File.ReadAllText(retirementCalcDataPath);
-                if (!string.IsNullOrEmpty(json))
+                XmlSerializer serializer = new XmlSerializer(typeof(List<RetirementCalcData>));
+                using (StreamReader reader = new StreamReader(retirementCalcDataPath))
                 {
-                    List<RetirementCalcData>? items = JsonSerializer.Deserialize<List<RetirementCalcData>>(json);
-                    if (items != null && items.Count > 0)
-                        retirementCalcDataList = items;
+                    var deserializedFile = serializer.Deserialize(reader);
+                    if (deserializedFile != null)
+                        retirementCalcDataList = (List<RetirementCalcData>)deserializedFile;
+                    else
+                        retirementCalcDataList = new List<RetirementCalcData>();
                 }
             }
-
         }
 
+        // TODO: Handle in database
         private void Save()
         {
-            // TODO: Write this
             using (StreamWriter xmlWriter = new StreamWriter(retirementCalcDataPath))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(List<RetirementCalcData>));
@@ -39,8 +39,9 @@ namespace asp_website.Server.Controllers
             }
         }
 
-        [HttpGet]
-        public RetirementCalcData? Get(string emailAddress)
+        [HttpPost]
+        [Route("[controller]/loaddata")]
+        public RetirementCalcData? LoadData([FromBody] string? emailAddress)
         {
             if (emailAddress != null && retirementCalcDataList != null)
             {
@@ -52,7 +53,8 @@ namespace asp_website.Server.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] RetirementCalcData updatedData)
+        [Route("[controller]/savedata")]
+        public void SaveData([FromBody] RetirementCalcData updatedData)
         {
             if (retirementCalcDataList == null)
             {

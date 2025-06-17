@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import { BarChart, Bar, Rectangle, XAxis, Tooltip } from 'recharts';
 
 async function saveData(retirementData) {
-    console.log("Attempting to send request to server");
-
-    const fetchToken = await fetch('retirementcalcdata', {
+    const fetchToken = await fetch('retirementcalcdata/savedata', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -12,12 +10,39 @@ async function saveData(retirementData) {
         },
         body: JSON.stringify(retirementData)
     });
+}
 
-    console.log("Finished attempting to send request to server");
+async function loadData(emailAddress) {
+    console.log("Loading data from the server");
+    console.log("sending email address to server: ");
+    console.log(emailAddress);
+
+    const response = await fetch('retirementcalcdata/loaddata', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailAddress)
+    });
+    if (!response.ok) {
+        console.log("ERROR! Unable to load data from the server");
+    }
+
+    const data = await response.json();
+    console.log("data from server: ");
+    console.log(data);
+
+    // TODO: Load this data into the appropriate fields on this page
+
+    console.log("Finished loading data from the server");
 }
 
 function RetirementCalc({ emailAddress }) {
-    // TODO: If emailAddress exists, we are logged in and can save data
+    console.log("email address: " + emailAddress);
+    // Load from the server
+    useEffect(() => { loadData(emailAddress) }, []);
+
     const [currentSavings, setCurrentSavings] = useState(0);
     const [currentPostTaxSavings, setCurrentPostTaxSavings] = useState(0);
     const [currentRetirementSavings, setCurrentRetirementSavings] = useState(0);
