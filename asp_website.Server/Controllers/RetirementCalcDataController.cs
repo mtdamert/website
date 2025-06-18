@@ -64,8 +64,21 @@ namespace asp_website.Server.Controllers
             RetirementCalcData? data = retirementCalcDataList.FirstOrDefault(data => data.emailAddress == updatedData.emailAddress);
             if (data != null)
             {
-                // Update this data. TODO: Test this line
-                data = updatedData;
+                // Update this data
+                data.emailAddress = updatedData.emailAddress;
+                data.currentAge = updatedData.currentAge;
+                data.currentSavings = updatedData.currentSavings;
+                data.currentPostTaxSavings = updatedData.currentPostTaxSavings;
+                data.currentRetirementSavings = updatedData.currentRetirementSavings;
+                data.currentIncome = updatedData.currentIncome;
+                data.livingExpenses = updatedData.livingExpenses;
+                data.retirementAge = updatedData.retirementAge;
+                data.startSocialSecurityAge = updatedData.startSocialSecurityAge;
+                data.estSocialSecurityIncome = updatedData.estSocialSecurityIncome;
+                data.predictedYieldPct = updatedData.predictedYieldPct;
+                data.cpiPct = updatedData.cpiPct;
+                data.ageAtDeath = updatedData.ageAtDeath;
+                data.extrapolateCapGains = updatedData.extrapolateCapGains;
             }
             else
             {
