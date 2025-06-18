@@ -43,23 +43,25 @@ function RetirementCalc({ emailAddress }) {
     console.log("email address: " + emailAddress);
     // Load from the server
     useEffect(() => {
-        async function loadData () {
-            const data = await getData(emailAddress);
-            if (data != null) {
-                console.log("current savings: " + data.currentSavings);
-                setCurrentSavings(data.currentSavings);
-                setCurrentPostTaxSavings(data.currentPostTaxSavings);
-                setCurrentRetirementSavings(data.currentRetirementSavings);
-                setCurrentIncome(data.currentIncome);
-                setLivingExpenses(data.livingExpenses);
-                setCurrentAge(data.currentAge);
-                setRetirementAge(data.retirementAge);
-                setStartSocialSecurityAge(data.startSocialSecurityAge);
-                setEstSocialSecurityIncome(data.estSocialSecurityIncome);
-                setPredictedYieldPct(data.predictedYieldPct);
-                setCpiPct(data.cpiPct);
-                setAgeAtDeath(data.ageAtDeath);
-                setExtrapolateCapGains(data.extrapolateCapGains);
+        async function loadData() {
+            if (emailAddress != null && emailAddress != '') {
+                const data = await getData(emailAddress);
+                if (data != null) {
+                    console.log("current savings: " + data.currentSavings);
+                    setCurrentSavings(data.currentSavings);
+                    setCurrentPostTaxSavings(data.currentPostTaxSavings);
+                    setCurrentRetirementSavings(data.currentRetirementSavings);
+                    setCurrentIncome(data.currentIncome);
+                    setLivingExpenses(data.livingExpenses);
+                    setCurrentAge(data.currentAge);
+                    setRetirementAge(data.retirementAge);
+                    setStartSocialSecurityAge(data.startSocialSecurityAge);
+                    setEstSocialSecurityIncome(data.estSocialSecurityIncome);
+                    setPredictedYieldPct(data.predictedYieldPct);
+                    setCpiPct(data.cpiPct);
+                    setAgeAtDeath(data.ageAtDeath);
+                    setExtrapolateCapGains(data.extrapolateCapGains);
+                }
             }
         }
 
