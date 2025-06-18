@@ -12,7 +12,7 @@ async function saveData(retirementData) {
     });
 }
 
-async function loadData(emailAddress) {
+async function getData(emailAddress) {
     console.log("Loading data from the server");
     console.log("sending email address to server: ");
     console.log(emailAddress);
@@ -27,13 +27,14 @@ async function loadData(emailAddress) {
     });
     if (!response.ok) {
         console.log("ERROR! Unable to load data from the server");
+    } else {
+        const data = await response.json();
+        console.log("data from server: ");
+        console.log(data);
+
+        // Load this data into the appropriate fields on this page
+        return data;
     }
-
-    const data = await response.json();
-    console.log("data from server: ");
-    console.log(data);
-
-    // TODO: Load this data into the appropriate fields on this page
 
     console.log("Finished loading data from the server");
 }
@@ -41,7 +42,29 @@ async function loadData(emailAddress) {
 function RetirementCalc({ emailAddress }) {
     console.log("email address: " + emailAddress);
     // Load from the server
-    useEffect(() => { loadData(emailAddress) }, []);
+    useEffect(() => {
+        async function loadData () {
+            const data = await getData(emailAddress);
+            if (data != null) {
+                console.log("current savings: " + data.currentSavings);
+                setCurrentSavings(data.currentSavings);
+                setCurrentPostTaxSavings(data.currentPostTaxSavings);
+                setCurrentRetirementSavings(data.currentRetirementSavings);
+                setCurrentIncome(data.currentIncome);
+                setLivingExpenses(data.livingExpenses);
+                setCurrentAge(data.currentAge);
+                setRetirementAge(data.retirementAge);
+                setStartSocialSecurityAge(data.startSocialSecurityAge);
+                setEstSocialSecurityIncome(data.estSocialSecurityIncome);
+                setPredictedYieldPct(data.predictedYieldPct);
+                setCpiPct(data.cpiPct);
+                setAgeAtDeath(data.ageAtDeath);
+                setExtrapolateCapGains(data.extrapolateCapGains);
+            }
+        }
+
+        loadData().catch(console.error);
+    }, []);
 
     const [currentSavings, setCurrentSavings] = useState(0);
     const [currentPostTaxSavings, setCurrentPostTaxSavings] = useState(0);
