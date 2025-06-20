@@ -25,19 +25,19 @@ function MyAccount({ emailAddress, username, setToken }) {
     // TODO: Make sure the username gets updated after it has been saved and this page is reloaded
 
     return (
-        <div>
+        <div class="content">
             <form onSubmit={handleSubmit} className="p-2 bg-blue-200">
                 <div>
                     <span className="font-bold">Username: </span>
                     <input id="userInput" value={userInput} onChange={e => setUserInput(e.target.value)} className="border-2" />
                 </div>
-                <div>
+                <div className="pt-2">
                     <span className="font-bold">Password: </span>
                     <input onChange={e => setPassInput(e.target.value)} className="border-2" />
                 </div>
                 <div>etc.</div>
-                <div className="pt-4 float-center">
-                    <button type="submit" className="bg-gray-100 p-1 px-2 float-center">Update</button>
+                <div className="pt-8 place-self-center">
+                    <button type="submit">Update</button>
                 </div>
             </form>
         </div>
