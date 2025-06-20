@@ -400,7 +400,7 @@ function RetirementCalc({ emailAddress }) {
 
                     {
                         (emailAddress != null && emailAddress != "")
-                            ? <div><button type="submit">Save Data for Next Use</button></div>
+                            ? <div className="place-self-center"><button type="submit">Save Data for Next Use</button></div>
                             : <div></div>
                     }
 
