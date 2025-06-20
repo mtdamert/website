@@ -85,10 +85,13 @@ function RetirementCalc({ emailAddress }) {
     const [zeroSavingsAge, setZeroSavingsAge] = useState(40);
     const [data, setData] = useState([]);
 
+    const [isSaveDisabled, setIsSaveDisabled] = useState(true);
+
     const [zeroSavingsAgeColor, setZeroSavingsAgeColor] = useState('text-black');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsSaveDisabled(true);
         const saveDataResult = await saveData({
             emailAddress,
             currentAge,
@@ -246,7 +249,7 @@ function RetirementCalc({ emailAddress }) {
                             </label>
                             <input type="number"
                                 value={currentAge}
-                                onChange={(e) => { setCurrentAge(Number(e.target.value)); } }
+                                onChange={(e) => { setCurrentAge(Number(e.target.value)); setIsSaveDisabled(false); } }
                                 className="float-right border text-right w-12"
                             />
                     </div>
@@ -257,7 +260,7 @@ function RetirementCalc({ emailAddress }) {
                         </label>{/* todo: sanitize input */}
                         <input type="text"
                             value={currentSavings}
-                            onChange={(e) => { setCurrentSavings(e.target.value); setCurrentPostTaxSavings(0); setCurrentRetirementSavings(0); } } 
+                            onChange={(e) => { setCurrentSavings(e.target.value); setCurrentPostTaxSavings(0); setCurrentRetirementSavings(0); setIsSaveDisabled(false); } } 
                             className="float-right border text-right w-30"
                         />
                     </div>
@@ -271,7 +274,7 @@ function RetirementCalc({ emailAddress }) {
                             <input type="text"
                                 value={[currentPostTaxSavings]}
                                 onChange={
-                                    (e) => { setCurrentPostTaxSavings(e.target.value); setSavings(Number(e.target.value) + Number(currentRetirementSavings)); }
+                                    (e) => { setCurrentPostTaxSavings(e.target.value); setSavings(Number(e.target.value) + Number(currentRetirementSavings)); setIsSaveDisabled(false); }
                                 } 
                                 className="float-right border text-right w-30"
                             />
@@ -284,7 +287,7 @@ function RetirementCalc({ emailAddress }) {
                             <input type="text"
                                 value={currentRetirementSavings}
                                 onChange={
-                                    (e) => { setCurrentRetirementSavings(e.target.value); setSavings(Number(e.target.value) + Number(currentPostTaxSavings)); }
+                                    (e) => { setCurrentRetirementSavings(e.target.value); setSavings(Number(e.target.value) + Number(currentPostTaxSavings)); setIsSaveDisabled(false); }
                                 } 
                                 className="float-right border text-right w-30"
                             />
@@ -298,7 +301,7 @@ function RetirementCalc({ emailAddress }) {
                         </label>
                         <input type="text"
                             value={currentIncome}
-                            onChange={(e) => { setCurrentIncome(e.target.value); } }
+                            onChange={(e) => { setCurrentIncome(e.target.value); setIsSaveDisabled(false); } }
                             className="float-right border text-right w-30"
                         />
                     </div>
@@ -309,7 +312,7 @@ function RetirementCalc({ emailAddress }) {
                         </label>{/* todo: sanitize input */}
                         <input type="text"
                             value={livingExpenses}
-                                onChange={(e) => { console.log("living expenses - e.target.value: " + e.target.value); setLivingExpenses(e.target.value); }}
+                                onChange={(e) => { console.log("living expenses - e.target.value: " + e.target.value); setLivingExpenses(e.target.value); setIsSaveDisabled(false); }}
                             className="float-right border text-right w-24"
                         />
                     </div>
@@ -320,7 +323,7 @@ function RetirementCalc({ emailAddress }) {
                         </label>
                         <input type="number"
                             value={retirementAge}
-                            onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); }}
+                            onChange={(e) => { setRetirementAge(e.target.value); if (startSocialSecurityAge === 0) setStartSocialSecurityAge(e.target.value); setIsSaveDisabled(false); }}
                             className="float-right border text-right w-12"
                         />
                     </div>{/* todo: Use this value, and also add a 'yearly income' value */}
@@ -331,7 +334,7 @@ function RetirementCalc({ emailAddress }) {
                         </label>
                         <input type="number"
                             value={startSocialSecurityAge}
-                            onChange={(e) => { setStartSocialSecurityAge(e.target.value); } }
+                            onChange={(e) => { setStartSocialSecurityAge(e.target.value); setIsSaveDisabled(false); } }
                             className="float-right border text-right w-12"
                         />
                     </div>{/* TODO: Create a tooltip that leads to: https://www.ssa.gov/OACT/quickcalc/ */}
@@ -342,7 +345,7 @@ function RetirementCalc({ emailAddress }) {
                         </label>
                         <input type="text"
                             value={estSocialSecurityIncome}
-                            onChange={(e) => { setEstSocialSecurityIncome(e.target.value); } }
+                            onChange={(e) => { setEstSocialSecurityIncome(e.target.value); setIsSaveDisabled(false); } }
                             className="float-right border text-right w-24"
                         />
                     </div>
@@ -355,7 +358,7 @@ function RetirementCalc({ emailAddress }) {
                         <span className="float-right">%</span>
                         <input type="number"
                             value={predictedYieldPct}
-                            onChange={(e) => { setPredictedYieldPct(e.target.value); } }
+                            onChange={(e) => { setPredictedYieldPct(e.target.value); setIsSaveDisabled(false); } }
                             className="float-right border text-right w-12"
                         />
                     </div>
@@ -367,7 +370,7 @@ function RetirementCalc({ emailAddress }) {
                         <span className="float-right">%</span>
                         <input type="number"
                             value={cpiPct}
-                            onChange={(e) => { setCpiPct(e.target.value); } }
+                            onChange={(e) => { setCpiPct(e.target.value); setIsSaveDisabled(false); } }
                             className="float-right border text-right w-12"
                         />
                     </div>
@@ -379,7 +382,7 @@ function RetirementCalc({ emailAddress }) {
                         </label>
                         <input type="number"
                             value={ageAtDeath}
-                            onChange={(e) => { setAgeAtDeath(e.target.value); } }
+                            onChange={(e) => { setAgeAtDeath(e.target.value); setIsSaveDisabled(false); } }
                             className="float-right border text-right w-12"
                         />
                     </div>
@@ -390,7 +393,7 @@ function RetirementCalc({ emailAddress }) {
                         </label>
                         <input type="checkbox"
                             value={extrapolateCapGains}
-                            onChange={(e) => { setExtrapolateCapGains(e.target.value); } }
+                            onChange={(e) => { setExtrapolateCapGains(e.target.value); setIsSaveDisabled(false); } }
                             className="float-right border text-right"
                         />
                     </div>
@@ -400,7 +403,7 @@ function RetirementCalc({ emailAddress }) {
 
                     {
                         (emailAddress != null && emailAddress != "")
-                            ? <div className="place-self-center"><button type="submit">Save Data for Next Use</button></div>
+                            ? <div className="place-self-center"><button disabled={isSaveDisabled} type="submit">Save Data for Next Use</button></div>
                             : <div></div>
                     }
 
