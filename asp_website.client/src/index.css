@@ -82,6 +82,11 @@ button:hover {
     cursor: pointer;
 }
 
+button:disabled {
+    background-color: #999999;
+    cursor: auto;
+}
+
 p {
     margin: 0px;
 }
