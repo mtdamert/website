@@ -128,7 +128,7 @@ function App() {
             {/*    This website uses cookies to enhance the user experience.*/}
             {/*</CookieConsent>*/}
             <BrowserRouter>
-                <div id="top" className="bg-gray-900 py-1 mb-2">
+                <div id="top">
                     <div id="logInLink" className="px-4">
                         { renderLogInLink(token) }
                     </div>
@@ -140,7 +140,8 @@ function App() {
                         <Header isAdmin={isAdmin(token)} verifiedEmail={emailIsVerified(token)} />
                     </div>
                 </div>
-                <div className="px-8">
+                <div className="py-2 mb-16" /> {/*we need this DIV to create spacing between the top nav bar and the page's content*/}
+                <div className="px-8 mb-16">
                     <Routes>
                         <Route path="/" element={<AboutPage />} />
                         <Route path="/test" element={<TestPage />} />

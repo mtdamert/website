@@ -46,6 +46,13 @@ input:focus, input:focus-visible, input:active, input:hover, textarea:focus, tex
     margin: 0 auto;
 }
 
+#top {
+    background: #111826;
+    padding-block: 4px;
+    position: fixed;
+    width: 100%;
+}
+
 .title {
     color: #000;
     font-size: 24px;
