@@ -1,9 +1,22 @@
 import { Outlet, Link } from "react-router-dom";
 
+function renderLink(link) {
+    return(
+        <span key = {`${link.label}_span`} className = "px-2 " >
+            <Link key={link.label} to={link.path} class="menu-link-item" >
+                {link.label}
+            </Link>
+        </span >
+    );
+}
+
 function Header(props) {
     const links = [
-        { label: 'Tetris', path: '/tetris', adminOnly: false, verifiedOnly: false },
-        { label: 'Arkanoid', path: '/arkanoid', adminOnly: false, verifiedOnly: false },
+        {
+            label: 'Games', path: null, adminOnly: false, verifiedOnly: false, children:
+                [ { label: 'Tetris', path: '/tetris', adminOnly: false, verifiedOnly: false },
+                  { label: 'Arkanoid', path: '/arkanoid', adminOnly: false, verifiedOnly: false }, ]
+        },
         { label: 'Retirement Calculator', path: '/retirement-calc', adminOnly: false, verifiedOnly: false },
         { label: '3D Graphics', path: '/art', adminOnly: false, verifiedOnly: false },
         //{ label: 'Days Since App', path: 'days-since', adminOnly: false, verifiedOnly: false },
@@ -12,14 +25,12 @@ function Header(props) {
         { label: 'Home', path: '/about', adminOnly: false, verifiedOnly: false },
     ];
 
+
     const renderedLinks = links.map((link, index) => {
-        return ((!(link.adminOnly && !props.isAdmin))
-            && (!(link.verifiedOnly && !props.verifiedEmail)))
-            ? <span key={`${link.label}_span`} className="px-2 "><Link
-            key={link.label}
-            to={link.path}
-            className="mb-3 font-bold h-full text-blue-500 hover:underline"
-            >{link.label}</Link></span>
+        return ((!(link.adminOnly && !props.isAdmin)) && (!(link.verifiedOnly && !props.verifiedEmail))) // only render buttons that this user has permission for
+            ? ((link.path != null) ? renderLink(link)
+            : <span key={`${link.label}_span`} className="px-2 "><span key={link.label} to={link.path} // render a parent
+                    class="menu-parent-item">{link.label}</span></span>)
             : <span key={`${link.label}_span`}></span>;
     });
 
