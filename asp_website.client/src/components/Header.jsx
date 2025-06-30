@@ -1,12 +1,31 @@
 import { Outlet, Link } from "react-router-dom";
 
 function renderLink(link) {
-    return(
-        <span key = {`${link.label}_span`} className = "px-2 " >
-            <Link key={link.label} to={link.path} class="menu-link-item" >
+    return (
+        <span key={`${link.label}_span`}>
+            <Link key={link.label} to={link.path} class="menu-link-item">
                 {link.label}
             </Link>
-        </span >
+        </span>
+    );
+}
+
+function renderDropdownColumn(header) {
+    // TODO: This should just return the header text, but it should also show its children on hover
+
+    return (
+        <span class="menu-parent-item">
+            <span key={`${header.label}_span`} class="menu-parent-item">
+                {header.label}
+            </span>
+            {header.children.map((childLink, index) => {
+                return (<span key={`${childLink.label}_span`}>
+                    <Link key={childLink.label} to={childLink.path} class="menu-child-item">
+                        {childLink.label}
+                    </Link>
+                </span>);
+            })}
+        </span>
     );
 }
 
@@ -28,10 +47,8 @@ function Header(props) {
 
     const renderedLinks = links.map((link, index) => {
         return ((!(link.adminOnly && !props.isAdmin)) && (!(link.verifiedOnly && !props.verifiedEmail))) // only render buttons that this user has permission for
-            ? ((link.path != null) ? renderLink(link)
-            : <span key={`${link.label}_span`} className="px-2 "><span key={link.label} to={link.path} // render a parent
-                    class="menu-parent-item">{link.label}</span></span>)
-            : <span key={`${link.label}_span`}></span>;
+            ? ((link.path != null) ? renderLink(link) : renderDropdownColumn(link)) // render a link or a header and its child links
+            : <span key={`${link.label}_span`}></span>; // render nothing
     });
 
     return (

@@ -99,6 +99,7 @@ p {
 }
 
 .menu-parent-item {
+    padding: 0px 4px;
     margin-bottom: 3px;
     font-weight: 700;
     height: 100%;
@@ -106,12 +107,29 @@ p {
 }
 
 .menu-link-item {
+    padding: 0px 4px;
     margin-bottom: 3px;
     font-weight: 700;
     height: 100%;
-    color:#2b7fff;
+    color: #2b7fff;
 }
 
 .menu-link-item:hover {
     text-decoration: underline;
+}
+
+.menu-child-item {
+/*    display: none;
+*/
+display: block;
+
+background-color: #111826;
+    padding: 4px 16px;
+    color: #2b7fff;
+    font-weight: 700;
+    z-index: 1;
+}
+
+.menu-parent-item:hover .menu-child-item {
+    display: block;
 }
