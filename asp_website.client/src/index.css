@@ -118,16 +118,25 @@ p {
     text-decoration: underline;
 }
 
-.menu-child-item {
-/*    display: none;
-*/
-display: block;
+.menu-dropdown-wrapper {
+    position: absolute;
+    margin-top: 0px;
+    padding-top: 8px;
+    margin-left: 256px;
+}
 
-background-color: #111826;
-    padding: 4px 16px;
+.menu-child-item {
+    display: none; /* DEBUG: set this to 'block' for testing, but this should be 'none' */
+    height: 32px;
+    background-color: #111826;
+    padding: 0px 16px;
     color: #2b7fff;
     font-weight: 700;
     z-index: 1;
+}
+
+.menu-parent-item:hover {
+    color: #b4871c;
 }
 
 .menu-parent-item:hover .menu-child-item {

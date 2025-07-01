@@ -18,13 +18,15 @@ function renderDropdownColumn(header) {
             <span key={`${header.label}_span`} class="menu-parent-item">
                 {header.label}
             </span>
-            {header.children.map((childLink, index) => {
-                return (<span key={`${childLink.label}_span`}>
-                    <Link key={childLink.label} to={childLink.path} class="menu-child-item">
-                        {childLink.label}
-                    </Link>
-                </span>);
-            })}
+            <div class="menu-dropdown-wrapper">
+                {header.children.map((childLink, index) => {
+                    return (<div key={`${childLink.label}_span`}>
+                        <Link key={childLink.label} to={childLink.path} class="menu-child-item">
+                            {childLink.label}
+                        </Link>
+                    </div>);
+                })}
+            </div>
         </span>
     );
 }
@@ -36,7 +38,11 @@ function Header(props) {
                 [ { label: 'Tetris', path: '/tetris', adminOnly: false, verifiedOnly: false },
                   { label: 'Arkanoid', path: '/arkanoid', adminOnly: false, verifiedOnly: false }, ]
         },
-        { label: 'Retirement Calculator', path: '/retirement-calc', adminOnly: false, verifiedOnly: false },
+        {
+            label: 'Retirement Calculator', adminOnly: false, verifiedOnly: false, children:
+                [{ label: 'Retirement Calc', path: '/retirement-calc', adminOnly: false, verifiedOnly: false }, // DEBUG: We don't need a child here, but this is added for testing
+                ]
+        },
         { label: '3D Graphics', path: '/art', adminOnly: false, verifiedOnly: false },
         //{ label: 'Days Since App', path: 'days-since', adminOnly: false, verifiedOnly: false },
         { label: 'Mike\'s Tests', path: '/test', adminOnly: true, verifiedOnly: false },
