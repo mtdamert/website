@@ -233,13 +233,11 @@ function RetirementCalc({ emailAddress }) {
 
     return (
         <div class="content">
-            <div>
-                <div class="title">Retirement Calculator</div>
-                <div className="pl-8">
-                    <label className="italic">
-                        For use with US taxes
-                    </label>
-                </div>
+            <div class="title">Retirement Calculator</div>
+            <div className="pl-8">
+                <label className="italic">
+                    For use with US taxes
+                </label>
             </div>
             <div class="form-background">
                 <form onSubmit={handleSubmit} className="inline-block">
