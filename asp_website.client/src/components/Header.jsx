@@ -2,8 +2,8 @@ import { Outlet, Link } from "react-router-dom";
 
 function renderLink(link) {
     return (
-        <span key={`${link.label}_span`}>
-            <Link key={link.label} to={link.path} class="menu-link-item">
+        <span key={`${link.label}_span`} class="menu-link-item">
+            <Link key={link.label} to={link.path}>
                 {link.label}
             </Link>
         </span>
@@ -11,7 +11,7 @@ function renderLink(link) {
 }
 
 function renderDropdownColumn(header) {
-    // TODO: This should just return the header text, but it should also show its children on hover
+    // This justs displays the header text, but if you hover over it, it also shows its children
 
     return (
         <span class="menu-parent-item">
@@ -20,8 +20,8 @@ function renderDropdownColumn(header) {
             </span>
             <div class="menu-dropdown-wrapper">
                 {header.children.map((childLink, index) => {
-                    return (<div key={`${childLink.label}_span`}>
-                        <Link key={childLink.label} to={childLink.path} class="menu-child-item">
+                    return (<div key={`${childLink.label}_span`} class="menu-child-item">
+                        <Link key={childLink.label} to={childLink.path}>
                             {childLink.label}
                         </Link>
                     </div>);
@@ -38,11 +38,7 @@ function Header(props) {
                 [ { label: 'Tetris', path: '/tetris', adminOnly: false, verifiedOnly: false },
                   { label: 'Arkanoid', path: '/arkanoid', adminOnly: false, verifiedOnly: false }, ]
         },
-        {
-            label: 'Retirement Calculator', adminOnly: false, verifiedOnly: false, children:
-                [{ label: 'Retirement Calc', path: '/retirement-calc', adminOnly: false, verifiedOnly: false }, // DEBUG: We don't need a child here, but this is added for testing
-                ]
-        },
+        { label: 'Retirement Calculator', path: '/retirement-calc', adminOnly: false, verifiedOnly: false, },
         { label: '3D Graphics', path: '/art', adminOnly: false, verifiedOnly: false },
         //{ label: 'Days Since App', path: 'days-since', adminOnly: false, verifiedOnly: false },
         { label: 'Mike\'s Tests', path: '/test', adminOnly: true, verifiedOnly: false },
@@ -58,8 +54,8 @@ function Header(props) {
     });
 
     return (
-        <div className="container mx-auto gap-2 mt-4 mb-6">
-            <div className="top-0 text-center">
+        <div className="container gap-2 mt-4 mb-2">
+            <div className="top-0 text-left ml-24">
                 {renderedLinks}
             </div>
             <div>

@@ -11,6 +11,10 @@ body {
     margin: 0px;
 }
 
+.page {
+    display: flex;
+}
+
 .form-background {
     background-image: linear-gradient(#bfdbfe, #8ab3e6, #bfdbfe);
     padding: 16px;
@@ -19,10 +23,11 @@ body {
 
 .content {
     margin: auto;
+    margin-top: 16px;
 }
 
 a {
-    color: #9a3412;
+    color: #2b7fff;
 }
 
 a:hover {
@@ -59,7 +64,7 @@ input:focus, input:focus-visible, input:active, input:hover, textarea:focus, tex
     font-weight: 600;
     line-height: calc(2 / 1.5);
     text-align: center;
-    padding: 0px 0px 4px 0px;
+    padding: 8px 0px 4px 0px;
 }
 
 tr:nth-child(even) {
@@ -99,6 +104,8 @@ p {
 }
 
 .menu-parent-item {
+    display: inline-block;
+    width: 112px;
     padding: 0px 4px;
     margin-bottom: 3px;
     font-weight: 700;
@@ -107,7 +114,9 @@ p {
 }
 
 .menu-link-item {
-    padding: 0px 4px;
+    display: inline-block;
+    width: 112px;
+    padding: 0px 0px;
     margin-bottom: 3px;
     font-weight: 700;
     height: 100%;
@@ -122,14 +131,14 @@ p {
     position: absolute;
     margin-top: 0px;
     padding-top: 8px;
-    margin-left: 256px;
+    margin-right: 80px;
 }
 
 .menu-child-item {
     display: none; /* DEBUG: set this to 'block' for testing, but this should be 'none' */
     height: 32px;
     background-color: #111826;
-    padding: 0px 16px;
+    padding: 0px 16px 0px 4px;
     color: #2b7fff;
     font-weight: 700;
     z-index: 1;
