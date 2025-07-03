@@ -6,7 +6,7 @@ function SignUpPage(props) {
     const { setToken } = useToken(props.updateAppToken);
 
     return (
-        <div className="flex">
+        <div class="page">
             <SignUp setToken={setToken} />
         </div>
     )

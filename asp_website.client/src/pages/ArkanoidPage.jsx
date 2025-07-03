@@ -2,7 +2,7 @@ import Arkanoid from '../components/Arkanoid.tsx';
 
 function ArkanoidPage() {
     return (
-        <div>
+        <div class="page">
             <Arkanoid />
         </div>
     )

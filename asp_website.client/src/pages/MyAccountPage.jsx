@@ -5,7 +5,7 @@ function MyAccountPage(props) {
     const { setToken } = useToken(props.updateAppToken);
 
     return (
-        <div className="flex h-full">
+        <div class="page">
             <MyAccount username={props.username} emailAddress={props.emailAddress} setToken={setToken} />
         </div>
     )

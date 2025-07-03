@@ -5,7 +5,7 @@ function LogInPage(props) {
     const { setToken } = useToken(props.updateAppToken);
 
     return (
-        <div className="flex">
+        <div class="page">
             <LogIn setToken={ setToken } />
         </div>
     )

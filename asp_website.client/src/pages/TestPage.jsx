@@ -2,7 +2,7 @@ import Test from '../components/Test';
 
 function TestPage() {
     return (
-        <div className="flex">
+        <div class="page">
             <Test />
         </div>
     )
