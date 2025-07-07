@@ -26,6 +26,11 @@ body {
     margin-top: 16px;
 }
 
+.content3d {
+    width: 100%;
+    height: 100lvh;
+}
+
 a {
     color: #2b7fff;
 }
