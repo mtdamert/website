@@ -38,6 +38,25 @@ function Art(props) {
         }), []
     );
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+    }
+
+    const pauseClicked = (event) => {
+        if (isClockRunning) {
+            const pauseButton = document.getElementById("pauseButton");
+            pauseButton.innerText = "UNPAUSE";
+
+            setSavedHour(hour);
+            setSavedMinute(minute);
+        } else {
+            const pauseButton = document.getElementById("pauseButton");
+            pauseButton.innerText = "PAUSE";
+        }
+
+        setIsClockRunning(!isClockRunning);
+    }
+
     function SetUiTime(hour, minute) {
         const currentHourInput = document.getElementById("currentHourInput");
         currentHourInput.value = "" + hour;
@@ -405,11 +424,15 @@ function Art(props) {
     return (
         <div class="content content3d">
             <div class="title">3D Graphics</div>
-            <div><span className="italic">(work in progress)</span> - current time:
-                <input id="currentHourInput" className="w-5 text-right" value="05" onChange={changeTime} />
-                :
-                <input id="currentMinuteInput" className="w-5 text-right" value="20" onChange={changeTime} />
-                <span className="invisible" id="currentTimeSpan" />
+            <div class="form-background">
+                <form onSubmit={handleSubmit}>
+                    <span className="italic">(work in progress)</span> - <span className="font-semibold">Current Time: </span>
+                    <input id="currentHourInput" className="w-5 text-right" value="05" onChange={changeTime} />
+                    :
+                    <input id="currentMinuteInput" className="w-5 text-right" value="20" onChange={changeTime} />
+                    <span className="invisible" id="currentTimeSpan" />
+                    <button id="pauseButton" onClick={pauseClicked}>PAUSE</button>
+                </form>
             </div>
             <div id="hiddenDiv" className="invisible italic">Hide Menu button was pressed</div>
             <div className="flex w-full h-full">
