@@ -21,11 +21,9 @@ function Art(props) {
     const font = new FontLoader().parse(almendra);
     const [hideMenu, setHideMenu] = useState(false);
     const [clockButton, setClockButton] = useState({ text: 'Stop Clock', textOffset: 0.3, age: 30 });
-    const [isClockRunning, setIsClockRunning] = useState(true);
-    const [savedHour, setSavedHour] = useState(5);
-    const [savedMinute, setSavedMinute] = useState(0);
-    let hour = savedHour;
-    let minute = savedMinute;
+    const isClockRunning = useRef(true);
+    const savedHour = useRef(5);
+    const savedMinute = useRef(0);
 
     const uniforms = useMemo(
         () => ({
@@ -43,18 +41,15 @@ function Art(props) {
     }
 
     const pauseClicked = (event) => {
-        if (isClockRunning) {
+        if (isClockRunning.current) {
             const pauseButton = document.getElementById("pauseButton");
             pauseButton.innerText = "UNPAUSE";
-
-            setSavedHour(hour);
-            setSavedMinute(minute);
         } else {
             const pauseButton = document.getElementById("pauseButton");
             pauseButton.innerText = "PAUSE";
         }
 
-        setIsClockRunning(!isClockRunning);
+        isClockRunning.current = !isClockRunning.current;
     }
 
     function SetUiTime(hour, minute) {
@@ -127,27 +122,25 @@ function Art(props) {
         const [, forceUpdate] = useReducer(x => x + 1, 0);
 
         // TODO: Call this when we return to normal time
-        const setCurrentTime = (currentHour, currentMinute) => {
-            const currentTime = currentHour + (currentMinute / 60.0);
+        //const setCurrentTime = (currentHour, currentMinute) => {
+        //    const currentTime = currentHour + (currentMinute / 60.0);
 
-            adjustedSunInclination.current = (currentTime / 12.0) - 0.55; // in range of (0, 2)
-        }
+        //    adjustedSunInclination.current = (currentTime / 12.0) - 0.55; // in range of (0, 2)
+        //}
 
         useFrame((state, delta) => {
-            if (isClockRunning) {
+            if (isClockRunning.current) {
                 adjustedSunInclination.current += (delta / 20.0);
                 forceUpdate();
 
                 // Update global clock and onscreen time
                 const currentTimeSpan = document.getElementById("currentTimeSpan");
                 const currentTime = ((12 * (0.55 + adjustedSunInclination.current)) % 24);
-                hour = Math.trunc(currentTime);
-                minute = (currentTime % 1) * (6 / 10);
-                currentTimeSpan.innerText = "" + hour + ":" + Math.trunc(minute * 10) + Math.trunc(minute * 100 % 10);
+                savedHour.current = Math.trunc(currentTime);
+                savedMinute.current = (currentTime % 1) * (6 / 10);
+                currentTimeSpan.innerText = "" + savedHour.current + ":" + Math.trunc(savedMinute.current * 10) + Math.trunc(savedMinute.current * 100 % 10);
 
-                SetUiTime(hour, minute);
-            } else {
-                SetUiTime(savedHour, savedMinute);
+                SetUiTime(savedHour.current, savedMinute.current);
             }
         })
 
@@ -155,7 +148,7 @@ function Art(props) {
         return (
             <mesh ref={mesh}>
                 <Sky ref={skyRef} distance={100} inclination={0.55 + adjustedSunInclination.current} azimuth={0.3} rayleigh={1} {...props} />
-                <Stars radius={100} depth={50} count={(hour > 6 && hour < 18) ? 0 : 5000} factor={4} saturation={0} fade speed={1} />
+                <Stars radius={100} depth={50} count={(savedHour.current > 6 && savedHour.current < 18) ? 0 : 5000} factor={4} saturation={0} fade speed={1} />
             </mesh>
         )
     }
@@ -169,7 +162,7 @@ function Art(props) {
 
         useFrame((state, delta) => {
 
-            if (hour > 6 && hour < 18) { // day
+            if (savedHour.current > 6 && savedHour.current < 18) { // day
                 ambientIntensity.current = Math.PI / 4;
                 pointIntensity.current = Math.PI * 2;
                 lightColor.current = [1.0, 1.0, 1.0];
@@ -384,14 +377,14 @@ function Art(props) {
         //    ((active) ? mesh.current.rotation.y += delta : mesh.current.rotation.y -= delta);
         //});
         useFrame((state, delta) => {
-            if (active && isClockRunning) {
+            if (active && isClockRunning.current) {
                 mesh.current.position.x += delta;
             }
             if (mesh.current.position.x > 22) {
                 mesh.current.position.x = -5;
             }
 
-            if (active && isClockRunning) {
+            if (active && isClockRunning.current) {
                 mixer.update(delta);
             }
         });
@@ -457,17 +450,18 @@ function Art(props) {
                         text={'Hide Menu'} textOffset={0.3} />}
                     {<Button3D scale={0.25} position={[-3.0, 1.7, 0]} text={clockButton.text}
                         onClick={(event) => {
-                            if (!isClockRunning) {
+                            // TODO: Can I say 'event.preventDefault()' and not force a page refresh here? 
+                            if (!isClockRunning.current) {
                                 setClockButton({ text: 'Stop Clock', textOffset: 0.3, age: 30 });
                             //    hour = savedHour;
                             //    minute = savedMinute;
                             }
                             else {
                                 setClockButton({ text: 'Restart Clock', textOffset: 0.4, age: 30 });
-                                setSavedHour(hour);
-                                setSavedMinute(minute);
+                                //savedHour.current = hour;
+                                //savedMinute.current = minute;
                             }
-                            setIsClockRunning(!isClockRunning);
+                            isClockRunning = !isClockRunning.current;
                         }}
                         textOffset={clockButton.textOffset} />}
                     {<Button3D scale={0.25} position={[-3.0, 1.4, 0]} text={'Option 3'} textOffset={0.23} />}
