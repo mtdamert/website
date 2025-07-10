@@ -238,13 +238,16 @@ function Art(props) {
 
     function MyAnimatedBox(props) {
         const myMesh = useRef();
+        const [boxMouseHover, setBoxMouseHover] = useState(false);
 
         useFrame(({ clock }) => {
-            myMesh.current.rotation.x = clock.getElapsedTime();
+            if (!boxMouseHover)
+                myMesh.current.rotation.x = clock.getElapsedTime();
         })
 
         return (
             <mesh {...props}
+                onPointerEnter={() => setBoxMouseHover(true)} onPointerLeave={() => setBoxMouseHover(false)}
                 ref={myMesh}>
                 <boxGeometry />
                 <meshBasicMaterial color="cornflowerblue" />
@@ -461,7 +464,7 @@ function Art(props) {
                                 //savedHour.current = hour;
                                 //savedMinute.current = minute;
                             }
-                            isClockRunning = !isClockRunning.current;
+                            isClockRunning.current = !isClockRunning.current;
                         }}
                         textOffset={clockButton.textOffset} />}
                     {<Button3D scale={0.25} position={[-3.0, 1.4, 0]} text={'Option 3'} textOffset={0.23} />}
