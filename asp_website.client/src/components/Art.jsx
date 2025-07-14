@@ -1,7 +1,7 @@
 import React, { useRef, useState, useMemo, useReducer } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
 import { useGLTF, GradientTexture, Sky, OrbitControls, Clouds, Cloud, Stars } from '@react-three/drei';
-import { AnimationMixer, Color, BackSide, MathUtils, MeshBasicMaterial } from 'three';
+import { AnimationMixer, Color, BackSide, MathUtils, MeshBasicMaterial, Vector3 } from 'three';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
@@ -22,19 +22,13 @@ function Art(props) {
     const [hideMenu, setHideMenu] = useState(false);
     const [clockButton, setClockButton] = useState({ text: 'Stop Clock', textOffset: 0.3, age: 30 });
     const isClockRunning = useRef(true);
-    const savedHour = useRef(5);
+    const savedHour = useRef(4);
     const savedMinute = useRef(0);
+    // We have one light:
+    const ambientIntensity = useRef(Math.PI / 4);
+    const pointIntensity = useRef(Math.PI * 2);
+    const lightColor = useRef([1.0, 1.0, 1.0]);
 
-    const uniforms = useMemo(
-        () => ({
-            u_time: {
-                value: 0.0,
-            },
-            u_hover: {
-                value: false,
-            },
-        }), []
-    );
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -64,20 +58,43 @@ function Art(props) {
         // TODO
         const currentHourInput = document.getElementById("currentHourInput");
         const currentMinuteInput = document.getElementById("currentMinuteInput");
-
-
     }
 
     function GroundPlane(props) {
-        const myMesh = useRef();
+        const mesh = useRef();
+
+        // TODO: Only pass light color, not sand color
+        const uniforms = useMemo(
+            () => ({
+
+                u_ambientLightIntensity: {
+                    value: ambientIntensity,
+                },
+                u_pointLightIntensity: {
+                    value: pointIntensity,
+                },
+                u_lightColor: {
+                    value: new Vector3(lightColor.current[0], lightColor.current[1], lightColor.current[2]),
+                },
+                u_sandColor: {
+                    value: new Vector3(0.93, 0.79, 0.69),
+                },
+            }), []
+        );
+
+        useFrame(({ clock }) => {
+            mesh.current.material.uniforms.u_sandColor.value = new Vector3(0.93, 0.79, 0.69);
+            mesh.current.material.uniforms.u_lightColor.value = new Vector3(lightColor.current[0], lightColor.current[1], lightColor.current[2]);
+        });
 
         return (
-            <mesh {...props} ref={myMesh}>
+            <mesh {...props} ref={mesh}>
                 <planeGeometry args={[2.5, 1, 8, 8]} />
                 <meshBasicMaterial color={[0.93, 0.79, 0.69]} />
                 <shaderMaterial
                     vertexShader={stillWaveVertShader}
                     fragmentShader={sandFragShader}
+                    uniforms={uniforms}
                     side={BackSide}
                     //wireframe
                 />
@@ -89,6 +106,16 @@ function Art(props) {
         const mesh = useRef();
         const hover = useRef(false);
 
+        const uniforms = useMemo(
+            () => ({
+                u_time: {
+                    value: 0.0,
+                },
+                u_hover: {
+                    value: false,
+                },
+            }), []
+        );
 
         useFrame(({ clock }) => {
             mesh.current.material.uniforms.u_time.value = clock.getElapsedTime();
@@ -155,14 +182,11 @@ function Art(props) {
 
     function DayNightLights(props) {
         const mesh = useRef();
-        const ambientIntensity = useRef(Math.PI / 4);
-        const pointIntensity = useRef(Math.PI * 2);
-        const lightColor = useRef([1.0, 1.0, 1.0]);
         const [, forceUpdate] = useReducer(x => x + 1, 0);
 
         useFrame((state, delta) => {
 
-            if (savedHour.current > 6 && savedHour.current < 18) { // day
+            if (savedHour.current > 5 && savedHour.current < 18) { // day
                 ambientIntensity.current = Math.PI / 4;
                 pointIntensity.current = Math.PI * 2;
                 lightColor.current = [1.0, 1.0, 1.0];
@@ -242,7 +266,7 @@ function Art(props) {
 
         useFrame(({ clock }) => {
             if (!boxMouseHover)
-                myMesh.current.rotation.x = clock.getElapsedTime();
+                myMesh.current.rotation.x = clock.getElapsedTime(); // what is clock.getElapsedTime()? I'm assuming it gets time since last frame
         })
 
         return (
