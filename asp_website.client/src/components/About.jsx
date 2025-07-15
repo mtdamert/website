@@ -1,7 +1,7 @@
 function About() {
     return (
-        <div class="content" className="items-center px-3 pb-1.5 ">
-            <div className="pl-12 text-4xl font-semibold text-orange-800">
+        <div class="content">
+            <div className="pl-12 pt-8 text-4xl font-semibold text-orange-800">
                 Michael Damert
             </div>
             <div className="pl-16 pb-12 text-xl">
