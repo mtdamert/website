@@ -1,4 +1,6 @@
-var builder = WebApplication.CreateBuilder(args);
+using Resend;
+
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -7,7 +9,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+// Add the Resend API Key
+IConfiguration appSetting = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json")
+        .Build();
+string? apiKey = appSetting.GetValue<string>("RESEND_API_KEY", string.Empty);
+
+builder.Services.AddOptions();
+builder.Services.AddHttpClient<ResendClient>();
+builder.Services.Configure<ResendClientOptions>(o =>
+{
+    o.ApiToken = apiKey;
+});
+builder.Services.AddTransient<IResend, ResendClient>();
+
+
+WebApplication app = builder.Build();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
