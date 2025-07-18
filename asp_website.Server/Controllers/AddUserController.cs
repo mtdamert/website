@@ -4,8 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using SendGrid.Helpers.Mail;
-using SendGrid;
+using Resend;
 
 namespace asp_website.Server.Controllers
 {
@@ -54,7 +53,7 @@ namespace asp_website.Server.Controllers
         }
 
         [HttpPost(Name = "AddNewUser")]
-        public async Task<string> Post([FromBody] LogonCredentials newCredentials)
+        public async Task<string> Post([FromBody] LogonCredentials newCredentials, [FromServices] IResend resend)
         {
             if (newCredentials != null && !string.IsNullOrWhiteSpace(newCredentials.username)
                 && !string.IsNullOrWhiteSpace(newCredentials.emailAddress)
@@ -63,25 +62,21 @@ namespace asp_website.Server.Controllers
                 UserInfo? newUserInfo = user.AddUser(newCredentials.username, newCredentials.emailAddress, newCredentials.password);
                 if (newUserInfo != null)
                 {
+                    EmailMessage message = new EmailMessage();
+                    message.From = "mtdamert.com <mike@mtdamert.com>";
+                    message.To.Add(newCredentials.emailAddress);
+                    message.Subject = "Welcome to mtdamert.com!";
+
                     // Send confirmation email. Include GUID and userID
-                    string? apiKey = appSetting.GetValue<string>("SENDGRID_API_KEY", string.Empty);
-                    SendGridClient client = new SendGridClient(apiKey);
-                    EmailAddress from_email = new EmailAddress("mike@mtdamert.com", "mtdamert.com");
-
-                    string subject = "Welcome to mtdamert.com!";
-                    EmailAddress to_email = new EmailAddress(newCredentials.emailAddress);
-
                     string emailText = string.Empty;
                     emailText += "Thank you for signing up for mtdamert.com. If you have received this email in error, please ignore it.<br /><br />";
                     emailText += "Please click the following link to confirm your account:<br />";
                     emailText += "http://mtdamert.com/confirm-email?id=" + newUserInfo.userId + "&emailConfirmationGuid=" + newUserInfo.emailConfirmationGuid + " <br /><br />";
                     emailText += "Thanks,<br />";
-                    emailText += "Mike";
+                    emailText += "Michael";
+                    message.HtmlBody = emailText;
 
-                    string plainTextContent = emailText;
-                    string htmlContent = emailText;
-                    SendGridMessage msg = MailHelper.CreateSingleEmail(from_email, to_email, subject, plainTextContent, htmlContent);
-                    Response response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+                    ResendResponse<Guid> response = await resend.EmailSendAsync(message);
 
                     return CreateToken(newCredentials.username, newCredentials.emailAddress, UserInfo.Client, string.Empty);
                 }
