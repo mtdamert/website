@@ -69,7 +69,7 @@ export default function LogIn({ setToken }) {
                 <div className="pb-20">
                     <div className="pb-2">
                         <p>Email Address</p>
-                        <p>📧 <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="name" /></p>
+                        <p>📧 <input type="email" onChange={e => setEmailAddress(e.target.value)} className="border-2" autoComplete="email" /></p>
                     </div>
                     <div>
                         <p>Password</p>
