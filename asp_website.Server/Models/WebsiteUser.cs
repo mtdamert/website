@@ -134,7 +134,7 @@ namespace asp_website.Server.Models
 
         public UserInfo? AddUser(string username, string emailAddress, string password)
         {
-            if (!usersInfo.Any(userInfo => userInfo.username == username))
+            if (!usersInfo.Any(userInfo => userInfo.username == username || userInfo.emailAddress == emailAddress))
             {
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
                 byte[] salt = RandomNumberGenerator.GetBytes(16);
