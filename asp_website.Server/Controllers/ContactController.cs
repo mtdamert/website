@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using asp_website.Server.Models;
 using Microsoft.AspNetCore.Mvc;
-using asp_website.Server.Models;
-using SendGrid;
-using SendGrid.Helpers.Mail;
-using System.Net.Mail;
+using Resend;
+using System;
 using System.Net;
+using System.Net.Mail;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace asp_website.Server.Controllers
 {
@@ -25,27 +24,24 @@ namespace asp_website.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> Post([FromBody] EmailInfo emailInfo)
+        public async Task<bool> Post([FromBody] EmailInfo emailInfo, [FromServices] IResend resend)
         {
             if (emailInfo == null || string.IsNullOrWhiteSpace(emailInfo.sender) || string.IsNullOrWhiteSpace(emailInfo.body))
                 return false;
 
-            // This needs to be set for the email to work
-            string? apiKey = appSetting.GetValue<string>("SENDGRID_API_KEY", string.Empty);
-            SendGridClient client = new SendGridClient(apiKey);
-            EmailAddress from_email = new EmailAddress("mike@mtdamert.com", "Contact Mike Form");
-            string subject = "Received Contact Form feedback from " + emailInfo.sender + " (" + emailInfo.email + ")";
-            EmailAddress to_email = new EmailAddress("mtdamert@gmail.com", "MTDamert Webmaster");
-
             // TODO: Sanitize email body
+            EmailMessage message = new EmailMessage();
+            message.From = "MTDamert.com Contact Form <mike@mtdamert.com>";
+            message.To = "MTDamert Webmaster <mtdamert@gmail.com>";
+            message.Subject = "Received Contact Form feedback from " + emailInfo.sender + " (" + emailInfo.email + ")";
+
+            // Send confirmation email. Include GUID and userID
             string emailText = string.Empty;
             emailText += "Received an email from mtdamert.com user " + emailInfo.sender + ":<br /><br />\n\n";
             emailText += emailInfo.body;
+            message.HtmlBody = emailText;
 
-            string plainTextContent = emailText;
-            string htmlContent = emailText;
-            SendGridMessage msg = MailHelper.CreateSingleEmail(from_email, to_email, subject, plainTextContent, htmlContent);
-            Response response = await client.SendEmailAsync(msg).ConfigureAwait(false);
+            ResendResponse<Guid> response = await resend.EmailSendAsync(message);
 
             return true;
         }
