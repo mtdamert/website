@@ -12,6 +12,9 @@ async function emailServer(emailContents) {
         body: JSON.stringify(emailContents)
     });
 
+    setIsSendDisabled(true);
+
+    // TODO: React somehow. At least disable the Send button so we don't accidentally multi-send the same form 
     console.log("Finished attempting to send request to server");
 }
 
@@ -20,6 +23,7 @@ function Contact({ username, emailAddress }) {
     const [sender, setSender] = useState(username);
     const email = useRef(emailAddress).current;
     const [body, setBody] = useState("");
+    const [isSendDisabled, setIsSendDisabled] = useState(true);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,10 +49,10 @@ function Contact({ username, emailAddress }) {
                 </div>
                 <div>
                     <p>Message</p>
-                    <textarea rows="8" cols="100" id="body" className="border-2" onChange={e => setBody(e.target.value)} />
+                    <textarea rows="8" cols="100" id="body" className="border-2" onChange={e => { setBody(e.target.value); setIsSendDisabled(false); }} />
                 </div>
                 <div className="pt-8 place-self-center">
-                    <button type="submit">Send</button>
+                    <button type="submit" disabled={isSendDisabled}>Send</button>
                 </div>
             </form>
         </div>
