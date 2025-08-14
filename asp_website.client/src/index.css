@@ -112,8 +112,7 @@ p {
 
 .menu-parent-item {
     display: inline-block;
-    width: 96px;
-    padding: 0px 4px;
+    padding: 0px 8px;
     margin-bottom: 3px;
     font-weight: 700;
     font-size: 14px;
@@ -123,8 +122,7 @@ p {
 
 .menu-link-item {
     display: inline-block;
-    width: 96px;
-    padding: 0px 0px;
+    padding: 0px 8px;
     margin-bottom: 3px;
     font-weight: 700;
     font-size: 14px;
