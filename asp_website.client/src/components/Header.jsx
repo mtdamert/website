@@ -11,7 +11,7 @@ function renderLink(link) {
 }
 
 function renderDropdownColumn(header) {
-    // This justs displays the header text, but if you hover over it, it also shows its children
+    // This just displays the header text, but if you hover over it, it also shows its children
 
     return (
         <span class="menu-parent-item">
