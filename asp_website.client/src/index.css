@@ -142,7 +142,7 @@ p {
 }
 
 .menu-child-item {
-    display: none; /* DEBUG: set this to 'block' for testing, but this should be 'none' */
+    display: none;
     height: 32px;
     background-color: #111826;
     padding: 0px 16px 0px 4px;
