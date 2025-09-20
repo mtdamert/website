@@ -76,10 +76,7 @@ asp_website.Server/RetirementCalcData.txt
 
 # TEMPORARY - token file and password file
 asp_website.client/token.txt
-asp_website.Server/passwords.txt
 asp_website.Server/passwordsXml.txt
 
 # server-side config file
 asp_website.Server/appsettings.json
-
-
