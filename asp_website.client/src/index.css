@@ -41,7 +41,7 @@ a:hover {
 }
 
 input, textarea {
-    border: 2px none #fff;
+    border: none #fff;
     margin: 0px;
     padding: 4px;
     border-radius: 8px;
@@ -50,7 +50,7 @@ input, textarea {
 }
 
 input:focus, input:focus-visible, input:active, input:hover, textarea:focus, textarea:focus-visible, textarea:active, textarea:hover {
-    border: 2px solid #9a3412;
+    outline: 2px solid #9a3412;
 }
 
 #root {
