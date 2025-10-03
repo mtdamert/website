@@ -80,3 +80,5 @@ asp_website.Server/passwordsXml.txt
 
 # server-side config file
 asp_website.Server/appsettings.json
+
+todo.txt
