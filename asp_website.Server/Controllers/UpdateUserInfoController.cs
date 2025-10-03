@@ -66,7 +66,7 @@ namespace asp_website.Server.Controllers
             if (updateFields != null && updateFields.emailAddress != null)
             {
                 // For now, all that can be updated is username
-                UserInfo userInfo = usersInfo.FirstOrDefault(info =>
+                UserInfo? userInfo = usersInfo.FirstOrDefault(info =>
                     info.emailAddress != null && updateFields.emailAddress != null && info.emailAddress == updateFields.emailAddress);
                 if (userInfo != null)
                 {

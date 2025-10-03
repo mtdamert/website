@@ -18,10 +18,13 @@ string? apiKey = appSetting.GetValue<string>("RESEND_API_KEY", string.Empty);
 
 builder.Services.AddOptions();
 builder.Services.AddHttpClient<ResendClient>();
-builder.Services.Configure<ResendClientOptions>(o =>
+if (apiKey != null)
 {
-    o.ApiToken = apiKey;
-});
+    builder.Services.Configure<ResendClientOptions>(o =>
+    {
+        o.ApiToken = apiKey;
+    });
+}
 builder.Services.AddTransient<IResend, ResendClient>();
 
 
