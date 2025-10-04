@@ -5,6 +5,7 @@ import ContactPage from './pages/ContactPage.jsx';
 import TestPage from './pages/TestPage.jsx';
 import TetrisPage from './pages/TetrisPage.jsx';
 import ArkanoidPage from './pages/ArkanoidPage.jsx';
+import RhythmGamePage from './pages/RhythmGamePage.jsx';
 import RetirementCalcPage from './pages/RetirementCalcPage.jsx';
 import ArtPage from './pages/ArtPage.jsx';
 import DaysSincePage from './pages/DaysSincePage.jsx';
@@ -147,6 +148,7 @@ function App() {
                         <Route path="/test" element={<TestPage />} />
                         <Route path="/tetris" element={<TetrisPage />} />
                         <Route path="/arkanoid" element={<ArkanoidPage />} />
+                        <Route path="/rhythmgame" element={<RhythmGamePage />} />
                         <Route path="/retirement-calc" element={<RetirementCalcPage emailAddress={getEmailAddress(token)} />} />
                         <Route path="/art" element={<ArtPage />} />
                         <Route path="/days-since" element={<DaysSincePage />} />

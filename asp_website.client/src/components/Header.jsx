@@ -36,7 +36,9 @@ function Header(props) {
         {
             label: 'Games', path: null, adminOnly: false, verifiedOnly: false, children:
                 [ { label: 'Tetris', path: '/tetris', adminOnly: false, verifiedOnly: false },
-                  { label: 'Arkanoid', path: '/arkanoid', adminOnly: false, verifiedOnly: false }, ]
+                  { label: 'Arkanoid', path: '/arkanoid', adminOnly: false, verifiedOnly: false },
+                    { label: 'Rhythm Game', path: '/rhythmgame', adminOnly: false, verifiedOnly: false },
+                ]
         },
         { label: 'Retirement Calculator', path: '/retirement-calc', adminOnly: false, verifiedOnly: false, },
         { label: '3D Graphics', path: '/art', adminOnly: false, verifiedOnly: false },
