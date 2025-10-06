@@ -82,7 +82,7 @@ function RetirementCalc({ emailAddress }) {
     const [cpiPct, setCpiPct] = useState(3);
     const [ageAtDeath, setAgeAtDeath] = useState(90);
     const [extrapolateCapGains, setExtrapolateCapGains] = useState(false);
-    const [zeroSavingsAge, setZeroSavingsAge] = useState(40);
+    const [resultText, setResultText] = useState('At the current rate, your savings will run out when you reach age 40');
     const [data, setData] = useState([]);
 
     const [isSaveDisabled, setIsSaveDisabled] = useState(true);
@@ -195,7 +195,7 @@ function RetirementCalc({ emailAddress }) {
 
             setData(data => [
                 ...data,
-                { name: "" + currentYear, uv: 2000, pv: remainingSavings }
+                { name: "" + currentYear, uv: 2000, Remaining: Math.trunc(remainingSavings) }
             ]);
             console.log("running sim for year " + currentYear + ", remaining savings: " + remainingSavings + ", data length: " + data.length);
 
@@ -205,24 +205,17 @@ function RetirementCalc({ emailAddress }) {
         }
 
         if (ageCounter == ageOfDeath && remainingSavings > 0) {
-            // ERROR: We can't set this, because it re-runs this loop             //setDeathAge(100); // TEST TEST TEST
-            // console.log("STILL SOME MONEY LEFT AT DEATH");
-            // console.log("ageCounter: " + ageCounter);
-            // console.log("ageOfDeath: " + ageOfDeath);
-            // console.log("remainingSavings: " + remainingSavings);
-            // console.log("============");
+            // Success
             setZeroSavingsAgeColor('font-bold text-green-800');
+            setResultText('At this rate, you will have  $' + Math.trunc(remainingSavings).toLocaleString() + ' remaining at death');
         } else {
+            // Shortfall
             setZeroSavingsAgeColor('font-bold text-red-800');
+            setResultText('At the current rate, your savings will run out when you reach age ' + currentAge);
         }
 
         console.log("Total earlyWithdrawalPenalty: " + earlyWithdrawalPenalty);
         console.log("==========================================");
-
-        if (ageCounter === currentAge)
-            setZeroSavingsAge(currentAge);
-        else
-            setZeroSavingsAge(ageCounter);
     }
 
     // If you can spend more than you're spending, calculate that difference
@@ -396,7 +389,7 @@ function RetirementCalc({ emailAddress }) {
                         />
                     </div>
 
-                    <div className="pt-6"><span className={zeroSavingsAgeColor}>At the current rate, your savings will run out when you reach age {zeroSavingsAge}</span></div>
+                    <div className="pt-6"><span className={zeroSavingsAgeColor}>{resultText}</span></div>
                     <div className="pt-6"><span className="font-semibold"></span></div>
 
                     {
@@ -409,7 +402,7 @@ function RetirementCalc({ emailAddress }) {
 
                 <div className="inline-block">
                     <BarChart id="barGraph" width={400} height={300} data={data}>
-                        <Bar dataKey="pv" fill="#c58847" activeBar={<Rectangle stroke="red" />} />
+                        <Bar dataKey="Remaining" fill="#c58847" activeBar={<Rectangle stroke="red" />} />
                         <XAxis dataKey="name" />
                         <Tooltip />
                     </BarChart>
