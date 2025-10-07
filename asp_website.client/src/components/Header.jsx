@@ -14,8 +14,8 @@ function renderDropdownColumn(header) {
     // This just displays the header text, but if you hover over it, it also shows its children
 
     return (
-        <span class="menu-parent-item">
-            <span key={`${header.label}_span`} class="menu-parent-item">
+        <span key={`${header.label}_span`} class="menu-parent-item">
+            <span key={`${header.label}_span_child`} class="menu-parent-item">
                 {header.label}
             </span>
             <div class="menu-dropdown-wrapper">
