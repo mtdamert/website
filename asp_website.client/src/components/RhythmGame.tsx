@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
+import dot_image from '../images/dot.png';
 
-const PRESSED_SPACE: number = 0;
+const PRESSED_SPACE: boolean = false;
 
 const STATE_START_SCREEN: number = 0;
 const STATE_GAME_RUNNING: number = 1;
 const STATE_GAME_PAUSED: number = 2;
+
+let startScreenSelectedOption: number = 0;
 
 let gameState: number = STATE_START_SCREEN;
 let isGameOver: boolean;
@@ -23,11 +26,17 @@ const init = (): void => {
     if (titleScreen !== null) {
         titleScreen.style.visibility = 'visible';
     }
+
+    startScreenSelectedOption = 0;
+
+    gameLoop();
 }
 
 const gameLoop = (): void => {
-
-    if (gameState === STATE_GAME_RUNNING) {
+    if (gameState === STATE_START_SCREEN) {
+        drawTitleScreen();
+    }
+    else if (gameState === STATE_GAME_RUNNING) {
         // main game loop
         playSong();
     }
@@ -66,6 +75,23 @@ const gameOver = (): void => {
 }
 
 
+const drawTitleScreen = () => {
+    let titleScreen: (HTMLElement | null) = document.getElementById("titleScreen");
+
+    let dotImageElement: HTMLImageElement = document.createElement('img');
+    dotImageElement.src = dot_image;
+    //dotImageElement.style.backgroundColor = "#ffffff";
+    dotImageElement.style.position = 'relative';
+    dotImageElement.style.top = '0px';
+    dotImageElement.style.left = '0px';
+    dotImageElement.style.display = 'inline';
+
+    titleScreen.appendChild(dotImageElement);
+
+    // TODO: Draw loop
+}
+
+
 const startNewGame = (): void => {
     //    currentScore = 0;
     //    totalNumLines = 0;
@@ -86,11 +112,7 @@ const startNewGame = (): void => {
 
     gameState = STATE_GAME_RUNNING;
     isGameOver = false;
-
-    // start the game loop
-    gameLoop();
 }
-
 
 function RhythmGame() {
     useEffect(() => {
@@ -108,9 +130,16 @@ function RhythmGame() {
                     PAUSED
                 </div>
                 <div id="titleScreen" className="absolute top-[300px] left-[80px] w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-pink-700">
-                    Rhythm Game
+                    <div>Rhythm Game</div>
+                    <div id="startNewGameOption" className="relative text-left text-blue-500 text-xl indent-[60px] top-[40px]">
+                        Start New Game
+                    </div>
+                    <div id="startOtherOption" className="relative text-left text-blue-500 text-xl indent-[60px] top-[40px]">
+                        Other Options
+                    </div>
                     <button id="startGameButton" onClick={startNewGame} className="relative top-[200px] text-2xl text-blue-500">Start New Game</button>
                 </div>
+
             </div>
         </div>
     );
