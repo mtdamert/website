@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import tetris_block_base from './tetris_block_base.png';
+import tetris_block_base from '../images/tetris_block_base.png';
 
 
 class Block {
