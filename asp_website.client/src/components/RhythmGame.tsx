@@ -131,13 +131,12 @@ function RhythmGame() {
                 </div>
                 <div id="titleScreen" className="absolute top-[300px] left-[80px] w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-pink-700">
                     <div>Rhythm Game</div>
-                    <div id="startNewGameOption" className="relative text-left text-blue-500 text-xl indent-[60px] top-[40px]">
+                    <div id="startNewGameOption" onClick={startNewGame} className="relative text-left text-blue-500 text-xl indent-[60px] top-[40px] hover:text-black">
                         Start New Game
                     </div>
-                    <div id="startOtherOption" className="relative text-left text-blue-500 text-xl indent-[60px] top-[40px]">
+                    <div id="startOtherOption" className="relative text-left text-blue-500 text-xl indent-[60px] top-[40px] hover:text-black">
                         Other Options
                     </div>
-                    <button id="startGameButton" onClick={startNewGame} className="relative top-[200px] text-2xl text-blue-500">Start New Game</button>
                 </div>
 
             </div>
