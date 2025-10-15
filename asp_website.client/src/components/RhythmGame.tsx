@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react';
 import dot_image from '../images/dot.png';
 
-const PRESSED_SPACE: boolean = false;
-
 const STATE_START_SCREEN: number = 0;
 const STATE_GAME_RUNNING: number = 1;
 const STATE_GAME_PAUSED: number = 2;
 
-let startScreenSelectedOption: number = 0;
+let startMenuSelectedOption: number = 0;
+const START_MENU_NUM_OPTIONS: number = 1;
+const startMenuItems: Array<(HTMLDivElement | null)> = [];
 
 let gameState: number = STATE_START_SCREEN;
 let isGameOver: boolean;
 let gameOverVarsSet: boolean = false;
 let firstTitleScreenDraw: boolean = true;
+
 
 const init = (): void => {
     let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
@@ -28,10 +29,19 @@ const init = (): void => {
         titleScreen.style.visibility = 'visible';
     }
 
-    startScreenSelectedOption = 0;
+    // Load the array of start menu items
+    if (startMenuItems.length === 0) {
+        let startNewGameOption: HTMLDivElement = document.getElementById("startNewGameOption") as HTMLDivElement;
+        startMenuItems.push(startNewGameOption);
+        let startOtherOption: HTMLDivElement = document.getElementById("startOtherOption") as HTMLDivElement;
+        startMenuItems.push(startOtherOption);
+    }
+
+    startMenuSelectedOption = 0;
 
     gameLoop();
 }
+
 
 const gameLoop = (): void => {
     if (gameState === STATE_START_SCREEN) {
@@ -55,6 +65,7 @@ const gameLoop = (): void => {
         // idle
     }
 }
+
 
 const playSong = (): void => {
     // Check whether it's time to drop the current piece
@@ -87,33 +98,107 @@ const gameOver = (): void => {
 }
 
 
+const clearStartMenuCanvas = () => {
+    const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+
+const updateStartMenuCanvas = () => {
+    const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw a dot next to the selected item
+    ctx.beginPath();
+    ctx.arc(45, 255 + (30 * startMenuSelectedOption), 10, 0, 2 * Math.PI);
+    ctx.fillStyle = "#2b7fff";
+    ctx.fill();
+
+    // Make the selected item blue and all other items black
+    for (let i: number = 0; i < startMenuItems.length; i++) {
+        if (i === startMenuSelectedOption) {
+            startMenuItems[i].style.color = "#2b7fff";
+        } else {
+            startMenuItems[i].style.color = "#000000";
+        }
+    }
+}
+
+
 const drawTitleScreen = () => {
-    //let titleScreen: (HTMLDivElement | null) = document.getElementById("titleScreen") as HTMLDivElement;
-
     if (firstTitleScreenDraw) {
-        // Draw a dot next to the selected menu item
-        //let dotImageElement: HTMLImageElement = document.createElement('img');
-        //dotImageElement.src = dot_image;
-        //dotImageElement.style.position = 'absolute';
-        //dotImageElement.style.top = '140px';
-        //dotImageElement.style.left = '35px';
-        //dotImageElement.style.height = '50%';
-        //dotImageElement.style.display = 'block';
-
-        //titleScreen.appendChild(dotImageElement);
-
         // Draw a canvas dot next to the selected menu item
-        const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
-        const ctx = canvas.getContext("2d");
-        ctx.beginPath();
-        ctx.arc(45, 255, 10, 0, 2 * Math.PI);
-        ctx.fillStyle = "#2b7fff";
-        ctx.fill();
+        updateStartMenuCanvas();
 
         firstTitleScreenDraw = false;
-    }
 
-    // TODO: Draw loop
+        window.addEventListener(
+            "keydown",
+            (event) => {
+                if (event.defaultPrevented) {
+                    return; // Do nothing if event already handled
+                }
+
+                // TODO: Do we need something like this?
+                //if (isGameOver === true)
+                //    return;
+
+                switch (event.code) {
+                    case "KeyS":
+                    case "ArrowDown":
+                        moveStartMenuPointerDown();
+                        break;
+                    case "KeyW":
+                    case "ArrowUp":
+                        moveStartMenuPointerUp();
+                        break;
+                    case "Enter":
+                        handleChooseStartMenuItem();
+                        break;
+                }
+
+                if (event.code !== "Tab") {
+                    // Consume the event so it doesn't get handled twice,
+                    // as long as the user isn't trying to move focus away
+                    event.preventDefault();
+                }
+            },
+            true,
+        );
+    }
+}
+
+
+const moveStartMenuPointerDown = () => {
+    if (startMenuSelectedOption < START_MENU_NUM_OPTIONS) {
+        startMenuSelectedOption++;
+
+        // Move dot and highlighted option
+        updateStartMenuCanvas();
+    }
+}
+
+
+const moveStartMenuPointerUp = () => {
+    if (startMenuSelectedOption > 0) {
+        startMenuSelectedOption--;
+
+        // Move dot and highlighted option
+        updateStartMenuCanvas();
+    }
+}
+
+
+const handleChooseStartMenuItem = () => {
+    if (startMenuSelectedOption === 0) {
+        clearStartMenuCanvas();
+        startNewGame();
+    }
 }
 
 
@@ -157,10 +242,10 @@ function RhythmGame() {
                     </div>
                     <div id="titleScreen" className="absolute top-[100px] w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-pink-700">
                         <div>Rhythm Game</div>
-                        <div id="startNewGameOption" onClick={startNewGame} className="absolute text-left text-blue-500 text-xl indent-[60px] top-[140px] hover:text-black">
+                        <div id="startNewGameOption" onClick={startNewGame} className="absolute text-left text-xl indent-[60px] top-[140px]">
                             Start New Game
                         </div>
-                        <div id="startOtherOption" className="absolute text-left text-blue-500 text-xl indent-[60px] top-[170px] hover:text-black">
+                        <div id="startOtherOption" className="absolute text-left text-xl indent-[60px] top-[170px]">
                             Other Options
                         </div>
                     </div>
