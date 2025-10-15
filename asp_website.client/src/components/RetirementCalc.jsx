@@ -207,11 +207,11 @@ function RetirementCalc({ emailAddress }) {
         if (ageCounter == ageOfDeath && remainingSavings > 0) {
             // Success
             setZeroSavingsAgeColor('font-bold text-green-800');
-            setResultText('At this rate, you will have  $' + Math.trunc(remainingSavings).toLocaleString() + ' remaining at death');
+            setResultText('At this rate, you will have $' + Math.trunc(remainingSavings).toLocaleString() + ' remaining at death');
         } else {
             // Shortfall
             setZeroSavingsAgeColor('font-bold text-red-800');
-            setResultText('At the current rate, your savings will run out when you reach age ' + currentAge);
+            setResultText('At the current rate, your savings will run out when you reach age ' + ageCounter);
         }
 
         console.log("Total earlyWithdrawalPenalty: " + earlyWithdrawalPenalty);
