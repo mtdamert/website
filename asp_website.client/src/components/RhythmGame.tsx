@@ -63,7 +63,7 @@ const playSong = (): void => {
     //        moveCurrentPiece(DIRECTION_DOWN);
     //    }
 
-    const canvas = document.getElementById("myCanvas");
+    const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
     ctx.beginPath();
     ctx.moveTo(50, 50);
@@ -88,7 +88,7 @@ const gameOver = (): void => {
 
 
 const drawTitleScreen = () => {
-    let titleScreen: (HTMLElement | null) = document.getElementById("titleScreen");
+    //let titleScreen: (HTMLDivElement | null) = document.getElementById("titleScreen") as HTMLDivElement;
 
     if (firstTitleScreenDraw) {
         // Draw a dot next to the selected menu item
@@ -103,7 +103,7 @@ const drawTitleScreen = () => {
         //titleScreen.appendChild(dotImageElement);
 
         // Draw a canvas dot next to the selected menu item
-        const canvas = document.getElementById("myCanvas");
+        const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
         const ctx = canvas.getContext("2d");
         ctx.beginPath();
         ctx.arc(45, 255, 10, 0, 2 * Math.PI);
