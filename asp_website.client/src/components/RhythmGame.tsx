@@ -29,6 +29,11 @@ const init = (): void => {
         titleScreen.style.visibility = 'visible';
     }
 
+    // Clear canvas
+    const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     // Load the array of start menu items
     if (startMenuItems.length === 0) {
         let startNewGameOption: HTMLDivElement = document.getElementById("startNewGameOption") as HTMLDivElement;
@@ -73,6 +78,11 @@ const playSong = (): void => {
 
     const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw a line at the middle of the screen
     ctx.beginPath();
     ctx.moveTo(0, 320);
     ctx.lineTo(320, 320);
