@@ -29,11 +29,6 @@ const init = (): void => {
         titleScreen.style.visibility = 'visible';
     }
 
-    // Clear canvas
-    const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
     // Load the array of start menu items
     if (startMenuItems.length === 0) {
         let startNewGameOption: HTMLDivElement = document.getElementById("startNewGameOption") as HTMLDivElement;
@@ -90,6 +85,13 @@ const playSong = (): void => {
     ctx.strokeStyle = "black";
     ctx.lineCap = "round";
     ctx.stroke();
+
+    // Draw a dot
+    let dotPosition: number = 100;
+    ctx.beginPath();
+    ctx.arc(45, 255 + (30 + dotPosition), 10, 0, 2 * Math.PI);
+    ctx.fillStyle = "#2b7fff";
+    ctx.fill();
 }
 
 
@@ -139,6 +141,11 @@ const updateStartMenuCanvas = () => {
 
 const drawTitleScreen = () => {
     if (firstTitleScreenDraw) {
+        // Clear canvas
+        const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         // Draw a canvas dot next to the selected menu item
         updateStartMenuCanvas();
 
@@ -155,25 +162,27 @@ const drawTitleScreen = () => {
                 //if (isGameOver === true)
                 //    return;
 
-                switch (event.code) {
-                    case "KeyS":
-                    case "ArrowDown":
-                        moveStartMenuPointerDown();
-                        break;
-                    case "KeyW":
-                    case "ArrowUp":
-                        moveStartMenuPointerUp();
-                        break;
-                    case "Enter":
-                        handleChooseStartMenuItem();
-                        break;
+                if (gameState === STATE_START_SCREEN) {
+                    switch (event.code) {
+                        case "KeyS":
+                        case "ArrowDown":
+                            moveStartMenuPointerDown();
+                            break;
+                        case "KeyW":
+                        case "ArrowUp":
+                            moveStartMenuPointerUp();
+                            break;
+                        case "Enter":
+                            handleChooseStartMenuItem();
+                            break;
+                    }
                 }
 
-                if (event.code !== "Tab") {
-                    // Consume the event so it doesn't get handled twice,
-                    // as long as the user isn't trying to move focus away
-                    event.preventDefault();
-                }
+            //    if (event.code !== "Tab") {
+            //        // Consume the event so it doesn't get handled twice,
+            //        // as long as the user isn't trying to move focus away
+            //        event.preventDefault();
+            //    }
             },
             true,
         );
