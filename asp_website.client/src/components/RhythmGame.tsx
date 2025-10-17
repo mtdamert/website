@@ -49,17 +49,14 @@ const gameLoop = (): void => {
         setTimeout(gameLoop, 50);
     }
     else if (gameState === STATE_GAME_RUNNING) {
-        // main game loop
-        playSong();
-    }
-
-    // end conditions
-    if (isGameOver === false && gameState !== STATE_GAME_PAUSED) {
-        // still in play - keep the loop going
-        gameOverVarsSet = false;
-        setTimeout(gameLoop, 50);
-    } else if (isGameOver === true) {
-        gameOver();
+        if (isGameOver === false && gameState !== STATE_GAME_PAUSED) {
+            // main game loop
+            playSong();
+            gameOverVarsSet = false;
+            setTimeout(gameLoop, 50);
+        } else if (isGameOver === true) {
+            gameOver();
+        }
     }
     else if (gameState === STATE_GAME_PAUSED) {
         // idle
@@ -77,10 +74,10 @@ const playSong = (): void => {
     const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
     ctx.beginPath();
-    ctx.moveTo(50, 50);
-    ctx.lineTo(200, 150);
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = "blue";
+    ctx.moveTo(0, 320);
+    ctx.lineTo(320, 320);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "black";
     ctx.lineCap = "round";
     ctx.stroke();
 }
