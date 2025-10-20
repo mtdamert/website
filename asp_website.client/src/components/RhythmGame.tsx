@@ -5,6 +5,9 @@ const STATE_START_SCREEN: number = 0;
 const STATE_GAME_RUNNING: number = 1;
 const STATE_GAME_PAUSED: number = 2;
 
+const SCREEN_HEIGHT: number = 640;
+const SCREEN_WIDTH: number = 320;
+
 let startMenuSelectedOption: number = 0;
 const START_MENU_NUM_OPTIONS: number = 1;
 const startMenuItems: Array<(HTMLDivElement | null)> = [];
@@ -13,6 +16,19 @@ let gameState: number = STATE_START_SCREEN;
 let isGameOver: boolean;
 let gameOverVarsSet: boolean = false;
 let firstTitleScreenDraw: boolean = true;
+
+const notes: Array<(Note | null)> = [];
+
+
+class Note {
+    startTime: number;
+    y: number;
+
+    constructor() {
+        this.startTime = new Date().getTime();
+        this.y = 0;
+    }
+}
 
 
 const init = (): void => {
@@ -92,6 +108,22 @@ const playSong = (): void => {
     ctx.arc(45, 255 + (30 + dotPosition), 10, 0, 2 * Math.PI);
     ctx.fillStyle = "#2b7fff";
     ctx.fill();
+
+    for (let i: number = 0; i < notes.length; i++) {
+        // Move the dot
+        notes[i].y = (new Date().getTime() - notes[i].startTime) * 0.2;
+
+        // If the dot has moved offscreen, delete it and add a new dot
+        if (notes[i].y > SCREEN_HEIGHT) {
+            notes[i].startTime = new Date().getTime();
+        }
+
+        // Draw the dot
+        ctx.beginPath();
+        ctx.arc(155, notes[i].y, 10, 0, 2 * Math.PI);
+        ctx.fillStyle = "#2b7fff";
+        ctx.fill();
+    }
 }
 
 
@@ -236,6 +268,8 @@ const startNewGame = (): void => {
         titleScreen.style.visibility = 'hidden';
     }
 
+    notes.push(new Note());
+
     gameState = STATE_GAME_RUNNING;
     isGameOver = false;
 }
@@ -250,13 +284,13 @@ function RhythmGame() {
             <div class="title">Rhythm Game</div>
             <span className="italic absolute top-[140px] left-[100px]">Press space when the dot hits the middle of the screen.<br/>Press ESC to pause.</span>
 
-            <div id="fullArea" className="absolute top-[200px] left-[80px] border-t-[1px] w-[320px] h-[640px]">
+            <div id="fullArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[${SCREEN_WIDTH}px] h-[${SCREEN_HEIGHT}px]`}>
                 <div id="playingArea" className="relative w-full h-full bg-[#c0c0c0]">
-                    <canvas id="myCanvas" className="absolute w-full h-full" width="320" height="640" />
-                    <div id="pausedBox" className="absolute top-[300px] border-t-[1px] border-black w-[320px] h-[48px] text-4xl text-center bold  z-10 text-orange-700 bg-[#808080]">
+                    <canvas id="myCanvas" className="absolute w-full h-full" width={`${SCREEN_WIDTH}`} height={`${SCREEN_HEIGHT}`} />
+                    <div id="pausedBox" className={`absolute top-[300px] border-t-[1px] border-black w-[${SCREEN_WIDTH}px] h-[48px] text-4xl text-center bold z-10 text-orange-700 bg-[#808080]`}>
                         PAUSED
                     </div>
-                    <div id="titleScreen" className="absolute top-[100px] w-[320px] h-[48px] text-4xl text-center bold invisible z-10 text-pink-700">
+                    <div id="titleScreen" className={`absolute top-[100px] w-[${SCREEN_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-pink-700`}>
                         <div>Rhythm Game</div>
                         <div id="startNewGameOption" onClick={startNewGame} className="absolute text-left text-xl indent-[60px] top-[140px]">
                             Start New Game
