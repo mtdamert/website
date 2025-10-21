@@ -5,8 +5,8 @@ const STATE_START_SCREEN: number = 0;
 const STATE_GAME_RUNNING: number = 1;
 const STATE_GAME_PAUSED: number = 2;
 
-const SCREEN_HEIGHT: number = 640;
-const SCREEN_WIDTH: number = 320;
+const SCREEN_HEIGHT: number = 320;
+const SCREEN_WIDTH: number = 640;
 
 let startMenuSelectedOption: number = 0;
 const START_MENU_NUM_OPTIONS: number = 1;
@@ -153,10 +153,12 @@ const updateStartMenuCanvas = () => {
 
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    console.log("canvas height: " + canvas.height);
 
     // Draw a dot next to the selected item
     ctx.beginPath();
-    ctx.arc(45, 255 + (30 * startMenuSelectedOption), 10, 0, 2 * Math.PI);
+    // TODO: Figure out where these mysterious 15s come from
+    ctx.arc((canvas.width * 0.1) - 15, (canvas.height * 0.5 + (canvas.height * 0.1 * startMenuSelectedOption)) + 15, 10, 0, 2 * Math.PI);
     ctx.fillStyle = "#2b7fff";
     ctx.fill();
 
@@ -290,12 +292,12 @@ function RhythmGame() {
                     <div id="pausedBox" className={`absolute top-[300px] border-t-[1px] border-black w-[${SCREEN_WIDTH}px] h-[48px] text-4xl text-center bold z-10 text-orange-700 bg-[#808080]`}>
                         PAUSED
                     </div>
-                    <div id="titleScreen" className={`absolute top-[100px] w-[${SCREEN_WIDTH}px] h-[48px] text-4xl text-center bold invisible z-10 text-pink-700`}>
-                        <div>Rhythm Game</div>
-                        <div id="startNewGameOption" onClick={startNewGame} className="absolute text-left text-xl indent-[60px] top-[140px]">
+                    <div id="titleScreen" className={`absolute h-[${SCREEN_HEIGHT}px] w-[${SCREEN_WIDTH}px] invisible z-10`}>
+                        <div className={`absolute top-[15%] text-center text-4xl font-bold text-pink-700 w-[${SCREEN_WIDTH}px]`}>Rhythm Game</div>
+                        <div id="startNewGameOption" onClick={startNewGame} className={`absolute text-left text-xl indent-[10%] top-[50%] w-[${SCREEN_WIDTH}px]`}>
                             Start New Game
                         </div>
-                        <div id="startOtherOption" className="absolute text-left text-xl indent-[60px] top-[170px]">
+                        <div id="startOtherOption" className={`absolute text-left text-xl indent-[10%] top-[60%] w-[${SCREEN_WIDTH}px]`}>
                             Other Options
                         </div>
                     </div>
