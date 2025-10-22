@@ -153,12 +153,10 @@ const updateStartMenuCanvas = () => {
 
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    console.log("canvas height: " + canvas.height);
 
     // Draw a dot next to the selected item
     ctx.beginPath();
-    // TODO: Figure out where these mysterious 15s come from
-    ctx.arc((canvas.width * 0.1) - 15, (canvas.height * 0.5 + (canvas.height * 0.1 * startMenuSelectedOption)) + 15, 10, 0, 2 * Math.PI);
+    ctx.arc((canvas.width * 0.075), (canvas.height * 0.55 + (canvas.height * 0.1 * startMenuSelectedOption)), (canvas.width * 0.015), 0, 2 * Math.PI);
     ctx.fillStyle = "#2b7fff";
     ctx.fill();
 
@@ -286,7 +284,7 @@ function RhythmGame() {
             <div class="title">Rhythm Game</div>
             <span className="italic absolute top-[140px] left-[100px]">Press space when the dot hits the middle of the screen.<br/>Press ESC to pause.</span>
 
-            <div id="fullArea" className={`absolute top-[200px] left-[80px] border-t-[1px] w-[${SCREEN_WIDTH}px] h-[${SCREEN_HEIGHT}px]`}>
+            <div id="fullArea" className={`absolute top-[200px] left-[80px] border-t-[1px] h-[${SCREEN_HEIGHT}px] w-[${SCREEN_WIDTH}px]`}>
                 <div id="playingArea" className="relative w-full h-full bg-[#c0c0c0]">
                     <canvas id="myCanvas" className="absolute w-full h-full" width={`${SCREEN_WIDTH}`} height={`${SCREEN_HEIGHT}`} />
                     <div id="pausedBox" className={`absolute top-[300px] border-t-[1px] border-black w-[${SCREEN_WIDTH}px] h-[48px] text-4xl text-center bold z-10 text-orange-700 bg-[#808080]`}>
