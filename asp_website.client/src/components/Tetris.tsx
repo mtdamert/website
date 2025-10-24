@@ -105,7 +105,7 @@ const gameLoop = (): void => {
     if (isGameOver === false && gameState !== STATE_GAME_PAUSED) {
         //still in play - keep the loop going
         gameOverVarsSet = false;
-        setTimeout(gameLoop, 50);
+        setTimeout(gameLoop, 17);
     } else if (isGameOver === true) {
         gameOver();
     }
@@ -395,7 +395,7 @@ const handleEscKeyPress = (): void => {
             playingAreaScreen.style.visibility = 'hidden';
         }
 
-        setTimeout(() => {gameLoop()}, 50);
+        setTimeout(() => {gameLoop()}, 17);
     }
 }
 
