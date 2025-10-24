@@ -22,11 +22,11 @@ const notes: Array<(Note | null)> = [];
 
 class Note {
     startTime: number;
-    y: number;
+    x: number;
 
     constructor() {
         this.startTime = new Date().getTime();
-        this.y = 0;
+        this.x = 0;
     }
 }
 
@@ -95,32 +95,25 @@ const playSong = (): void => {
 
     // Draw a line at the middle of the screen
     ctx.beginPath();
-    ctx.moveTo(0, 320);
-    ctx.lineTo(320, 320);
+    ctx.moveTo(SCREEN_WIDTH / 2, 0);
+    ctx.lineTo(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
     ctx.lineWidth = 2;
     ctx.strokeStyle = "black";
     ctx.lineCap = "round";
     ctx.stroke();
 
-    // Draw a dot
-    let dotPosition: number = 100;
-    ctx.beginPath();
-    ctx.arc(45, 255 + (30 + dotPosition), 10, 0, 2 * Math.PI);
-    ctx.fillStyle = "#2b7fff";
-    ctx.fill();
-
     for (let i: number = 0; i < notes.length; i++) {
         // Move the dot
-        notes[i].y = (new Date().getTime() - notes[i].startTime) * 0.2;
+        notes[i].x = (new Date().getTime() - notes[i].startTime) * 0.2;
 
         // If the dot has moved offscreen, delete it and add a new dot
-        if (notes[i].y > SCREEN_HEIGHT) {
+        if (notes[i].x > SCREEN_WIDTH) {
             notes[i].startTime = new Date().getTime();
         }
 
         // Draw the dot
         ctx.beginPath();
-        ctx.arc(155, notes[i].y, 10, 0, 2 * Math.PI);
+        ctx.arc(notes[i].x, SCREEN_HEIGHT / 2, (canvas.width * 0.015), 0, 2 * Math.PI);
         ctx.fillStyle = "#2b7fff";
         ctx.fill();
     }
