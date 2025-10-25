@@ -75,14 +75,14 @@ const init = (): void => {
 const gameLoop = (): void => {
     if (gameState === STATE_START_SCREEN) {
         drawTitleScreen();
-        setTimeout(gameLoop, 50);
+        setTimeout(gameLoop, 17);
     }
     else if (gameState === STATE_GAME_RUNNING) {
         if (isGameOver === false && gameState !== STATE_GAME_PAUSED) {
             // main game loop
-            playSong();
+            requestAnimationFrame(playSong);
             gameOverVarsSet = false;
-            setTimeout(gameLoop, 50);
+            setTimeout(gameLoop, 17);
         } else if (isGameOver === true) {
             gameOver();
         }
