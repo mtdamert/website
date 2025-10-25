@@ -18,15 +18,28 @@ let gameOverVarsSet: boolean = false;
 let firstTitleScreenDraw: boolean = true;
 
 const notes: Array<(Note | null)> = [];
+let lastTimeSpacePressed: number = 0;
 
 
 class Note {
     startTime: number;
     x: number;
+    speed: number;
+    hitTime: number;
+    wasHit: boolean;
 
-    constructor() {
+    updateHitTime(): void {
+        this.hitTime = this.startTime + (SCREEN_WIDTH / this.speed * 0.5); // 0.5 is the middle of the screen
+    }
+
+    constructor(speed: number) {
         this.startTime = new Date().getTime();
+        console.log("note start time: " + this.startTime);
         this.x = 0;
+        this.speed = speed;
+        this.updateHitTime();
+        console.log("note hit time  : " + this.hitTime);
+        this.wasHit = false;
     }
 }
 
@@ -81,22 +94,17 @@ const gameLoop = (): void => {
 
 
 const playSong = (): void => {
-    // Check whether it's time to drop the current piece
-    //    if ((new Date().getTime() - lastPieceTime) > msPerPieceDrop) {
-    //        lastPieceTime = new Date().getTime();
-    //        moveCurrentPiece(DIRECTION_DOWN);
-    //    }
-
     const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
+    const currentTime = new Date().getTime();
 
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw a line at the middle of the screen
     ctx.beginPath();
-    ctx.moveTo(SCREEN_WIDTH / 2, 0);
-    ctx.lineTo(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
+    ctx.moveTo(SCREEN_WIDTH * 0.5, 0);
+    ctx.lineTo(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT);
     ctx.lineWidth = 2;
     ctx.strokeStyle = "black";
     ctx.lineCap = "round";
@@ -104,17 +112,29 @@ const playSong = (): void => {
 
     for (let i: number = 0; i < notes.length; i++) {
         // Move the dot
-        notes[i].x = (new Date().getTime() - notes[i].startTime) * 0.2;
+        notes[i].x = (currentTime - notes[i].startTime) * notes[i].speed;
 
         // If the dot has moved offscreen, delete it and add a new dot
         if (notes[i].x > SCREEN_WIDTH) {
             notes[i].startTime = new Date().getTime();
+            notes[i].updateHitTime();
+            notes[i].wasHit = false;
         }
+
+        // Don't remove this test! It's a useful way of showing the range where a note hit is registered
+        //lastTimeSpacePressed = currentTime; // TEST note hit time
+        if (currentTime >= notes[i].startTime) {
+            let distanceFromHitTime: number = Math.abs(lastTimeSpacePressed - notes[i].hitTime);
+            if (distanceFromHitTime <= (notes[i].speed * 2000)) {
+                notes[i].wasHit = true;
+            }
+        }
+        if (notes[i])
 
         // Draw the dot
         ctx.beginPath();
         ctx.arc(notes[i].x, SCREEN_HEIGHT / 2, (canvas.width * 0.015), 0, 2 * Math.PI);
-        ctx.fillStyle = "#2b7fff";
+        ctx.fillStyle = (notes[i].wasHit ? "#2b7fff" : "#b4871c");
         ctx.fill();
     }
 }
@@ -201,6 +221,12 @@ const drawTitleScreen = () => {
                             handleChooseStartMenuItem();
                             break;
                     }
+                } else if (gameState === STATE_GAME_RUNNING) {
+                    switch (event.code) {
+                        case "Space":
+                            lastTimeSpacePressed = new Date().getTime();
+                            break;
+                    }
                 }
 
             //    if (event.code !== "Tab") {
@@ -261,7 +287,7 @@ const startNewGame = (): void => {
         titleScreen.style.visibility = 'hidden';
     }
 
-    notes.push(new Note());
+    notes.push(new Note(0.2));
 
     gameState = STATE_GAME_RUNNING;
     isGameOver = false;
@@ -277,7 +303,8 @@ function RhythmGame() {
             <div class="title">Rhythm Game</div>
             <span className="italic absolute top-[140px] left-[100px]">Press space when the dot hits the middle of the screen.<br/>Press ESC to pause.</span>
 
-            <div id="fullArea" className={`absolute top-[200px] left-[80px] border-t-[1px] h-[${SCREEN_HEIGHT}px] w-[${SCREEN_WIDTH}px]`}>
+{/*            TODO: Adjust screen width and height, because these values seem to not be getting picked up*/}
+            <div id="fullArea" className={`absolute top-[200px] left-[80px] border-t-[1px] h-[320px] w-[${SCREEN_WIDTH}px]`}>
                 <div id="playingArea" className="relative w-full h-full bg-[#c0c0c0]">
                     <canvas id="myCanvas" className="absolute w-full h-full" width={`${SCREEN_WIDTH}`} height={`${SCREEN_HEIGHT}`} />
                     <div id="pausedBox" className={`absolute top-[300px] border-t-[1px] border-black w-[${SCREEN_WIDTH}px] h-[48px] text-4xl text-center bold z-10 text-orange-700 bg-[#808080]`}>
