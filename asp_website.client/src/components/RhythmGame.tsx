@@ -18,6 +18,7 @@ let gameOverVarsSet: boolean = false;
 let firstTitleScreenDraw: boolean = true;
 
 const notes: Array<(Note | null)> = [];
+let score: number = 0;
 let lastTimeSpacePressed: number = 0;
 
 
@@ -67,6 +68,7 @@ const init = (): void => {
     }
 
     startMenuSelectedOption = 0;
+    score = 0;
 
     gameLoop();
 }
@@ -126,6 +128,11 @@ const playSong = (): void => {
         if (currentTime >= notes[i].startTime) {
             let distanceFromHitTime: number = Math.abs(lastTimeSpacePressed - notes[i].hitTime);
             if (distanceFromHitTime <= (notes[i].speed * 2000)) {
+                // If this is the first time this note was hit, score a point
+                if (notes[i].wasHit === false) {
+                    score++;
+                }
+
                 notes[i].wasHit = true;
             }
         }
@@ -137,6 +144,13 @@ const playSong = (): void => {
         ctx.fillStyle = (notes[i].wasHit ? "#2b7fff" : "#b4871c");
         ctx.fill();
     }
+
+    // Draw the current score
+    ctx.font = '30px Arial';
+    ctx.fillStyle = '#c6005c'; // Color for filled text
+    ctx.textAlign = 'center'; // Horizontal alignment
+    ctx.textBaseline = 'middle'; // Vertical alignment
+    ctx.fillText(score.toString(), canvas.width / 20 * 19, canvas.height / 10);
 }
 
 
