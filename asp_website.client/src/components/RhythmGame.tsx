@@ -18,22 +18,33 @@ let gameOverVarsSet: boolean = false;
 let firstTitleScreenDraw: boolean = true;
 
 const notes: Array<(Note | null)> = [];
+const NOTE_SIMPLE: number = 0;
+const NOTE_DOUBLE_LENGTH: number = 1;
+
+const NOTE_POS_TOP: number = 0;
+const NOTE_POS_SECOND: number = 1;
+const NOTE_POS_BOTTOM: number = 2;
+
 let score: number = 0;
 let lastTimeSpacePressed: number = 0;
+let lastTimeSpaceReleased: number = 0;
 
 
 class Note {
     startTime: number;
+    endTime: number;
     x: number;
+    y: number;
     speed: number;
     hitTime: number;
     wasHit: boolean;
+    noteType: number;
 
     updateHitTime(): void {
         this.hitTime = this.startTime + (SCREEN_WIDTH / this.speed * 0.5); // 0.5 is the middle of the screen
     }
 
-    constructor(speed: number) {
+    constructor(speed: number, noteType: number, notePos: number) {
         this.startTime = new Date().getTime();
         console.log("note start time: " + this.startTime);
         this.x = 0;
@@ -41,6 +52,19 @@ class Note {
         this.updateHitTime();
         console.log("note hit time  : " + this.hitTime);
         this.wasHit = false;
+        this.noteType = noteType;
+
+        switch (notePos) {
+            case NOTE_POS_TOP:
+                this.y = SCREEN_HEIGHT / 4;
+                break;
+            case NOTE_POS_SECOND:
+                this.y = SCREEN_HEIGHT / 4 * 2;
+                break;
+            case NOTE_POS_BOTTOM:
+                this.y = SCREEN_HEIGHT / 4 * 3;
+                break;
+        }
     }
 }
 
@@ -136,11 +160,10 @@ const playSong = (): void => {
                 notes[i].wasHit = true;
             }
         }
-        if (notes[i])
 
-        // Draw the dot
+        // Draw the note
         ctx.beginPath();
-        ctx.arc(notes[i].x, SCREEN_HEIGHT / 2, (canvas.width * 0.015), 0, 2 * Math.PI);
+        ctx.arc(notes[i].x, notes[i].y, (canvas.width * 0.015), 0, 2 * Math.PI);
         ctx.fillStyle = (notes[i].wasHit ? "#2b7fff" : "#b4871c");
         ctx.fill();
     }
@@ -251,6 +274,22 @@ const drawTitleScreen = () => {
             },
             true,
         );
+        window.addEventListener(
+            "keyup",
+            (event) => {
+                if (event.defaultPrevented) {
+                    return; // Do nothing if event already handled
+                }
+
+                if (gameState === STATE_GAME_RUNNING) {
+                    switch (event.code) {
+                        case "Space":
+                            lastTimeSpaceReleased = new Date().getTime();
+                            break;
+                    }
+                }
+            }
+        );
     }
 }
 
@@ -301,7 +340,8 @@ const startNewGame = (): void => {
         titleScreen.style.visibility = 'hidden';
     }
 
-    notes.push(new Note(0.2));
+    notes.push(new Note(0.2, NOTE_SIMPLE, NOTE_POS_TOP)); // test simple note
+    notes.push(new Note(0.3, NOTE_DOUBLE_LENGTH, NOTE_POS_SECOND)); // test long note
 
     gameState = STATE_GAME_RUNNING;
     isGameOver = false;
