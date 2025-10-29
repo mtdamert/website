@@ -137,10 +137,10 @@ const playSong = (): void => {
     ctx.stroke();
 
     for (let i: number = 0; i < notes.length; i++) {
-        // Move the dot
+        // Move the note
         notes[i].x = (currentTime - notes[i].startTime) * notes[i].speed;
 
-        // If the dot has moved offscreen, delete it and add a new dot
+        // If the note has moved offscreen, delete it and add a new note
         if (notes[i].x > SCREEN_WIDTH) {
             notes[i].startTime = new Date().getTime();
             notes[i].updateHitTime();
@@ -162,9 +162,25 @@ const playSong = (): void => {
         }
 
         // Draw the note
-        ctx.beginPath();
-        ctx.arc(notes[i].x, notes[i].y, (canvas.width * 0.015), 0, 2 * Math.PI);
         ctx.fillStyle = (notes[i].wasHit ? "#2b7fff" : "#b4871c");
+        ctx.beginPath();
+        if (notes[i].noteType === NOTE_SIMPLE) {
+            // Draw a circle
+            ctx.arc(notes[i].x, notes[i].y, (canvas.width * 0.015), 0, 2 * Math.PI);
+        } else if (notes[i].noteType === NOTE_DOUBLE_LENGTH) {
+            // Draw an ellipse
+            let ellipse_width: number = canvas.width * 0.06;
+            ctx.lineTo(notes[i].x + ellipse_width + 2, notes[i].y - (canvas.width * 0.015));
+            ctx.lineTo(notes[i].x - 1, notes[i].y - (canvas.width * 0.015));
+            ctx.lineTo(notes[i].x - 1, notes[i].y + (canvas.width * 0.015));
+            ctx.lineTo(notes[i].x + ellipse_width + 2, notes[i].y + (canvas.width * 0.015));
+            ctx.fill();
+
+            // TODO: Color only the portion of the note that the user has held the button for
+
+            ctx.arc(notes[i].x, notes[i].y, (canvas.width * 0.015), Math.PI / 2, 3 / 2 * Math.PI);
+            ctx.arc(notes[i].x + ellipse_width, notes[i].y, (canvas.width * 0.015), 3 / 2 * Math.PI / 2, 1 / 2 * Math.PI);
+        }
         ctx.fill();
     }
 
@@ -340,8 +356,8 @@ const startNewGame = (): void => {
         titleScreen.style.visibility = 'hidden';
     }
 
-    notes.push(new Note(0.2, NOTE_SIMPLE, NOTE_POS_TOP)); // test simple note
-    notes.push(new Note(0.3, NOTE_DOUBLE_LENGTH, NOTE_POS_SECOND)); // test long note
+    notes.push(new Note(0.1, NOTE_SIMPLE, NOTE_POS_TOP)); // test simple note
+    notes.push(new Note(0.15, NOTE_DOUBLE_LENGTH, NOTE_POS_SECOND)); // test long note
 
     gameState = STATE_GAME_RUNNING;
     isGameOver = false;
