@@ -7,6 +7,7 @@ const STATE_GAME_PAUSED: number = 2;
 
 const SCREEN_HEIGHT: number = 320;
 const SCREEN_WIDTH: number = 640;
+const NOTE_RADIUS: number = SCREEN_WIDTH * 0.015;
 
 let startMenuSelectedOption: number = 0;
 const START_MENU_NUM_OPTIONS: number = 1;
@@ -21,6 +22,8 @@ const notes: Array<(Note | null)> = [];
 const NOTE_SIMPLE: number = 0;
 const NOTE_DOUBLE_LENGTH: number = 1;
 
+const DOUBLE_LENGTH_NOTE_WIDTH: number = SCREEN_WIDTH * 0.06;
+
 const NOTE_POS_TOP: number = 0;
 const NOTE_POS_SECOND: number = 1;
 const NOTE_POS_BOTTOM: number = 2;
@@ -31,17 +34,26 @@ let lastTimeSpaceReleased: number = 0;
 
 
 class Note {
-    startTime: number;
-    endTime: number;
+    startTime: number; // when the note started being rendered onscreen
     x: number;
     y: number;
     speed: number;
-    hitTime: number;
+    startHitTime: number;
+    endHitTime: number;
     wasHit: boolean;
     noteType: number;
 
     updateHitTime(): void {
-        this.hitTime = this.startTime + (SCREEN_WIDTH / this.speed * 0.5); // 0.5 is the middle of the screen
+        switch (this.noteType) {
+            case NOTE_SIMPLE:
+                this.startHitTime = this.endHitTime = this.startTime + (SCREEN_WIDTH * 0.5 / this.speed); // 0.5 is the middle of the screen
+                break;
+            case NOTE_DOUBLE_LENGTH:
+                this.startHitTime = this.startTime + ((SCREEN_WIDTH * 0.5 + NOTE_RADIUS) / this.speed); // 0.5 is the middle of the screen
+                this.endHitTime = this.startHitTime + (DOUBLE_LENGTH_NOTE_WIDTH * 0.5 / this.speed);
+                break;
+        }
+
     }
 
     constructor(speed: number, noteType: number, notePos: number) {
@@ -49,10 +61,10 @@ class Note {
         console.log("note start time: " + this.startTime);
         this.x = 0;
         this.speed = speed;
-        this.updateHitTime();
-        console.log("note hit time  : " + this.hitTime);
         this.wasHit = false;
         this.noteType = noteType;
+        this.updateHitTime();
+        console.log("note start hit time  : " + this.startHitTime);
 
         switch (notePos) {
             case NOTE_POS_TOP:
@@ -149,8 +161,9 @@ const playSong = (): void => {
 
         // Don't remove this test! It's a useful way of showing the range where a note hit is registered
         //lastTimeSpacePressed = currentTime; // TEST note hit time
+
         if (currentTime >= notes[i].startTime) {
-            let distanceFromHitTime: number = Math.abs(lastTimeSpacePressed - notes[i].hitTime);
+            let distanceFromHitTime: number = Math.abs(lastTimeSpacePressed - notes[i].startHitTime);
             if (distanceFromHitTime <= (notes[i].speed * 2000)) {
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
@@ -166,20 +179,25 @@ const playSong = (): void => {
         ctx.beginPath();
         if (notes[i].noteType === NOTE_SIMPLE) {
             // Draw a circle
-            ctx.arc(notes[i].x, notes[i].y, (canvas.width * 0.015), 0, 2 * Math.PI);
+            ctx.arc(notes[i].x, notes[i].y, NOTE_RADIUS, 0, 2 * Math.PI);
         } else if (notes[i].noteType === NOTE_DOUBLE_LENGTH) {
             // Draw an ellipse
-            let ellipse_width: number = canvas.width * 0.06;
-            ctx.lineTo(notes[i].x + ellipse_width + 2, notes[i].y - (canvas.width * 0.015));
-            ctx.lineTo(notes[i].x - 1, notes[i].y - (canvas.width * 0.015));
-            ctx.lineTo(notes[i].x - 1, notes[i].y + (canvas.width * 0.015));
-            ctx.lineTo(notes[i].x + ellipse_width + 2, notes[i].y + (canvas.width * 0.015));
+            ctx.arc(notes[i].x, notes[i].y, NOTE_RADIUS, 2 * Math.PI / 2, 1 / 2 * Math.PI);
             ctx.fill();
 
-            // TODO: Color only the portion of the note that the user has held the button for
+            // If the player is still holding down the note, color in the note
+            ctx.beginPath();
+            ctx.fillStyle = (notes[i].wasHit && notes[i].endHitTime < lastTimeSpaceReleased) ? "#2b7fff" : "#b4871c";
 
-            ctx.arc(notes[i].x, notes[i].y, (canvas.width * 0.015), Math.PI / 2, 3 / 2 * Math.PI);
-            ctx.arc(notes[i].x + ellipse_width, notes[i].y, (canvas.width * 0.015), 3 / 2 * Math.PI / 2, 1 / 2 * Math.PI);
+            // TODO: Color only the portion of the note that the user has held the button for
+            ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS); // 2 is a magic number so we slightly overdraw and remove aliasing
+            ctx.lineTo(notes[i].x - 1, notes[i].y - NOTE_RADIUS);
+            ctx.lineTo(notes[i].x - 1, notes[i].y + NOTE_RADIUS);
+            ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y + NOTE_RADIUS);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH, notes[i].y, NOTE_RADIUS, 1 / 2 * Math.PI / 2, 3 / 2 * Math.PI);
         }
         ctx.fill();
     }
@@ -222,7 +240,7 @@ const updateStartMenuCanvas = () => {
 
     // Draw a dot next to the selected item
     ctx.beginPath();
-    ctx.arc((canvas.width * 0.075), (canvas.height * 0.55 + (canvas.height * 0.1 * startMenuSelectedOption)), (canvas.width * 0.015), 0, 2 * Math.PI);
+    ctx.arc((canvas.width * 0.075), (canvas.height * 0.55 + (canvas.height * 0.1 * startMenuSelectedOption)), NOTE_RADIUS, 0, 2 * Math.PI);
     ctx.fillStyle = "#2b7fff";
     ctx.fill();
 
