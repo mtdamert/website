@@ -18,6 +18,7 @@ let isGameOver: boolean;
 let gameOverVarsSet: boolean = false;
 let firstTitleScreenDraw: boolean = true;
 
+const keysPressed: Array<(KeyPressed | null)> = [];
 const notes: Array<(Note | null)> = [];
 const NOTE_SIMPLE: number = 0;
 const NOTE_DOUBLE_LENGTH: number = 1;
@@ -41,7 +42,9 @@ class Note {
     startHitTime: number;
     endHitTime: number;
     wasHit: boolean;
+    hitPercentage: number;
     noteType: number;
+    keyPressOnHit: KeyPressed;
 
     updateHitTime(): void {
         switch (this.noteType) {
@@ -62,7 +65,9 @@ class Note {
         this.x = 0;
         this.speed = speed;
         this.wasHit = false;
+        this.hitPercentage = 0;
         this.noteType = noteType;
+        this.keyPressOnHit = null;
         this.updateHitTime();
         console.log("note start hit time  : " + this.startHitTime);
 
@@ -77,6 +82,21 @@ class Note {
                 this.y = SCREEN_HEIGHT / 4 * 3;
                 break;
         }
+    }
+}
+
+class KeyPressed {
+    pressTime: number;
+    releaseTime: number = 0;
+    isCurrentlyDown: boolean;
+    keyName: string;
+
+    constructor(pressTime: number) {
+        this.pressTime = pressTime;
+        this.isCurrentlyDown = true;
+
+        // TODO: For now, the space bar is the only key that gets pressed
+        this.keyName = 'space';
     }
 }
 
@@ -159,6 +179,7 @@ const playSong = (): void => {
             notes[i].wasHit = false;
         }
 
+        // detect notes hit
         // Don't remove this test! It's a useful way of showing the range where a note hit is registered
         //lastTimeSpacePressed = currentTime; // TEST note hit time
 
@@ -171,6 +192,9 @@ const playSong = (): void => {
                 }
 
                 notes[i].wasHit = true;
+                // attach the key press to this note so we can access it later
+                // TODO: This needs to be more complex when we have more keypresses than just the space bar
+                notes[i].keyPressOnHit = keysPressed[keysPressed.length - 1];
             }
         }
 
@@ -187,16 +211,27 @@ const playSong = (): void => {
 
             // If the player is still holding down the note, color in the note
             ctx.beginPath();
-            ctx.fillStyle = (notes[i].wasHit && notes[i].endHitTime < lastTimeSpaceReleased) ? "#2b7fff" : "#b4871c";
+            ctx.fillStyle = (notes[i].wasHit && notes[i].keyPressOnHit.isCurrentlyDown) ? "#2b7fff" : "#b4871c";
 
             // TODO: Color only the portion of the note that the user has held the button for
+            // Draw this rect in the following order: top-left, top-right, bottom-right, bottom-left
             ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS); // 2 is a magic number so we slightly overdraw and remove aliasing
             ctx.lineTo(notes[i].x - 1, notes[i].y - NOTE_RADIUS);
             ctx.lineTo(notes[i].x - 1, notes[i].y + NOTE_RADIUS);
             ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y + NOTE_RADIUS);
             ctx.fill();
 
+            // TODO: We'll need 2 rectangles if we want to draw part of the shape filled in and part of it not
+            //ctx.beginPath();
+            //ctx.fillStyle = 
+            //ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS); // 2 is a magic number so we slightly overdraw and remove aliasing
+            //ctx.lineTo(notes[i].x - 1, notes[i].y - NOTE_RADIUS);
+            //ctx.lineTo(notes[i].x - 1, notes[i].y + NOTE_RADIUS);
+            //ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y + NOTE_RADIUS);
+            //ctx.fill();
+
             ctx.beginPath();
+            ctx.fillStyle = (notes[i].wasHit && notes[i].keyPressOnHit.releaseTime >= notes[i].endHitTime) ?"#2b7fff" : "#b4871c";
             ctx.arc(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH, notes[i].y, NOTE_RADIUS, 1 / 2 * Math.PI / 2, 3 / 2 * Math.PI);
         }
         ctx.fill();
@@ -296,6 +331,7 @@ const drawTitleScreen = () => {
                     switch (event.code) {
                         case "Space":
                             lastTimeSpacePressed = new Date().getTime();
+                            keysPressed.push(new KeyPressed(lastTimeSpacePressed));
                             break;
                     }
                 }
@@ -319,6 +355,15 @@ const drawTitleScreen = () => {
                     switch (event.code) {
                         case "Space":
                             lastTimeSpaceReleased = new Date().getTime();
+
+                            // TODO: This will have to be more sophisticated when we add keys other than the space bar
+                            for (let i = 0; i < keysPressed.length; i++) {
+                                if (keysPressed[i].isCurrentlyDown) {
+                                    keysPressed[i].isCurrentlyDown = false;
+                                    keysPressed[i].releaseTime = lastTimeSpaceReleased;
+                                }
+                            }
+
                             break;
                     }
                 }
@@ -357,10 +402,6 @@ const handleChooseStartMenuItem = () => {
 
 
 const startNewGame = (): void => {
-    //    currentScore = 0;
-    //    totalNumLines = 0;
-    //    msPerPieceDrop = 800;
-
     let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
     if (pausedBox !== null) {
         pausedBox.style.visibility = 'hidden';
@@ -375,7 +416,7 @@ const startNewGame = (): void => {
     }
 
     notes.push(new Note(0.1, NOTE_SIMPLE, NOTE_POS_TOP)); // test simple note
-    notes.push(new Note(0.15, NOTE_DOUBLE_LENGTH, NOTE_POS_SECOND)); // test long note
+    notes.push(new Note(0.05, NOTE_DOUBLE_LENGTH, NOTE_POS_SECOND)); // test long note
 
     gameState = STATE_GAME_RUNNING;
     isGameOver = false;
