@@ -8,6 +8,7 @@ const STATE_GAME_PAUSED: number = 2;
 const SCREEN_HEIGHT: number = 320;
 const SCREEN_WIDTH: number = 640;
 const NOTE_RADIUS: number = SCREEN_WIDTH * 0.015;
+const HIT_POINT: number = SCREEN_WIDTH * 0.5;
 
 let startMenuSelectedOption: number = 0;
 const START_MENU_NUM_OPTIONS: number = 1;
@@ -49,10 +50,10 @@ class Note {
     updateHitTime(): void {
         switch (this.noteType) {
             case NOTE_SIMPLE:
-                this.startHitTime = this.endHitTime = this.startTime + (SCREEN_WIDTH * 0.5 / this.speed); // 0.5 is the middle of the screen
+                this.startHitTime = this.endHitTime = this.startTime + (HIT_POINT / this.speed);
                 break;
             case NOTE_DOUBLE_LENGTH:
-                this.startHitTime = this.startTime + ((SCREEN_WIDTH * 0.5 + NOTE_RADIUS) / this.speed); // 0.5 is the middle of the screen
+                this.startHitTime = this.startTime + ((HIT_POINT + NOTE_RADIUS) / this.speed);
                 this.endHitTime = this.startHitTime + (DOUBLE_LENGTH_NOTE_WIDTH * 0.5 / this.speed);
                 break;
         }
@@ -161,8 +162,8 @@ const playSong = (): void => {
 
     // Draw a line at the middle of the screen
     ctx.beginPath();
-    ctx.moveTo(SCREEN_WIDTH * 0.5, 0);
-    ctx.lineTo(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT);
+    ctx.moveTo(HIT_POINT, 0);
+    ctx.lineTo(HIT_POINT, SCREEN_HEIGHT);
     ctx.lineWidth = 2;
     ctx.strokeStyle = "black";
     ctx.lineCap = "round";
