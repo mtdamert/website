@@ -67,7 +67,7 @@ function DaysSince() {
 
     return (
         <div>
-            <div class="title">Days Since</div>
+            <div className="title">Days Since</div>
             <div className="border w-screen h-screen content-normal grid justify-between grid-cols-4 grid-rows-6">
                 {
                     items.map(

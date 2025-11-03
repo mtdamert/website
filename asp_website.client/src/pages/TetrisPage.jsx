@@ -2,7 +2,7 @@ import Tetris from '../components/Tetris.tsx';
 
 function TetrisPage() {
     return (
-        <div class="page">
+        <div className="page">
             <Tetris />
         </div>
     )

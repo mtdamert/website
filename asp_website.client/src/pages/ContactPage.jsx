@@ -2,7 +2,7 @@ import Contact from '../components/Contact';
 
 function ContactPage(props) {
     return (
-        <div class="page">
+        <div className="page">
             <Contact username={props.username} emailAddress={props.emailAddress} />
         </div>
     )

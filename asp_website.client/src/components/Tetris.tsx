@@ -2233,8 +2233,8 @@ export default function Tetris() {
       // the playing area is 22 * 10, except that the top 2 rows are hidden
 	  //  i.e. 320 x 704
     return (
-        <div class="content">
-            <div class="title">Tetris</div>
+        <div className="content">
+            <div className="title">Tetris</div>
             <span className="italic absolute top-[140px] left-[100px]">Press up arrow to rotate.<br/>Press ESC to pause.</span>
 
             <div id="fullArea">

@@ -2,7 +2,7 @@ import RhythmGame from '../components/RhythmGame.tsx';
 
 function RhythmGamePage() {
     return (
-        <div class="page">
+        <div className="page">
             <RhythmGame />
         </div>
     )

@@ -2,7 +2,7 @@ import RetirementCalc from '../components/RetirementCalc';
 
 function RetirementCalcPage(props) {
     return (
-        <div class="page">
+        <div className="page">
             <RetirementCalc emailAddress={props.emailAddress} />
         </div>
     )

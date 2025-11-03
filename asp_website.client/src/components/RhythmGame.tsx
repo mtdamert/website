@@ -429,8 +429,8 @@ function RhythmGame() {
     }, []);
 
     return (
-        <div class="content">
-            <div class="title">Rhythm Game</div>
+        <div className="content">
+            <div className="title">Rhythm Game</div>
             <span className="italic absolute top-[140px] left-[100px]">Press space when the dot hits the middle of the screen.<br/>Press ESC to pause.</span>
 
 {/*            TODO: Adjust screen width and height, because these values seem to not be getting picked up*/}

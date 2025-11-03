@@ -2,7 +2,7 @@ import { Outlet, Link } from "react-router-dom";
 
 function renderLink(link) {
     return (
-        <span key={`${link.label}_span`} class="menu-link-item">
+        <span key={`${link.label}_span`} className="menu-link-item">
             <Link key={link.label} to={link.path}>
                 {link.label}
             </Link>
@@ -14,13 +14,13 @@ function renderDropdownColumn(header) {
     // This just displays the header text, but if you hover over it, it also shows its children
 
     return (
-        <span key={`${header.label}_span`} class="menu-parent-item">
-            <span key={`${header.label}_span_child`} class="menu-parent-item">
+        <span key={`${header.label}_span`} className="menu-parent-item">
+            <span key={`${header.label}_span_child`} className="menu-parent-item">
                 {header.label}
             </span>
-            <div class="menu-dropdown-wrapper">
+            <div className="menu-dropdown-wrapper">
                 {header.children.map((childLink, index) => {
-                    return (<div key={`${childLink.label}_span`} class="menu-child-item">
+                    return (<div key={`${childLink.label}_span`} className="menu-child-item">
                         <Link key={childLink.label} to={childLink.path}>
                             {childLink.label}
                         </Link>

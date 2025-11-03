@@ -1,6 +1,6 @@
 function About() {
     return (
-        <div class="content">
+        <div className="content">
             <div className="pl-12 pt-8 text-4xl font-semibold text-orange-800">
                 Michael Damert
             </div>

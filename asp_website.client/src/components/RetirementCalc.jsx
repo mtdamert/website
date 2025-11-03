@@ -225,14 +225,14 @@ function RetirementCalc({ emailAddress }) {
     // }
 
     return (
-        <div class="content">
-            <div class="title">Retirement Calculator</div>
+        <div className="content">
+            <div className="title">Retirement Calculator</div>
             <div className="pl-8">
                 <label className="italic">
                     For use with US taxes
                 </label>
             </div>
-            <div class="form-background">
+            <div className="form-background">
                 <form onSubmit={handleSubmit} className="inline-block">
                     <div className="pt-4">
                         <label className="font-semibold">

@@ -2,7 +2,7 @@ import DaysSince from '../components/DaysSince';
 
 function DaysSincePage() {
     return (
-        <div class="page">
+        <div className="page">
             <DaysSince />
         </div>
     )

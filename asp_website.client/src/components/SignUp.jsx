@@ -61,10 +61,10 @@ function SignUp({ setToken }) {
     }
 
     return (
-        <div class="content">
-            <div class="title">Add a New User</div>
+        <div className="content">
+            <div className="title">Add a New User</div>
             <div id="errorMessage" className="hidden text-rose-600">Unable to create new user. Is this user already in the system?</div>
-            <form onSubmit={handleSubmit} class="form-background">
+            <form onSubmit={handleSubmit} className="form-background">
                 <div className="pb-2 w-[480px]">Enter your info here:</div>
                 <div>
                     <p>Username</p>

@@ -30,8 +30,8 @@ function MyAccount({ emailAddress, username, setToken }) {
     // TODO: Make sure the username gets updated after it has been saved and this page is reloaded
 
     return (
-        <div class="content">
-            <div class="title">Update Your User Info</div>
+        <div className="content">
+            <div className="title">Update Your User Info</div>
             <form onSubmit={handleSubmit} className="p-2 bg-blue-200">
                 <div>
                     <span className="font-bold">New Username: </span>

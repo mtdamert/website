@@ -40,9 +40,9 @@ function Contact({ username, emailAddress }) {
     }
 
     return (
-        <div class="content">
-            <div class="title">Send Mike an Email</div>
-            <form onSubmit={handleSubmit} class="form-background">
+        <div className="content">
+            <div className="title">Send Mike an Email</div>
+            <form onSubmit={handleSubmit} className="form-background">
                 <div className="pb-2">
                     <p>Your Name</p>
                     { showUsername(username) }

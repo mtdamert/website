@@ -442,9 +442,9 @@ function Art(props) {
     };
 
     return (
-        <div class="content content3d">
-            <div class="title">3D Graphics</div>
-            <div class="form-background">
+        <div className="content content3d">
+            <div className="title">3D Graphics</div>
+            <div className="form-background">
                 <form onSubmit={handleSubmit}>
                     <span className="italic">(work in progress)</span> - <span className="font-semibold">Current Time: </span>
                     <input id="currentHourInput" className="w-5 text-right" value="05" onChange={changeTime} />

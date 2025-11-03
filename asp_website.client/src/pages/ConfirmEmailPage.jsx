@@ -5,7 +5,7 @@ function ConfirmEmailPage(props) {
     const { setToken } = useToken(props.updateAppToken);
 
     return (
-        <div class="page">
+        <div className="page">
             <ConfirmEmail username={props.username} setToken={setToken} />
         </div>
     )

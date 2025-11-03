@@ -2,7 +2,7 @@ import LoginSuccessful from '../components/LoginSuccessful';
 
 function LoginSuccessfulPage(props) {
     return (
-        <div class="page">
+        <div className="page">
             <LoginSuccessful onLoad={props.onLoad} />
         </div>
     )

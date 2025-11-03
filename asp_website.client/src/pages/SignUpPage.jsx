@@ -6,7 +6,7 @@ function SignUpPage(props) {
     const { setToken } = useToken(props.updateAppToken);
 
     return (
-        <div class="page">
+        <div className="page">
             <SignUp setToken={setToken} />
         </div>
     )

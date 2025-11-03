@@ -5,7 +5,7 @@ function MyAccountPage(props) {
     const { setToken } = useToken(props.updateAppToken);
 
     return (
-        <div class="page">
+        <div className="page">
             <MyAccount username={props.username} emailAddress={props.emailAddress} setToken={setToken} />
         </div>
     )
