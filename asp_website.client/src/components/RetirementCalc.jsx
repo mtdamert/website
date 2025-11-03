@@ -110,19 +110,9 @@ function RetirementCalc({ emailAddress }) {
         });
     }
 
-    useEffect(() => { getSavingsZeroAge(); }, [currentAge]);
-    useEffect(() => { getSavingsZeroAge(); }, [currentSavings]);
-    useEffect(() => { getSavingsZeroAge(); }, [currentPostTaxSavings]);
-    useEffect(() => { getSavingsZeroAge(); }, [currentRetirementSavings]);
-    useEffect(() => { getSavingsZeroAge(); }, [currentIncome]);
-    useEffect(() => { getSavingsZeroAge(); }, [livingExpenses]);
-    useEffect(() => { getSavingsZeroAge(); }, [retirementAge]);
-    useEffect(() => { getSavingsZeroAge(); }, [startSocialSecurityAge]);
-    useEffect(() => { getSavingsZeroAge(); }, [estSocialSecurityIncome]);
-    useEffect(() => { getSavingsZeroAge(); }, [predictedYieldPct]);
-    useEffect(() => { getSavingsZeroAge(); }, [cpiPct]);
-    useEffect(() => { getSavingsZeroAge(); }, [ageAtDeath]);
-    useEffect(() => { getSavingsZeroAge(); }, [extrapolateCapGains]);
+    useEffect(() => { getSavingsZeroAge(); },
+        [currentAge, currentSavings, currentPostTaxSavings, currentRetirementSavings, currentIncome, livingExpenses, retirementAge,
+            startSocialSecurityAge, estSocialSecurityIncome, predictedYieldPct, cpiPct, ageAtDeath, extrapolateCapGains]);
 
     let calcIsRunning = false;
 
