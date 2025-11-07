@@ -40,7 +40,6 @@ async function getData(emailAddress) {
 }
 
 function RetirementCalc({ emailAddress }) {
-    console.log("email address: " + emailAddress);
     // Load from the server
     useEffect(() => {
         async function loadData() {
