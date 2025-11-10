@@ -188,7 +188,7 @@ function RetirementCalc({ emailAddress }) {
             ]);
             console.log("running sim for year " + currentYear + ", remaining savings: " + remainingSavings + ", data length: " + data.length);
 
-            await new Promise(r => setTimeout(r, 10)); // wait for X ms before continuing processing
+            await new Promise(r => setTimeout(r, 1)); // wait for X ms before continuing processing
 
             currentYear += 1;
         }
