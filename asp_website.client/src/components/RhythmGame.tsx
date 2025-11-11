@@ -34,6 +34,8 @@ let score: number = 0;
 let lastTimeSpacePressed: number = 0;
 let lastTimeSpaceReleased: number = 0;
 
+let debugMode: boolean = true;
+
 
 class Note {
     startTime: number; // when the note started being rendered onscreen
@@ -50,7 +52,8 @@ class Note {
     updateHitTime(): void {
         switch (this.noteType) {
             case NOTE_SIMPLE:
-                this.startHitTime = this.endHitTime = this.startTime + (HIT_POINT / this.speed);
+                this.startHitTime = this.startTime + (HIT_POINT / this.speed);
+                this.endHitTime = this.startHitTime;
                 break;
             case NOTE_DOUBLE_LENGTH:
                 this.startHitTime = this.startTime + ((HIT_POINT + NOTE_RADIUS) / this.speed);
@@ -83,6 +86,22 @@ class Note {
                 this.y = SCREEN_HEIGHT / 4 * 3;
                 break;
         }
+    }
+
+    getStartHitXCoord(currentTime: number): number {
+        return this.getXCoord(this.startHitTime, currentTime);
+    }
+
+    getEndHitXCoord(currentTime: number): number {
+        return this.getXCoord(this.endHitTime, currentTime);
+    }
+
+    getXCoord(targetTime: number, currentTime: number): number {
+        // DEBUG: For now, treat all notes as NOTE_SIMPLE
+
+        // Note to self: if speed is 1, it takes the note SCREEN_WIDTH ms to cross the screen
+
+        return ((currentTime - this.startTime) / this.speed);
     }
 }
 
@@ -173,9 +192,12 @@ const playSong = (): void => {
         // Move the note
         notes[i].x = (currentTime - notes[i].startTime) * notes[i].speed;
 
-        // If the note has moved offscreen, delete it and add a new note
+        // DEBUG: If the note has moved offscreen, delete it and add a new note
         if (notes[i].x > SCREEN_WIDTH) {
-            notes[i].startTime = new Date().getTime();
+            let newStartTime = new Date().getTime();
+            //console.log("reset note " + i + " at time " + newStartTime);
+            //console.log("note " + i + "'s speed is " + notes[i].speed + ", and it crossed the screen in " + (newStartTime - notes[i].startTime) + "ms");
+            notes[i].startTime = newStartTime;
             notes[i].updateHitTime();
             notes[i].wasHit = false;
         }
@@ -200,13 +222,33 @@ const playSong = (): void => {
         }
 
         // Draw the note
-        ctx.fillStyle = (notes[i].wasHit ? "#2b7fff" : "#b4871c");
-        ctx.beginPath();
         if (notes[i].noteType === NOTE_SIMPLE) {
+            if (debugMode) {
+                // TODO: In debug mode, show the area where the note can be hit
+                ctx.globalAlpha = 0.3;
+                ctx.fillStyle = "#c6005c";
+                ctx.beginPath();
+
+                ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS); // 2 is a magic number so we slightly overdraw and remove aliasing
+                ctx.lineTo(notes[i].x - 1, notes[i].y - NOTE_RADIUS);
+                ctx.lineTo(notes[i].x - 1, notes[i].y + NOTE_RADIUS);
+                ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y + NOTE_RADIUS);
+
+                ctx.fill();
+
+                ctx.globalAlpha = 1.0;
+            }
+
             // Draw a circle
+            ctx.fillStyle = (notes[i].wasHit ? "#2b7fff" : "#b4871c");
+            ctx.beginPath();
             ctx.arc(notes[i].x, notes[i].y, NOTE_RADIUS, 0, 2 * Math.PI);
+            ctx.fill();
+
         } else if (notes[i].noteType === NOTE_DOUBLE_LENGTH) {
             // Draw an ellipse
+            ctx.fillStyle = (notes[i].wasHit ? "#2b7fff" : "#b4871c");
+            ctx.beginPath();
             ctx.arc(notes[i].x, notes[i].y, NOTE_RADIUS, 2 * Math.PI / 2, 1 / 2 * Math.PI);
             ctx.fill();
 
@@ -234,8 +276,8 @@ const playSong = (): void => {
             ctx.beginPath();
             ctx.fillStyle = (notes[i].wasHit && notes[i].keyPressOnHit.releaseTime >= notes[i].endHitTime) ?"#2b7fff" : "#b4871c";
             ctx.arc(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH, notes[i].y, NOTE_RADIUS, 1 / 2 * Math.PI / 2, 3 / 2 * Math.PI);
+            ctx.fill();
         }
-        ctx.fill();
     }
 
     // Draw the current score
