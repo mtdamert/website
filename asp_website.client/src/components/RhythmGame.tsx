@@ -235,7 +235,7 @@ const playSong = (): void => {
                 ctx.fillStyle = "#c6005c";
                 ctx.beginPath();
 
-                ctx.lineTo(notes[i].getStartHitXCoord(currentTime), notes[i].y - NOTE_RADIUS); // 2 is a magic number so we slightly overdraw and remove aliasing
+                ctx.lineTo(notes[i].getStartHitXCoord(currentTime), notes[i].y - NOTE_RADIUS);
                 ctx.lineTo(notes[i].getEndHitXCoord(currentTime), notes[i].y - NOTE_RADIUS);
                 ctx.lineTo(notes[i].getEndHitXCoord(currentTime), notes[i].y + NOTE_RADIUS);
                 ctx.lineTo(notes[i].getStartHitXCoord(currentTime), notes[i].y + NOTE_RADIUS);
