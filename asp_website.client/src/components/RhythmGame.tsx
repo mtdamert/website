@@ -30,6 +30,8 @@ const NOTE_POS_TOP: number = 0;
 const NOTE_POS_SECOND: number = 1;
 const NOTE_POS_BOTTOM: number = 2;
 
+const NOTE_LEEWAY: number = 200;
+
 let score: number = 0;
 let lastTimeSpacePressed: number = 0;
 let lastTimeSpaceReleased: number = 0;
@@ -52,8 +54,8 @@ class Note {
     updateHitTime(): void {
         switch (this.noteType) {
             case NOTE_SIMPLE:
-                this.startHitTime = this.startTime + (HIT_POINT / this.speed) + 200;
-                this.endHitTime = this.startHitTime - 400; // TODO: Update this number so it's not a constant
+                this.startHitTime = this.startTime + (HIT_POINT / this.speed) + NOTE_LEEWAY;
+                this.endHitTime = this.startHitTime - (2 * NOTE_LEEWAY);
                 break;
             case NOTE_DOUBLE_LENGTH:
                 this.startHitTime = this.startTime + ((HIT_POINT + NOTE_RADIUS) / this.speed);
