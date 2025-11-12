@@ -52,8 +52,8 @@ class Note {
     updateHitTime(): void {
         switch (this.noteType) {
             case NOTE_SIMPLE:
-                this.startHitTime = this.startTime + (HIT_POINT / this.speed);
-                this.endHitTime = this.startHitTime;
+                this.startHitTime = this.startTime + (HIT_POINT / this.speed) + 200;
+                this.endHitTime = this.startHitTime - 400; // TODO: Update this number so it's not a constant
                 break;
             case NOTE_DOUBLE_LENGTH:
                 this.startHitTime = this.startTime + ((HIT_POINT + NOTE_RADIUS) / this.speed);
@@ -65,7 +65,7 @@ class Note {
 
     constructor(speed: number, noteType: number, notePos: number) {
         this.startTime = new Date().getTime();
-        console.log("note start time: " + this.startTime);
+        console.log("note start time      : " + this.startTime);
         this.x = 0;
         this.speed = speed;
         this.wasHit = false;
@@ -74,6 +74,7 @@ class Note {
         this.keyPressOnHit = null;
         this.updateHitTime();
         console.log("note start hit time  : " + this.startHitTime);
+        console.log("note end hit time    : " + this.endHitTime);
 
         switch (notePos) {
             case NOTE_POS_TOP:
@@ -89,11 +90,13 @@ class Note {
     }
 
     getStartHitXCoord(currentTime: number): number {
-        return this.getXCoord(this.startHitTime, currentTime);
+        let result: number = this.getXCoord(this.startHitTime, currentTime);
+        return result;
     }
 
     getEndHitXCoord(currentTime: number): number {
-        return this.getXCoord(this.endHitTime, currentTime);
+        let result: number = this.getXCoord(this.endHitTime, currentTime);
+        return result;
     }
 
     getXCoord(targetTime: number, currentTime: number): number {
@@ -101,7 +104,8 @@ class Note {
 
         // Note to self: if speed is 1, it takes the note SCREEN_WIDTH ms to cross the screen
 
-        return ((currentTime - this.startTime) / this.speed);
+        // This works because we're trying to calculate how far targetTime is from the HIT_POINT
+        return (currentTime - targetTime) * this.speed + HIT_POINT;
     }
 }
 
@@ -229,10 +233,10 @@ const playSong = (): void => {
                 ctx.fillStyle = "#c6005c";
                 ctx.beginPath();
 
-                ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS); // 2 is a magic number so we slightly overdraw and remove aliasing
-                ctx.lineTo(notes[i].x - 1, notes[i].y - NOTE_RADIUS);
-                ctx.lineTo(notes[i].x - 1, notes[i].y + NOTE_RADIUS);
-                ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y + NOTE_RADIUS);
+                ctx.lineTo(notes[i].getStartHitXCoord(currentTime), notes[i].y - NOTE_RADIUS); // 2 is a magic number so we slightly overdraw and remove aliasing
+                ctx.lineTo(notes[i].getEndHitXCoord(currentTime), notes[i].y - NOTE_RADIUS);
+                ctx.lineTo(notes[i].getEndHitXCoord(currentTime), notes[i].y + NOTE_RADIUS);
+                ctx.lineTo(notes[i].getStartHitXCoord(currentTime), notes[i].y + NOTE_RADIUS);
 
                 ctx.fill();
 
