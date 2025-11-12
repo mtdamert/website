@@ -230,7 +230,7 @@ const playSong = (): void => {
         // Draw the note
         if (notes[i].noteType === NOTE_SIMPLE) {
             if (debugMode) {
-                // TODO: In debug mode, show the area where the note can be hit
+                // In debug mode, show the area where the note can be hit
                 ctx.globalAlpha = 0.3;
                 ctx.fillStyle = "#c6005c";
                 ctx.beginPath();
