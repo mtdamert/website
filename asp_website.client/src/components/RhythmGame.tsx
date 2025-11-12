@@ -232,7 +232,7 @@ const playSong = (): void => {
             if (debugMode) {
                 // In debug mode, show the area where the note can be hit
                 ctx.globalAlpha = 0.3;
-                ctx.fillStyle = "#c6005c";
+                ctx.fillStyle = (notes[i].wasHit? "#000000" : "#c6005c");
                 ctx.beginPath();
 
                 ctx.lineTo(notes[i].getStartHitXCoord(currentTime), notes[i].y - NOTE_RADIUS);
