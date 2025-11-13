@@ -54,8 +54,8 @@ class Note {
     updateHitTime(): void {
         switch (this.noteType) {
             case NOTE_SIMPLE:
-                this.startHitTime = this.startTime + (HIT_POINT / this.speed) + NOTE_LEEWAY;
-                this.endHitTime = this.startHitTime - (2 * NOTE_LEEWAY);
+                this.startHitTime = this.startTime + (HIT_POINT / this.speed) - NOTE_LEEWAY;
+                this.endHitTime = this.startHitTime + (2 * NOTE_LEEWAY);
                 break;
             case NOTE_DOUBLE_LENGTH:
                 this.startHitTime = this.startTime + ((HIT_POINT + NOTE_RADIUS) / this.speed);
@@ -213,8 +213,7 @@ const playSong = (): void => {
         //lastTimeSpacePressed = currentTime; // TEST note hit time
 
         if (currentTime >= notes[i].startTime) {
-            let distanceFromHitTime: number = Math.abs(lastTimeSpacePressed - notes[i].startHitTime);
-            if (distanceFromHitTime <= (notes[i].speed * 2000)) {
+            if (lastTimeSpacePressed >= notes[i].startHitTime && lastTimeSpacePressed <= notes[i].endHitTime) {
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
                     score++;
