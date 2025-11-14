@@ -36,6 +36,8 @@ let score: number = 0;
 let lastTimeSpacePressed: number = 0;
 let lastTimeSpaceReleased: number = 0;
 
+let onscreenMessages: Array<(OnscreenMessage | null)> = [];
+
 let debugMode: boolean = true;
 
 
@@ -111,6 +113,7 @@ class Note {
     }
 }
 
+
 class KeyPressed {
     pressTime: number;
     releaseTime: number = 0;
@@ -123,6 +126,24 @@ class KeyPressed {
 
         // TODO: For now, the space bar is the only key that gets pressed
         this.keyName = 'space';
+    }
+}
+
+
+class OnscreenMessage {
+    text: string;
+    x: number;
+    y: number;
+    startTime: number;
+    duration: number;
+
+    constructor(x: number, y: number, text: string) {
+        this.x = x;
+        this.y = y;
+        this.text = text;
+
+        this.startTime = new Date().getTime();
+        this.duration = 1000;
     }
 }
 
@@ -183,7 +204,7 @@ const playSong = (): void => {
     const currentTime = new Date().getTime();
 
     // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // Draw a line at the middle of the screen
     ctx.beginPath();
@@ -214,8 +235,10 @@ const playSong = (): void => {
 
         if (currentTime >= notes[i].startTime) {
             if (lastTimeSpacePressed >= notes[i].startHitTime && lastTimeSpacePressed <= notes[i].endHitTime) {
+                // TODO: Score more if the note is hit in the middle rather than on the edge of its range
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
+                    addOnscreenMessage(ctx, 0, 0, "GOOD");
                     score++;
                 }
 
@@ -285,12 +308,39 @@ const playSong = (): void => {
         }
     }
 
+    updateAndRenderOnscreenMessages(currentTime, ctx);
+
     // Draw the current score
     ctx.font = '30px Arial';
     ctx.fillStyle = '#c6005c'; // Color for filled text
     ctx.textAlign = 'center'; // Horizontal alignment
     ctx.textBaseline = 'middle'; // Vertical alignment
-    ctx.fillText(score.toString(), canvas.width / 20 * 19, canvas.height / 10);
+    ctx.fillText(score.toString(), SCREEN_WIDTH / 20 * 19, SCREEN_HEIGHT / 10);
+}
+
+
+const addOnscreenMessage = (ctx: CanvasRenderingContext2D, x: number, y: number, text: string): void => {
+    let message: OnscreenMessage = new OnscreenMessage(x, y, text);
+    onscreenMessages.push(message);
+}
+
+
+function updateAndRenderOnscreenMessages(currentTime: number, ctx: CanvasRenderingContext2D) {
+    // Remove stale onscreen messages
+    for (let i: number = onscreenMessages.length - 1; i >= 0; i--) {
+        if (currentTime > (onscreenMessages[i].startTime + onscreenMessages[i].duration)) {
+            onscreenMessages.splice(i, 1);
+        }
+    }
+
+    // Render onscreen messages
+    for (let i: number = 0; i < onscreenMessages.length; i++) {
+        ctx.font = '30px Arial';
+        ctx.fillStyle = '#c6005c'; // Color for filled text
+        ctx.textAlign = 'left'; // Horizontal alignment
+        ctx.textBaseline = 'top'; // Vertical alignment
+        ctx.fillText(onscreenMessages[i].text, onscreenMessages[i].x, onscreenMessages[i].y);
+    }
 }
 
 
@@ -310,7 +360,7 @@ const clearStartMenuCanvas = () => {
     const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
     const ctx = canvas.getContext("2d");
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 
@@ -319,11 +369,11 @@ const updateStartMenuCanvas = () => {
     const ctx = canvas.getContext("2d");
 
     // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // Draw a dot next to the selected item
     ctx.beginPath();
-    ctx.arc((canvas.width * 0.075), (canvas.height * 0.55 + (canvas.height * 0.1 * startMenuSelectedOption)), NOTE_RADIUS, 0, 2 * Math.PI);
+    ctx.arc((SCREEN_WIDTH * 0.075), (SCREEN_HEIGHT * 0.55 + (SCREEN_HEIGHT * 0.1 * startMenuSelectedOption)), NOTE_RADIUS, 0, 2 * Math.PI);
     ctx.fillStyle = "#2b7fff";
     ctx.fill();
 
@@ -343,7 +393,7 @@ const drawTitleScreen = () => {
         // Clear canvas
         const canvas: (HTMLCanvasElement) = document.getElementById("myCanvas") as HTMLCanvasElement;
         const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
         // Draw a canvas dot next to the selected menu item
         updateStartMenuCanvas();
@@ -469,6 +519,7 @@ const startNewGame = (): void => {
     gameState = STATE_GAME_RUNNING;
     isGameOver = false;
 }
+
 
 function RhythmGame() {
     useEffect(() => {
