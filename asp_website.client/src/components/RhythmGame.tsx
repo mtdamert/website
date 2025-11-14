@@ -256,12 +256,8 @@ const playSong = (): void => {
                 ctx.globalAlpha = 0.3;
                 ctx.fillStyle = (notes[i].wasHit? "#000000" : "#c6005c");
                 ctx.beginPath();
-
-                ctx.lineTo(notes[i].getStartHitXCoord(currentTime), notes[i].y - NOTE_RADIUS);
-                ctx.lineTo(notes[i].getEndHitXCoord(currentTime), notes[i].y - NOTE_RADIUS);
-                ctx.lineTo(notes[i].getEndHitXCoord(currentTime), notes[i].y + NOTE_RADIUS);
-                ctx.lineTo(notes[i].getStartHitXCoord(currentTime), notes[i].y + NOTE_RADIUS);
-
+                ctx.fillRect(notes[i].getStartHitXCoord(currentTime), notes[i].y - NOTE_RADIUS,
+                    notes[i].getEndHitXCoord(currentTime) - notes[i].getStartHitXCoord(currentTime), NOTE_RADIUS * 2);
                 ctx.fill();
 
                 ctx.globalAlpha = 1.0;
@@ -285,20 +281,13 @@ const playSong = (): void => {
             ctx.fillStyle = (notes[i].wasHit && notes[i].keyPressOnHit.isCurrentlyDown) ? "#2b7fff" : "#b4871c";
 
             // TODO: Color only the portion of the note that the user has held the button for
-            // Draw this rect in the following order: top-left, top-right, bottom-right, bottom-left
-            ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS); // 2 is a magic number so we slightly overdraw and remove aliasing
-            ctx.lineTo(notes[i].x - 1, notes[i].y - NOTE_RADIUS);
-            ctx.lineTo(notes[i].x - 1, notes[i].y + NOTE_RADIUS);
-            ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y + NOTE_RADIUS);
+            ctx.fillRect(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS, DOUBLE_LENGTH_NOTE_WIDTH + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
             ctx.fill();
 
             // TODO: We'll need 2 rectangles if we want to draw part of the shape filled in and part of it not
             //ctx.beginPath();
-            //ctx.fillStyle = 
-            //ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS); // 2 is a magic number so we slightly overdraw and remove aliasing
-            //ctx.lineTo(notes[i].x - 1, notes[i].y - NOTE_RADIUS);
-            //ctx.lineTo(notes[i].x - 1, notes[i].y + NOTE_RADIUS);
-            //ctx.lineTo(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y + NOTE_RADIUS);
+            //ctx.fillStyle =
+            //ctx.fillRect(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS, DOUBLE_LENGTH_NOTE_WIDTH + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
             //ctx.fill();
 
             ctx.beginPath();
