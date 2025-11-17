@@ -31,6 +31,9 @@ const NOTE_POS_SECOND: number = 1;
 const NOTE_POS_BOTTOM: number = 2;
 
 const NOTE_LEEWAY: number = 200;
+const NOTE_OK_RANGE: number = 60;
+const NOTE_GREAT_RANGE: number = 150;
+// Beyond that, all notes are in the EXCELLENT range
 
 let score: number = 0;
 let lastTimeSpacePressed: number = 0;
@@ -238,7 +241,18 @@ const playSong = (): void => {
                 // TODO: Score more if the note is hit in the middle rather than on the edge of its range
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
-                    addOnscreenMessage(ctx, 0, 0, "GOOD");
+                    let message: string = "OK";
+
+                    // TODO: How close were we to the center of this note?
+                    if (lastTimeSpacePressed >= (NOTE_OK_RANGE + notes[i].startHitTime) && lastTimeSpacePressed <= (notes[i].endHitTime - NOTE_OK_RANGE)) {
+                        message = "GREAT";
+
+                        if (lastTimeSpacePressed >= (NOTE_GREAT_RANGE + notes[i].startHitTime) && lastTimeSpacePressed <= (notes[i].endHitTime - NOTE_GREAT_RANGE)) {
+                            message = "EXCELLENT";
+                        }
+                    }
+
+                    addOnscreenMessage(ctx, 0, 0, message);
                     score++;
                 }
 
