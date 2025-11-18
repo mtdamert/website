@@ -210,13 +210,7 @@ const playSong = (): void => {
     ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     // Draw a line at the middle of the screen
-    ctx.beginPath();
-    ctx.moveTo(HIT_POINT, 0);
-    ctx.lineTo(HIT_POINT, SCREEN_HEIGHT);
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = "black";
-    ctx.lineCap = "round";
-    ctx.stroke();
+    drawHitPointLine(ctx);
 
     for (let i: number = 0; i < notes.length; i++) {
         // Move the note
@@ -225,8 +219,6 @@ const playSong = (): void => {
         // DEBUG: If the note has moved offscreen, delete it and add a new note
         if (notes[i].x > SCREEN_WIDTH) {
             let newStartTime = new Date().getTime();
-            //console.log("reset note " + i + " at time " + newStartTime);
-            //console.log("note " + i + "'s speed is " + notes[i].speed + ", and it crossed the screen in " + (newStartTime - notes[i].startTime) + "ms");
             notes[i].startTime = newStartTime;
             notes[i].updateHitTime();
             notes[i].wasHit = false;
@@ -243,7 +235,7 @@ const playSong = (): void => {
                 if (notes[i].wasHit === false) {
                     let message: string = "OK";
 
-                    // TODO: How close were we to the center of this note?
+                    // How close were we to the center of this note?
                     if (lastTimeSpacePressed >= (NOTE_OK_RANGE + notes[i].startHitTime) && lastTimeSpacePressed <= (notes[i].endHitTime - NOTE_OK_RANGE)) {
                         message = "GREAT";
 
@@ -265,55 +257,80 @@ const playSong = (): void => {
 
         // Draw the note
         if (notes[i].noteType === NOTE_SIMPLE) {
-            if (debugMode) {
-                // In debug mode, show the area where the note can be hit
-                ctx.globalAlpha = 0.3;
-                ctx.fillStyle = (notes[i].wasHit? "#000000" : "#c6005c");
-                ctx.beginPath();
-                ctx.fillRect(notes[i].getStartHitXCoord(currentTime), notes[i].y - NOTE_RADIUS,
-                    notes[i].getEndHitXCoord(currentTime) - notes[i].getStartHitXCoord(currentTime), NOTE_RADIUS * 2);
-                ctx.fill();
-
-                ctx.globalAlpha = 1.0;
-            }
-
-            // Draw a circle
-            ctx.fillStyle = (notes[i].wasHit ? "#2b7fff" : "#b4871c");
-            ctx.beginPath();
-            ctx.arc(notes[i].x, notes[i].y, NOTE_RADIUS, 0, 2 * Math.PI);
-            ctx.fill();
-
+            drawSimpleNote(ctx, notes[i], currentTime);
         } else if (notes[i].noteType === NOTE_DOUBLE_LENGTH) {
-            // Draw an ellipse
-            ctx.fillStyle = (notes[i].wasHit ? "#2b7fff" : "#b4871c");
-            ctx.beginPath();
-            ctx.arc(notes[i].x, notes[i].y, NOTE_RADIUS, 2 * Math.PI / 2, 1 / 2 * Math.PI);
-            ctx.fill();
-
-            // If the player is still holding down the note, color in the note
-            ctx.beginPath();
-            ctx.fillStyle = (notes[i].wasHit && notes[i].keyPressOnHit.isCurrentlyDown) ? "#2b7fff" : "#b4871c";
-
-            // TODO: Color only the portion of the note that the user has held the button for
-            ctx.fillRect(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS, DOUBLE_LENGTH_NOTE_WIDTH + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
-            ctx.fill();
-
-            // TODO: We'll need 2 rectangles if we want to draw part of the shape filled in and part of it not
-            //ctx.beginPath();
-            //ctx.fillStyle =
-            //ctx.fillRect(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH - 2, notes[i].y - NOTE_RADIUS, DOUBLE_LENGTH_NOTE_WIDTH + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
-            //ctx.fill();
-
-            ctx.beginPath();
-            ctx.fillStyle = (notes[i].wasHit && notes[i].keyPressOnHit.releaseTime >= notes[i].endHitTime) ?"#2b7fff" : "#b4871c";
-            ctx.arc(notes[i].x - DOUBLE_LENGTH_NOTE_WIDTH, notes[i].y, NOTE_RADIUS, 1 / 2 * Math.PI / 2, 3 / 2 * Math.PI);
-            ctx.fill();
+            drawDoubleLengthNote(ctx, notes[i], currentTime);
         }
     }
 
     updateAndRenderOnscreenMessages(currentTime, ctx);
 
     // Draw the current score
+    drawScore(ctx);
+}
+
+
+const drawHitPointLine = (ctx: CanvasRenderingContext2D): void => {
+    ctx.beginPath();
+    ctx.moveTo(HIT_POINT, 0);
+    ctx.lineTo(HIT_POINT, SCREEN_HEIGHT);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "black";
+    ctx.lineCap = "round";
+    ctx.stroke();
+}
+
+
+const drawSimpleNote = (ctx: CanvasRenderingContext2D, note: Note, currentTime: number): void => {
+    if (debugMode) {
+        // In debug mode, show the area where the note can be hit
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = (note.wasHit ? "#000000" : "#c6005c");
+        ctx.beginPath();
+        ctx.fillRect(note.getStartHitXCoord(currentTime), note.y - NOTE_RADIUS,
+            note.getEndHitXCoord(currentTime) - note.getStartHitXCoord(currentTime), NOTE_RADIUS * 2);
+        ctx.fill();
+
+        ctx.globalAlpha = 1.0;
+    }
+
+    // Draw a circle
+    ctx.fillStyle = (note.wasHit ? "#2b7fff" : "#b4871c");
+    ctx.beginPath();
+    ctx.arc(note.x, note.y, NOTE_RADIUS, 0, 2 * Math.PI);
+    ctx.fill();
+}
+
+
+const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, currentTime: number): void => {
+    // Draw an ellipse
+    ctx.fillStyle = (note.wasHit ? "#2b7fff" : "#b4871c");
+    ctx.beginPath();
+    ctx.arc(note.x, note.y, NOTE_RADIUS, 2 * Math.PI / 2, 1 / 2 * Math.PI);
+    ctx.fill();
+
+    // If the player is still holding down the note, color in the note
+    ctx.beginPath();
+    ctx.fillStyle = (note.wasHit && note.keyPressOnHit.isCurrentlyDown) ? "#2b7fff" : "#b4871c";
+
+    // TODO: Color only the portion of the note that the user has held the button for
+    ctx.fillRect(note.x - DOUBLE_LENGTH_NOTE_WIDTH - 2, note.y - NOTE_RADIUS, DOUBLE_LENGTH_NOTE_WIDTH + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
+    ctx.fill();
+
+    // TODO: We'll need 2 rectangles if we want to draw part of the shape filled in and part of it not
+    //ctx.beginPath();
+    //ctx.fillStyle =
+    //ctx.fillRect(note.x - DOUBLE_LENGTH_NOTE_WIDTH - 2, note.y - NOTE_RADIUS, DOUBLE_LENGTH_NOTE_WIDTH + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
+    //ctx.fill();
+
+    ctx.beginPath();
+    ctx.fillStyle = (note.wasHit && note.keyPressOnHit.releaseTime >= note.endHitTime) ? "#2b7fff" : "#b4871c";
+    ctx.arc(note.x - DOUBLE_LENGTH_NOTE_WIDTH, note.y, NOTE_RADIUS, 1 / 2 * Math.PI / 2, 3 / 2 * Math.PI);
+    ctx.fill();
+}
+
+
+const drawScore = (ctx: CanvasRenderingContext2D): void => {
     ctx.font = '30px Arial';
     ctx.fillStyle = '#c6005c'; // Color for filled text
     ctx.textAlign = 'center'; // Horizontal alignment
