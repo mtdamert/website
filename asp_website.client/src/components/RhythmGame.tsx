@@ -287,8 +287,8 @@ const drawSimpleNote = (ctx: CanvasRenderingContext2D, note: Note, currentTime: 
         ctx.globalAlpha = 0.3;
         ctx.fillStyle = (note.wasHit ? "#000000" : "#c6005c");
         ctx.beginPath();
-        ctx.fillRect(note.getStartHitXCoord(currentTime), note.y - NOTE_RADIUS,
-            note.getEndHitXCoord(currentTime) - note.getStartHitXCoord(currentTime), NOTE_RADIUS * 2);
+        ctx.fillRect(note.getStartHitXCoord(currentTime), note.y - (1.5 * NOTE_RADIUS),
+            note.getEndHitXCoord(currentTime) - note.getStartHitXCoord(currentTime), NOTE_RADIUS * 3);
         ctx.fill();
 
         ctx.globalAlpha = 1.0;
