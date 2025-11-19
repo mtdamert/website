@@ -234,18 +234,21 @@ const playSong = (): void => {
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
                     let message: string = "OK";
+                    let points: number = 10;
 
                     // How close were we to the center of this note?
                     if (lastTimeSpacePressed >= (NOTE_OK_RANGE + notes[i].startHitTime) && lastTimeSpacePressed <= (notes[i].endHitTime - NOTE_OK_RANGE)) {
                         message = "GREAT";
+                        points = 25;
 
                         if (lastTimeSpacePressed >= (NOTE_GREAT_RANGE + notes[i].startHitTime) && lastTimeSpacePressed <= (notes[i].endHitTime - NOTE_GREAT_RANGE)) {
                             message = "EXCELLENT";
+                            points = 50;
                         }
                     }
 
                     addOnscreenMessage(ctx, 0, 0, message);
-                    score++;
+                    score += points;
                 }
 
                 notes[i].wasHit = true;
