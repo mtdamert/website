@@ -51,6 +51,7 @@ class Note {
     speed: number;
     startHitTime: number;
     endHitTime: number;
+    endHoldTime: number; // TODO: Use this variable to figure out how long the user should be holding the note for a double-length note
     wasHit: boolean;
     hitPercentage: number;
     noteType: number;
@@ -61,10 +62,16 @@ class Note {
             case NOTE_SIMPLE:
                 this.startHitTime = this.startTime + (HIT_POINT / this.speed) - NOTE_LEEWAY;
                 this.endHitTime = this.startHitTime + (2 * NOTE_LEEWAY);
+                console.log('creating NOTE_SIMPLE with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime);
                 break;
             case NOTE_DOUBLE_LENGTH:
-                this.startHitTime = this.startTime + ((HIT_POINT + NOTE_RADIUS) / this.speed);
-                this.endHitTime = this.startHitTime + (DOUBLE_LENGTH_NOTE_WIDTH * 0.5 / this.speed);
+                this.startHitTime = this.startTime + (HIT_POINT / this.speed) - NOTE_LEEWAY;
+                this.endHitTime = this.startHitTime + (2 * NOTE_LEEWAY);
+                console.log('creating NOTE_DOUBLE_LENGTH with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime);
+
+                // TODO: This was the original values, but this isn't quite right
+                //this.startHitTime = this.startTime + ((HIT_POINT + NOTE_RADIUS) / this.speed);
+                //this.endHitTime = this.startHitTime + (DOUBLE_LENGTH_NOTE_WIDTH * 0.5 / this.speed);
                 break;
         }
 
@@ -72,7 +79,6 @@ class Note {
 
     constructor(speed: number, noteType: number, notePos: number) {
         this.startTime = new Date().getTime();
-        console.log("note start time      : " + this.startTime);
         this.x = 0;
         this.speed = speed;
         this.wasHit = false;
@@ -80,8 +86,6 @@ class Note {
         this.noteType = noteType;
         this.keyPressOnHit = null;
         this.updateHitTime();
-        console.log("note start hit time  : " + this.startHitTime);
-        console.log("note end hit time    : " + this.endHitTime);
 
         switch (notePos) {
             case NOTE_POS_TOP:
@@ -107,10 +111,7 @@ class Note {
     }
 
     getXCoord(targetTime: number, currentTime: number): number {
-        // DEBUG: For now, treat all notes as NOTE_SIMPLE
-
         // Note to self: if speed is 1, it takes the note SCREEN_WIDTH ms to cross the screen
-
         // This works because we're trying to calculate how far targetTime is from the HIT_POINT
         return (currentTime - targetTime) * this.speed + HIT_POINT;
     }
@@ -306,6 +307,18 @@ const drawSimpleNote = (ctx: CanvasRenderingContext2D, note: Note, currentTime: 
 
 
 const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, currentTime: number): void => {
+    if (debugMode) {
+        // In debug mode, show the area where the note can be hit
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = (note.wasHit ? "#000000" : "#c6005c");
+        ctx.beginPath();
+        ctx.fillRect(note.getStartHitXCoord(currentTime), note.y - (1.5 * NOTE_RADIUS),
+            note.getEndHitXCoord(currentTime) - note.getStartHitXCoord(currentTime), NOTE_RADIUS * 3);
+        ctx.fill();
+
+        ctx.globalAlpha = 1.0;
+    }
+
     // Draw an ellipse
     ctx.fillStyle = (note.wasHit ? "#2b7fff" : "#b4871c");
     ctx.beginPath();
