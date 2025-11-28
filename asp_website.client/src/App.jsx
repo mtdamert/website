@@ -104,7 +104,7 @@ function App() {
             return <div>
                 <div className="float-left text-gray-200 text-sm">Hi, {getUsername(token)}</div>
                 <div className="float-right">
-                    <Link key="My Account" to='/myaccount' className="mb-3 font-bold h-full text-blue-500 no-underline">⚙️</Link><span>   </span>
+                    <Link key="My Account" to='/myaccount' className="mb-3 font-bold h-full text-blue-500 no-underline">⚙️Settings</Link><span> | </span>
                     <Link key="Log Out" className="mb-3 font-bold h-full text-blue-500" to="/" onClick={logOut}>Log Out</Link>
                 </div>
             </div>;
