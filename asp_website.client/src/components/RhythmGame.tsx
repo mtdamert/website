@@ -113,7 +113,8 @@ class Note {
     getXCoord(targetTime: number, currentTime: number): number {
         // Note to self: if speed is 1, it takes the note SCREEN_WIDTH ms to cross the screen
         // This works because we're trying to calculate how far targetTime is from the HIT_POINT
-        return (currentTime - targetTime) * this.speed + HIT_POINT;
+        //return (currentTime - targetTime);// + (HIT_POINT / this.speed);
+        return (currentTime - targetTime) * this.speed + HIT_POINT; // BUG: we're using speed here to multiply, but we use it to divide when we set times
     }
 }
 
@@ -291,8 +292,8 @@ const drawSimpleNote = (ctx: CanvasRenderingContext2D, note: Note, currentTime: 
         ctx.globalAlpha = 0.3;
         ctx.fillStyle = (note.wasHit ? "#000000" : "#c6005c");
         ctx.beginPath();
-        ctx.fillRect(note.getStartHitXCoord(currentTime), note.y - (1.5 * NOTE_RADIUS),
-            note.getEndHitXCoord(currentTime) - note.getStartHitXCoord(currentTime), NOTE_RADIUS * 3);
+        let scaledNoteLeeway = NOTE_LEEWAY * note.speed;
+        ctx.fillRect(note.x + scaledNoteLeeway, note.y - (1.5 * NOTE_RADIUS), -2 * scaledNoteLeeway, NOTE_RADIUS * 3);
         ctx.fill();
 
         ctx.globalAlpha = 1.0;
@@ -312,8 +313,8 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
         ctx.globalAlpha = 0.3;
         ctx.fillStyle = (note.wasHit ? "#000000" : "#c6005c");
         ctx.beginPath();
-        ctx.fillRect(note.getStartHitXCoord(currentTime), note.y - (1.5 * NOTE_RADIUS),
-            note.getEndHitXCoord(currentTime) - note.getStartHitXCoord(currentTime), NOTE_RADIUS * 3);
+        let scaledNoteLeeway = NOTE_LEEWAY * note.speed;
+        ctx.fillRect(note.x + scaledNoteLeeway, note.y - (1.5 * NOTE_RADIUS), -2 * scaledNoteLeeway, NOTE_RADIUS * 3);
         ctx.fill();
 
         ctx.globalAlpha = 1.0;
