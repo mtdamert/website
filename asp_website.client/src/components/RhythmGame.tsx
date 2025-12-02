@@ -342,7 +342,7 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
 
     ctx.beginPath();
     ctx.fillStyle = (note.wasHit && note.keyPressOnHit.releaseTime >= note.endHitTime) ? "#2b7fff" : "#b4871c";
-    ctx.arc(note.x - DOUBLE_LENGTH_NOTE_WIDTH, note.y, NOTE_RADIUS, 1 / 2 * Math.PI / 2, 3 / 2 * Math.PI);
+    ctx.arc(note.x - DOUBLE_LENGTH_NOTE_WIDTH, note.y, NOTE_RADIUS, (1 / 2) * Math.PI, (3 / 2) * Math.PI);
     ctx.fill();
 }
 
