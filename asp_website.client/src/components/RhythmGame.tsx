@@ -116,6 +116,23 @@ class Note {
         //return (currentTime - targetTime);// + (HIT_POINT / this.speed);
         return (currentTime - targetTime) * this.speed + HIT_POINT; // BUG: we're using speed here to multiply, but we use it to divide when we set times
     }
+
+    getLengthOfNoteToDraw(currentTime: number): number {
+        if (this.keyPressOnHit == null) {
+            return 0;
+        }
+
+        if (!this.keyPressOnHit.isCurrentlyDown) {
+            if (this.keyPressOnHit.releaseTime <= 0) { // Key has not been pressed yet
+                return 0;
+            }
+            else { // Key has been pressed
+                return (this.keyPressOnHit.releaseTime - this.keyPressOnHit.pressTime) * this.speed;
+            }
+        } else if (this.keyPressOnHit.isCurrentlyDown) { // Key has been pressed but not released
+            return (currentTime - this.keyPressOnHit.pressTime) * this.speed;
+        }
+    }
 }
 
 
@@ -331,7 +348,11 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     ctx.fillStyle = (note.wasHit && note.keyPressOnHit.isCurrentlyDown) ? "#2b7fff" : "#b4871c";
 
     // TODO: Color only the portion of the note that the user has held the button for
-    ctx.fillRect(note.x - DOUBLE_LENGTH_NOTE_WIDTH - 2, note.y - NOTE_RADIUS, DOUBLE_LENGTH_NOTE_WIDTH + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
+    let noteBodyWidth = note.getLengthOfNoteToDraw(currentTime); //previously, this was DOUBLE_LENGTH_NOTE_WIDTH
+    if (noteBodyWidth > DOUBLE_LENGTH_NOTE_WIDTH) {
+        noteBodyWidth = DOUBLE_LENGTH_NOTE_WIDTH;
+    }
+    ctx.fillRect(note.x - noteBodyWidth - 2, note.y - NOTE_RADIUS, noteBodyWidth + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
     ctx.fill();
 
     // TODO: We'll need 2 rectangles if we want to draw part of the shape filled in and part of it not
