@@ -338,24 +338,27 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     // Draw an ellipse
     ctx.fillStyle = (note.wasHit ? "#2b7fff" : "#b4871c");
     ctx.beginPath();
-    ctx.arc(note.x, note.y, NOTE_RADIUS, 2 * Math.PI / 2, 1 / 2 * Math.PI);
+    ctx.arc(note.x, note.y, NOTE_RADIUS, 3 / 2 * Math.PI, 1 / 2 * Math.PI);
     ctx.fill();
 
-    // If the player is still holding down the note, color in the note
-    ctx.beginPath();
-    ctx.fillStyle = (note.wasHit && note.keyPressOnHit.isCurrentlyDown) ? "#2b7fff" : "#b4871c";
-
     // TODO: Color only the portion of the note that the user has held the button for
+
+    // Draw the colored-in portion of the note. This is for both if the player is still holding down the note or if the note was previously held
+    ctx.beginPath();
+    ctx.fillStyle = "#2b7fff";
+    //ctx.fillStyle = (note.wasHit && note.keyPressOnHit.isCurrentlyDown) ? "#2b7fff" : "#b4871c";
+
     let noteBodyWidth = note.getLengthOfNoteToDraw(currentTime); //previously, this was DOUBLE_LENGTH_NOTE_WIDTH
     if (noteBodyWidth > DOUBLE_LENGTH_NOTE_WIDTH) {
         noteBodyWidth = DOUBLE_LENGTH_NOTE_WIDTH;
     }
+    // TODO: Make sure that a tiny part of the note doesn't get drawn (the '2' here) unless the note was hit
     ctx.fillRect(note.x - noteBodyWidth - 2, note.y - NOTE_RADIUS, noteBodyWidth + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
     ctx.fill();
 
-    // TODO: We'll need 2 rectangles if we want to draw part of the shape filled in and part of it not
+    // TODO: Draw the un-colored-in portion of the note
     //ctx.beginPath();
-    //ctx.fillStyle =
+    //ctx.fillStyle = "#b4871c";
     //ctx.fillRect(note.x - DOUBLE_LENGTH_NOTE_WIDTH - 2, note.y - NOTE_RADIUS, DOUBLE_LENGTH_NOTE_WIDTH + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
     //ctx.fill();
 
