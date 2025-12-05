@@ -356,7 +356,7 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     ctx.fillRect(note.x - noteBodyWidth - 2, note.y - NOTE_RADIUS, noteBodyWidth + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
     ctx.fill();
 
-    // TODO: Draw the un-colored-in portion of the note
+    // Draw the un-colored-in portion of the note
     ctx.beginPath();
     ctx.fillStyle = "#b4871c";
     ctx.fillRect(note.x - DOUBLE_LENGTH_NOTE_WIDTH - 2, note.y - NOTE_RADIUS, (DOUBLE_LENGTH_NOTE_WIDTH - noteBodyWidth) + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
