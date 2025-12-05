@@ -357,12 +357,14 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     ctx.fill();
 
     // TODO: Draw the un-colored-in portion of the note
-    //ctx.beginPath();
-    //ctx.fillStyle = "#b4871c";
-    //ctx.fillRect(note.x - DOUBLE_LENGTH_NOTE_WIDTH - 2, note.y - NOTE_RADIUS, DOUBLE_LENGTH_NOTE_WIDTH + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
-    //ctx.fill();
+    ctx.beginPath();
+    ctx.fillStyle = "#b4871c";
+    ctx.fillRect(note.x - DOUBLE_LENGTH_NOTE_WIDTH - 2, note.y - NOTE_RADIUS, (DOUBLE_LENGTH_NOTE_WIDTH - noteBodyWidth) + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
+    ctx.fill();
 
     ctx.beginPath();
+    // TODO: This should only be filled in if the player releases the note within the range of the end note hit time
+    // TODO: which means we also need to be able to debug this range and show that range in debug mode
     ctx.fillStyle = (note.wasHit && note.keyPressOnHit.releaseTime >= note.endHitTime) ? "#2b7fff" : "#b4871c";
     ctx.arc(note.x - DOUBLE_LENGTH_NOTE_WIDTH, note.y, NOTE_RADIUS, (1 / 2) * Math.PI, (3 / 2) * Math.PI);
     ctx.fill();
