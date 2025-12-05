@@ -111,10 +111,8 @@ class Note {
     }
 
     getXCoord(targetTime: number, currentTime: number): number {
-        // Note to self: if speed is 1, it takes the note SCREEN_WIDTH ms to cross the screen
         // This works because we're trying to calculate how far targetTime is from the HIT_POINT
-        //return (currentTime - targetTime);// + (HIT_POINT / this.speed);
-        return (currentTime - targetTime) * this.speed + HIT_POINT; // BUG: we're using speed here to multiply, but we use it to divide when we set times
+        return (currentTime - targetTime) * this.speed + HIT_POINT;
     }
 
     getLengthOfNoteToDraw(currentTime: number): number {
@@ -126,7 +124,7 @@ class Note {
             if (this.keyPressOnHit.releaseTime <= 0) { // Key has not been pressed yet
                 return 0;
             }
-            else { // Key has been pressed
+            else { // Key has been pressed and released
                 return (this.keyPressOnHit.releaseTime - this.keyPressOnHit.pressTime) * this.speed;
             }
         } else if (this.keyPressOnHit.isCurrentlyDown) { // Key has been pressed but not released
