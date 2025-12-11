@@ -53,25 +53,24 @@ class Note {
     endHitTime: number;
     endHoldTime: number; // TODO: Use this variable to figure out how long the user should be holding the note for a double-length note
     wasHit: boolean;
+    endWasHit: boolean;
     hitPercentage: number;
     noteType: number;
     keyPressOnHit: KeyPressed;
 
     updateHitTime(): void {
+        this.startHitTime = this.startTime + (HIT_POINT / this.speed) - NOTE_LEEWAY;
+        this.endHitTime = this.startHitTime + (2 * NOTE_LEEWAY);
+
         switch (this.noteType) {
             case NOTE_SIMPLE:
-                this.startHitTime = this.startTime + (HIT_POINT / this.speed) - NOTE_LEEWAY;
-                this.endHitTime = this.startHitTime + (2 * NOTE_LEEWAY);
-                console.log('creating NOTE_SIMPLE with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime);
+                //console.log('creating NOTE_SIMPLE with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime);
                 break;
             case NOTE_DOUBLE_LENGTH:
-                this.startHitTime = this.startTime + (HIT_POINT / this.speed) - NOTE_LEEWAY;
-                this.endHitTime = this.startHitTime + (2 * NOTE_LEEWAY);
-                console.log('creating NOTE_DOUBLE_LENGTH with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime);
+                // TODO: Not sure if this is right; we want the endHoldTime to be sometime between when the middle of the note ends and {that point + NOTE_LEEWAY}
+                this.endHoldTime = this.startTime + ((HIT_POINT + DOUBLE_LENGTH_NOTE_WIDTH) / this.speed) + NOTE_LEEWAY;
 
-                // TODO: This was the original values, but this isn't quite right
-                //this.startHitTime = this.startTime + ((HIT_POINT + NOTE_RADIUS) / this.speed);
-                //this.endHitTime = this.startHitTime + (DOUBLE_LENGTH_NOTE_WIDTH * 0.5 / this.speed);
+                console.log('creating NOTE_DOUBLE_LENGTH with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime + ' and endHoldTime of ' + this.endHoldTime);
                 break;
         }
 
@@ -82,6 +81,7 @@ class Note {
         this.x = 0;
         this.speed = speed;
         this.wasHit = false;
+        this.endWasHit = false;
         this.hitPercentage = 0;
         this.noteType = noteType;
         this.keyPressOnHit = null;
@@ -330,6 +330,11 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
         ctx.beginPath();
         let scaledNoteLeeway = NOTE_LEEWAY * note.speed;
         ctx.fillRect(note.x + scaledNoteLeeway, note.y - (1.5 * NOTE_RADIUS), -2 * scaledNoteLeeway, NOTE_RADIUS * 3);
+        ctx.fill();
+
+        // Show where the key can be released after filling in as much of the note as possible
+        ctx.beginPath();
+        ctx.fillRect(note.x - DOUBLE_LENGTH_NOTE_WIDTH, note.y - (1.5 * NOTE_RADIUS), -2 * scaledNoteLeeway, NOTE_RADIUS * 3);
         ctx.fill();
 
         ctx.globalAlpha = 1.0;
