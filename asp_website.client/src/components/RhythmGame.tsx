@@ -51,7 +51,8 @@ class Note {
     speed: number;
     startHitTime: number;
     endHitTime: number;
-    endHoldTime: number; // TODO: Use this variable to figure out how long the user should be holding the note for a double-length note
+    startReleaseHoldTime: number;
+    endReleaseHoldTime: number; // TODO: Use this variable to figure out how long the user should be holding the note for a double-length note
     wasHit: boolean;
     endWasHit: boolean;
     hitPercentage: number;
@@ -67,10 +68,12 @@ class Note {
                 //console.log('creating NOTE_SIMPLE with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime);
                 break;
             case NOTE_DOUBLE_LENGTH:
-                // TODO: Not sure if this is right; we want the endHoldTime to be sometime between when the middle of the note ends and {that point + NOTE_LEEWAY}
-                this.endHoldTime = this.startTime + ((HIT_POINT + DOUBLE_LENGTH_NOTE_WIDTH) / this.speed) + NOTE_LEEWAY;
+                // TODO: Not sure if this is right; we want the endReleaseHoldTime to be sometime between when the middle of the note ends and {that point + NOTE_LEEWAY}
+                this.startReleaseHoldTime = this.startTime + ((HIT_POINT + DOUBLE_LENGTH_NOTE_WIDTH) / this.speed);
+                this.endReleaseHoldTime = this.startReleaseHoldTime + (NOTE_LEEWAY / this.speed);
 
-                console.log('creating NOTE_DOUBLE_LENGTH with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime + ' and endHoldTime of ' + this.endHoldTime);
+                console.log('creating NOTE_DOUBLE_LENGTH with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime
+                    + ' and startReleaseHoldTime of ' + this.startReleaseHoldTime + ' and endReleaseHoldTime of ' + this.endReleaseHoldTime);
                 break;
         }
 
@@ -131,6 +134,19 @@ class Note {
             return (currentTime - this.keyPressOnHit.pressTime) * this.speed;
         }
     }
+
+    keyPressWasReleased(): void {
+        // TODO
+        console.log("note released at " + this.keyPressOnHit.releaseTime + "; expected from ("
+            + this.startReleaseHoldTime + " - " + this.endReleaseHoldTime + ")");
+
+        // If we have a double-length note, detect whether or not the key was released on the end of the note
+        if (this.noteType === NOTE_DOUBLE_LENGTH && this.keyPressOnHit.isCurrentlyDown === false // Both conditions on this line should always be true
+            && this.keyPressOnHit.releaseTime >= this.startReleaseHoldTime
+            && this.keyPressOnHit.releaseTime <= this.endReleaseHoldTime) {
+            this.endWasHit = true;
+        }
+    }
 }
 
 
@@ -139,6 +155,7 @@ class KeyPressed {
     releaseTime: number = 0;
     isCurrentlyDown: boolean;
     keyName: string;
+    observers: Array<Note> = [];
 
     constructor(pressTime: number) {
         this.pressTime = pressTime;
@@ -146,6 +163,16 @@ class KeyPressed {
 
         // TODO: For now, the space bar is the only key that gets pressed
         this.keyName = 'space';
+    }
+
+    addObserver(note: Note): void {
+        this.observers.push(note);
+    }
+
+    notifyObservers(): void {
+        for (let i = 0; i < this.observers.length; i++) {
+            this.observers[i].keyPressWasReleased();
+        }
     }
 }
 
@@ -234,11 +261,15 @@ const playSong = (): void => {
         notes[i].x = (currentTime - notes[i].startTime) * notes[i].speed;
 
         // DEBUG: If the note has moved offscreen, delete it and add a new note
+        // TODO: Make a resetNote() function for testing?
         if (notes[i].x > SCREEN_WIDTH) {
             let newStartTime = new Date().getTime();
             notes[i].startTime = newStartTime;
             notes[i].updateHitTime();
             notes[i].wasHit = false;
+            notes[i].hitPercentage = 0;
+            notes[i].endWasHit = false;
+            notes[i].keyPressOnHit = null;
         }
 
         // detect notes hit
@@ -246,6 +277,7 @@ const playSong = (): void => {
         //lastTimeSpacePressed = currentTime; // TEST note hit time
 
         if (currentTime >= notes[i].startTime) {
+            // TODO: This needs to be more complex when we have more keypresses than just the space bar
             if (lastTimeSpacePressed >= notes[i].startHitTime && lastTimeSpacePressed <= notes[i].endHitTime) {
                 // TODO: Score more if the note is hit in the middle rather than on the edge of its range
                 // If this is the first time this note was hit, score a point
@@ -269,9 +301,10 @@ const playSong = (): void => {
                 }
 
                 notes[i].wasHit = true;
-                // attach the key press to this note so we can access it later
+                // attach the key press to this note so we can access it later and vice versa
                 // TODO: This needs to be more complex when we have more keypresses than just the space bar
                 notes[i].keyPressOnHit = keysPressed[keysPressed.length - 1];
+                keysPressed[keysPressed.length - 1].addObserver(notes[i]);
             }
         }
 
@@ -370,7 +403,8 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     ctx.beginPath();
     // TODO: This should only be filled in if the player releases the note within the range of the end note hit time
     // TODO: which means we also need to be able to debug this range and show that range in debug mode
-    ctx.fillStyle = (note.wasHit && note.keyPressOnHit.releaseTime >= note.endHitTime) ? "#2b7fff" : "#b4871c";
+    //ctx.fillStyle = (note.wasHit && note.keyPressOnHit.releaseTime >= note.endHitTime) ? "#2b7fff" : "#b4871c";
+    ctx.fillStyle = (note.wasHit && note.endWasHit) ? "#2b7fff" : "#b4871c";
     ctx.arc(note.x - DOUBLE_LENGTH_NOTE_WIDTH, note.y, NOTE_RADIUS, (1 / 2) * Math.PI, (3 / 2) * Math.PI);
     ctx.fill();
 }
@@ -525,6 +559,8 @@ const drawTitleScreen = () => {
                                 if (keysPressed[i].isCurrentlyDown) {
                                     keysPressed[i].isCurrentlyDown = false;
                                     keysPressed[i].releaseTime = lastTimeSpaceReleased;
+
+                                    keysPressed[i].notifyObservers();
                                 }
                             }
 
