@@ -51,8 +51,8 @@ class Note {
     speed: number;
     startHitTime: number;
     endHitTime: number;
-    startReleaseHoldTime: number;
-    endReleaseHoldTime: number; // TODO: Use this variable to figure out how long the user should be holding the note for a double-length note
+    startReleaseHoldTime: number; // For notes that have to be held, like a double-length note
+    endReleaseHoldTime: number; // For notes that have to be held, like a double-length note
     wasHit: boolean;
     endWasHit: boolean;
     hitPercentage: number;
@@ -136,10 +136,10 @@ class Note {
     }
 
     keyPressWasReleased(): void {
-        // TODO
-        console.log("note released at " + this.keyPressOnHit.releaseTime + "; expected from ("
-            + this.startReleaseHoldTime + " - " + this.endReleaseHoldTime + ")");
+        //console.log("note released at " + this.keyPressOnHit.releaseTime + "; expected from ("
+        //    + this.startReleaseHoldTime + " - " + this.endReleaseHoldTime + ")");
 
+        // TODO: Score based on how close to the center of the note the key was released
         // If we have a double-length note, detect whether or not the key was released on the end of the note
         if (this.noteType === NOTE_DOUBLE_LENGTH && this.keyPressOnHit.isCurrentlyDown === false // Both conditions on this line should always be true
             && this.keyPressOnHit.releaseTime >= this.startReleaseHoldTime
@@ -261,7 +261,6 @@ const playSong = (): void => {
         notes[i].x = (currentTime - notes[i].startTime) * notes[i].speed;
 
         // DEBUG: If the note has moved offscreen, delete it and add a new note
-        // TODO: Make a resetNote() function for testing?
         if (notes[i].x > SCREEN_WIDTH) {
             let newStartTime = new Date().getTime();
             notes[i].startTime = newStartTime;
@@ -279,7 +278,6 @@ const playSong = (): void => {
         if (currentTime >= notes[i].startTime) {
             // TODO: This needs to be more complex when we have more keypresses than just the space bar
             if (lastTimeSpacePressed >= notes[i].startHitTime && lastTimeSpacePressed <= notes[i].endHitTime) {
-                // TODO: Score more if the note is hit in the middle rather than on the edge of its range
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
                     let message: string = "OK";
@@ -379,7 +377,7 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     ctx.arc(note.x, note.y, NOTE_RADIUS, 3 / 2 * Math.PI, 1 / 2 * Math.PI);
     ctx.fill();
 
-    // TODO: Color only the portion of the note that the user has held the button for
+    // Color only the portion of the note that the user has held the button for
 
     // Draw the colored-in portion of the note. This is for both if the player is still holding down the note or if the note was previously held
     ctx.beginPath();
@@ -390,7 +388,6 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     if (noteBodyWidth > DOUBLE_LENGTH_NOTE_WIDTH) {
         noteBodyWidth = DOUBLE_LENGTH_NOTE_WIDTH;
     }
-    // TODO: Make sure that a tiny part of the note doesn't get drawn (the '2' here) unless the note was hit
     ctx.fillRect(note.x - noteBodyWidth - 2, note.y - NOTE_RADIUS, noteBodyWidth + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
     ctx.fill();
 
@@ -401,9 +398,6 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     ctx.fill();
 
     ctx.beginPath();
-    // TODO: This should only be filled in if the player releases the note within the range of the end note hit time
-    // TODO: which means we also need to be able to debug this range and show that range in debug mode
-    //ctx.fillStyle = (note.wasHit && note.keyPressOnHit.releaseTime >= note.endHitTime) ? "#2b7fff" : "#b4871c";
     ctx.fillStyle = (note.wasHit && note.endWasHit) ? "#2b7fff" : "#b4871c";
     ctx.arc(note.x - DOUBLE_LENGTH_NOTE_WIDTH, note.y, NOTE_RADIUS, (1 / 2) * Math.PI, (3 / 2) * Math.PI);
     ctx.fill();
