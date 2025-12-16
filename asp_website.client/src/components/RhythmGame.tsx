@@ -280,22 +280,7 @@ const playSong = (): void => {
             if (lastTimeSpacePressed >= notes[i].startHitTime && lastTimeSpacePressed <= notes[i].endHitTime) {
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
-                    let message: string = "OK";
-                    let points: number = 10;
-
-                    // How close were we to the center of this note?
-                    if (lastTimeSpacePressed >= (NOTE_OK_RANGE + notes[i].startHitTime) && lastTimeSpacePressed <= (notes[i].endHitTime - NOTE_OK_RANGE)) {
-                        message = "GREAT";
-                        points = 25;
-
-                        if (lastTimeSpacePressed >= (NOTE_GREAT_RANGE + notes[i].startHitTime) && lastTimeSpacePressed <= (notes[i].endHitTime - NOTE_GREAT_RANGE)) {
-                            message = "EXCELLENT";
-                            points = 50;
-                        }
-                    }
-
-                    addOnscreenMessage(ctx, 0, 0, message);
-                    score += points;
+                    scoreNoteHit(ctx, notes[i].startHitTime, notes[i].endHitTime, 10, 25, 50);
                 }
 
                 notes[i].wasHit = true;
@@ -318,6 +303,26 @@ const playSong = (): void => {
 
     // Draw the current score
     drawScore(ctx);
+}
+
+
+const scoreNoteHit = (ctx: CanvasRenderingContext2D, startHitTime: number, endHitTime: number, goodPoints: number, greatPoints: number, excellentPoints: number): void => {
+    let message: string = "OK";
+    let points: number = 10;
+
+    // How close were we to the center of this note?
+    if (lastTimeSpacePressed >= (NOTE_OK_RANGE + startHitTime) && lastTimeSpacePressed <= (endHitTime - NOTE_OK_RANGE)) {
+        message = "GREAT";
+        points = 25;
+
+        if (lastTimeSpacePressed >= (NOTE_GREAT_RANGE + startHitTime) && lastTimeSpacePressed <= (endHitTime - NOTE_GREAT_RANGE)) {
+            message = "EXCELLENT";
+            points = 50;
+        }
+    }
+
+    addOnscreenMessage(ctx, 0, 0, message);
+    score += points;
 }
 
 
