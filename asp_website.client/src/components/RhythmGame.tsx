@@ -135,16 +135,19 @@ class Note {
         }
     }
 
-    keyPressWasReleased(): void {
+    // TODO: Make sure this only gets called once per note
+    keyPressWasReleased(ctx: CanvasRenderingContext2D): void {
         //console.log("note released at " + this.keyPressOnHit.releaseTime + "; expected from ("
         //    + this.startReleaseHoldTime + " - " + this.endReleaseHoldTime + ")");
 
-        // TODO: Score based on how close to the center of the note the key was released
-        // If we have a double-length note, detect whether or not the key was released on the end of the note
+        // If we have a double-length note, detect when key was released on the end of the note
         if (this.noteType === NOTE_DOUBLE_LENGTH && this.keyPressOnHit.isCurrentlyDown === false // Both conditions on this line should always be true
+            && this.endWasHit === false
             && this.keyPressOnHit.releaseTime >= this.startReleaseHoldTime
             && this.keyPressOnHit.releaseTime <= this.endReleaseHoldTime) {
             this.endWasHit = true;
+
+            scoreNoteHit(ctx, this.startHitTime, this.endHitTime, 20, 50, 100);
         }
     }
 }
@@ -169,9 +172,9 @@ class KeyPressed {
         this.observers.push(note);
     }
 
-    notifyObservers(): void {
+    notifyObservers(ctx: CanvasRenderingContext2D): void {
         for (let i = 0; i < this.observers.length; i++) {
-            this.observers[i].keyPressWasReleased();
+            this.observers[i].keyPressWasReleased(ctx);
         }
     }
 }
@@ -308,16 +311,16 @@ const playSong = (): void => {
 
 const scoreNoteHit = (ctx: CanvasRenderingContext2D, startHitTime: number, endHitTime: number, goodPoints: number, greatPoints: number, excellentPoints: number): void => {
     let message: string = "OK";
-    let points: number = 10;
+    let points: number = goodPoints;
 
     // How close were we to the center of this note?
     if (lastTimeSpacePressed >= (NOTE_OK_RANGE + startHitTime) && lastTimeSpacePressed <= (endHitTime - NOTE_OK_RANGE)) {
         message = "GREAT";
-        points = 25;
+        points = greatPoints;
 
         if (lastTimeSpacePressed >= (NOTE_GREAT_RANGE + startHitTime) && lastTimeSpacePressed <= (endHitTime - NOTE_GREAT_RANGE)) {
             message = "EXCELLENT";
-            points = 50;
+            points = excellentPoints;
         }
     }
 
@@ -559,7 +562,7 @@ const drawTitleScreen = () => {
                                     keysPressed[i].isCurrentlyDown = false;
                                     keysPressed[i].releaseTime = lastTimeSpaceReleased;
 
-                                    keysPressed[i].notifyObservers();
+                                    keysPressed[i].notifyObservers(ctx);
                                 }
                             }
 
