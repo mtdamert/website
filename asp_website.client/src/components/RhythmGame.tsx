@@ -58,6 +58,7 @@ class Note {
     hitPercentage: number;
     noteType: number;
     keyPressOnHit: KeyPressed;
+    scorePerMsHeld: number;
 
     updateHitTime(): void {
         this.startHitTime = this.startTime + (HIT_POINT / this.speed) - NOTE_LEEWAY;
@@ -79,7 +80,7 @@ class Note {
 
     }
 
-    constructor(speed: number, noteType: number, notePos: number) {
+    constructor(speed: number, noteType: number, notePos: number, scorePerMsHeld: number) {
         this.startTime = new Date().getTime();
         this.x = 0;
         this.speed = speed;
@@ -88,6 +89,7 @@ class Note {
         this.hitPercentage = 0;
         this.noteType = noteType;
         this.keyPressOnHit = null;
+        this.scorePerMsHeld = scorePerMsHeld;
         this.updateHitTime();
 
         switch (notePos) {
@@ -399,6 +401,8 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     ctx.fillRect(note.x - noteBodyWidth - 2, note.y - NOTE_RADIUS, noteBodyWidth + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
     ctx.fill();
 
+    // TODO: Score the note if it's currently being held down
+
     // Draw the un-colored-in portion of the note
     ctx.beginPath();
     ctx.fillStyle = "#b4871c";
@@ -617,8 +621,8 @@ const startNewGame = (): void => {
         titleScreen.style.visibility = 'hidden';
     }
 
-    notes.push(new Note(0.1, NOTE_SIMPLE, NOTE_POS_TOP)); // test simple note
-    notes.push(new Note(0.05, NOTE_DOUBLE_LENGTH, NOTE_POS_SECOND)); // test long note
+    notes.push(new Note(0.1, NOTE_SIMPLE, NOTE_POS_TOP, 0)); // test simple note
+    notes.push(new Note(0.05, NOTE_DOUBLE_LENGTH, NOTE_POS_SECOND, 1)); // test double-length note
 
     gameState = STATE_GAME_RUNNING;
     isGameOver = false;
