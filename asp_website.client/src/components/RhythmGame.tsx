@@ -71,7 +71,7 @@ class Note {
             case NOTE_DOUBLE_LENGTH:
                 // TODO: Not sure if this is right; we want the endReleaseHoldTime to be sometime between when the middle of the note ends and {that point + NOTE_LEEWAY}
                 this.startReleaseHoldTime = this.startTime + ((HIT_POINT + DOUBLE_LENGTH_NOTE_WIDTH) / this.speed);
-                this.endReleaseHoldTime = this.startReleaseHoldTime + (NOTE_LEEWAY / this.speed);
+                this.endReleaseHoldTime = this.startReleaseHoldTime + (2 * NOTE_LEEWAY);
 
                 console.log('creating NOTE_DOUBLE_LENGTH with startHitTime of ' + this.startHitTime + ' and endHitTime of ' + this.endHitTime
                     + ' and startReleaseHoldTime of ' + this.startReleaseHoldTime + ' and endReleaseHoldTime of ' + this.endReleaseHoldTime);
@@ -160,6 +160,7 @@ class KeyPressed {
     releaseTime: number = 0;
     isCurrentlyDown: boolean;
     keyName: string;
+    scoreAwarded: number = 0;
     observers: Array<Note> = [];
 
     constructor(pressTime: number) {
@@ -402,6 +403,24 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     ctx.fill();
 
     // TODO: Score the note if it's currently being held down
+    if (note.keyPressOnHit != null && note.keyPressOnHit.isCurrentlyDown) {
+        // TODO: How do we only add the portion of the score added since last frame?
+
+        let noteHoldStartTime: number = note.startHitTime + NOTE_LEEWAY;
+        if (currentTime >= noteHoldStartTime) {
+            let noteHoldEndTime: number = note.startReleaseHoldTime;
+
+            let currentHeldTime: number = ((currentTime > noteHoldEndTime) ? noteHoldEndTime : currentTime) - note.keyPressOnHit.pressTime;
+            let scoreAwarded: number = currentHeldTime * note.scorePerMsHeld;
+            score += (scoreAwarded - note.keyPressOnHit.scoreAwarded);
+            note.keyPressOnHit.scoreAwarded = scoreAwarded;
+        }
+
+        // TODO: 
+        //   -> a note starts at note.startTime + NOTE_LEEWAY and ends at startReleaseHoldTime + NOTE_LEEWAY
+        //   -> figure out how much time has passed since last frame (note.keyPressed.scoreAwarded) and multiply by scorePerMsHeld,
+        //      then update scoreAwarded
+    }
 
     // Draw the un-colored-in portion of the note
     ctx.beginPath();
