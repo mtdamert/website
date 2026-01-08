@@ -402,7 +402,7 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
     ctx.fillRect(note.x - noteBodyWidth - 2, note.y - NOTE_RADIUS, noteBodyWidth + 2, NOTE_RADIUS * 2); // 2 is a magic number so we slightly overdraw and remove aliasing
     ctx.fill();
 
-    // TODO: Score the note if it's currently being held down
+    // Score the note if it's currently being held down
     if (note.keyPressOnHit != null && note.keyPressOnHit.isCurrentlyDown) {
         // TODO: How do we only add the portion of the score added since last frame?
 
