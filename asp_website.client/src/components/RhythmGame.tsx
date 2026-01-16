@@ -349,8 +349,9 @@ const drawSimpleNote = (ctx: CanvasRenderingContext2D, note: Note, currentTime: 
         ctx.globalAlpha = 0.3;
         ctx.fillStyle = (note.wasHit ? "#000000" : "#c6005c");
         ctx.beginPath();
-        let scaledNoteLeeway = NOTE_LEEWAY * note.speed;
-        ctx.fillRect(note.x + scaledNoteLeeway, note.y - (1.5 * NOTE_RADIUS), -2 * scaledNoteLeeway, NOTE_RADIUS * 3);
+        let rightXCoord = HIT_POINT - ((note.startHitTime - currentTime) * note.speed);
+        let leftXCoord = HIT_POINT - ((note.endHitTime - currentTime) * note.speed); // Calculating this every time is ineffecient, but because this is debug mode, we don't care
+        ctx.fillRect(rightXCoord, note.y - (1.5 * NOTE_RADIUS), (leftXCoord - rightXCoord), NOTE_RADIUS * 3);
         ctx.fill();
 
         ctx.globalAlpha = 1.0;
@@ -370,13 +371,16 @@ const drawDoubleLengthNote = (ctx: CanvasRenderingContext2D, note: Note, current
         ctx.globalAlpha = 0.3;
         ctx.fillStyle = (note.wasHit ? "#000000" : "#c6005c");
         ctx.beginPath();
-        let scaledNoteLeeway = NOTE_LEEWAY * note.speed;
-        ctx.fillRect(note.x + scaledNoteLeeway, note.y - (1.5 * NOTE_RADIUS), -2 * scaledNoteLeeway, NOTE_RADIUS * 3);
+        let rightXCoord = HIT_POINT - ((note.startHitTime - currentTime) * note.speed);
+        let leftXCoord = HIT_POINT - ((note.endHitTime - currentTime) * note.speed); // Calculating this every time is ineffecient, but because this is debug mode, we don't care
+        ctx.fillRect(rightXCoord, note.y - (1.5 * NOTE_RADIUS), (leftXCoord - rightXCoord), NOTE_RADIUS * 3);
         ctx.fill();
 
         // Show where the key can be released after filling in as much of the note as possible
         ctx.beginPath();
-        ctx.fillRect(note.x - DOUBLE_LENGTH_NOTE_WIDTH, note.y - (1.5 * NOTE_RADIUS), -2 * scaledNoteLeeway, NOTE_RADIUS * 3);
+        rightXCoord = HIT_POINT - ((note.startReleaseHoldTime - currentTime) * note.speed);
+        leftXCoord = HIT_POINT - ((note.endReleaseHoldTime - currentTime) * note.speed);
+        ctx.fillRect(rightXCoord, note.y - (1.5 * NOTE_RADIUS), (leftXCoord - rightXCoord), NOTE_RADIUS * 3);
         ctx.fill();
 
         ctx.globalAlpha = 1.0;
