@@ -1,3 +1,11 @@
+// TODO: Graphics
+//       - make notes prettier (bounce when hit?)
+//       - make text placement better & prettier
+//       - what do I want the game to look like?
+//       - prettier start screen (& other screens)
+//       stage format
+//       end-of-level scoring
+
 import React, { useEffect } from 'react';
 import dot_image from '../images/dot.png';
 
@@ -38,8 +46,10 @@ const NOTE_GREAT_RANGE: number = 150;
 let score: number = 0;
 let lastTimeSpacePressed: number = 0;
 let lastTimeSpaceReleased: number = 0;
+let lastFrameTime: number = 0;
 
 let onscreenMessages: Array<(OnscreenMessage | null)> = [];
+let particleSystems: Array<(ParticleSystem | null)> = [];
 
 let debugMode: boolean = true;
 
@@ -201,6 +211,99 @@ class OnscreenMessage {
 }
 
 
+class ParticleSystem {
+    startTime: number;
+    startXPos: number;
+    startYPos: number;
+    duration: number;
+    numParticles: number;
+    particles: Array<CircleParticle> = [];
+
+    constructor(startTime: number, startXPos: number, startYPos: number, duration: number, numParticles: number) {
+        this.startTime = startTime;
+        this.startXPos = startXPos;
+        this.startYPos = startYPos;
+        this.duration = duration;
+        this.numParticles = numParticles;
+
+        for (let i: number = 0; i < this.numParticles; i++) {
+            // TODO: Radius shouldn't be a constant, it should be based on screen size
+            // Push each particle in random direction and vary its velocity
+            const angle = Math.random() * 2 * Math.PI;
+            const radius = Math.random() * 0.1; // Random radius 0 to 1
+
+            // Convert polar coordinates to Cartesian
+            const xVelocity = radius * Math.cos(angle);
+            const yVelocity = radius * Math.sin(angle);
+
+            this.particles.push(new CircleParticle(this.startXPos, this.startYPos, xVelocity, yVelocity, 5, "#2b7fff"));
+        }
+    }
+
+    update(msSinceLastFrame: number): void {
+        // TODO: Update all particles
+        for (let i: number = 0; i < this.numParticles; i++) {
+            this.particles[i].update(msSinceLastFrame);
+        }
+    }
+
+    draw(ctx: CanvasRenderingContext2D): void {
+        for (let i = 0; i < this.particles.length; i++) {
+            this.particles[i].draw(ctx);
+        }
+    }
+
+    // TODO: Make this particle system observed by a note. When that note moves, we can also move the particle system
+    move(x: number, y: number) {
+        for (let i = 0; i < this.particles.length; i++) {
+            this.particles[i].xPos += x;
+            this.particles[i].yPos += y;
+        }
+    }
+
+    isFinished(currentTime: number) {
+        if (currentTime > (this.startTime + this.duration)) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+
+class CircleParticle {
+    xPos: number;
+    yPos: number;
+    xVelocity: number;
+    yVelocity: number;
+    radius: number;
+    color: string;
+
+    // TODO: Allow particle to be created at non-zero time so it doesn't start in the middle of a circle, it starts slightly outside it already in motion
+    constructor(startXPos: number, startYPos: number, xVelocity: number, yVelocity: number, radius: number, color: string) {
+        this.xPos = startXPos;
+        this.yPos = startYPos;
+        this.xVelocity = xVelocity;
+        this.yVelocity = yVelocity;
+        this.radius = radius;
+        this.color = color;
+    }
+
+    update(msSinceLastFrame: number): void {
+        this.xPos = this.xPos + this.xVelocity * msSinceLastFrame;
+        this.yPos = this.yPos + this.yVelocity * msSinceLastFrame;
+    }
+
+    draw(ctx: CanvasRenderingContext2D): void {
+        console.log("Drawing a particle at (" + this.xPos + ", " + this.yPos + ")");
+        ctx.fillStyle = (this.color);
+        ctx.beginPath();
+        ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+}
+
+
 const init = (): void => {
     let pausedBox: (HTMLElement | null) = document.getElementById("pausedBox");
     if (pausedBox !== null) {
@@ -232,6 +335,7 @@ const init = (): void => {
 
 const gameLoop = (): void => {
     if (gameState === STATE_START_SCREEN) {
+        lastFrameTime = new Date().getTime();
         drawTitleScreen();
         setTimeout(gameLoop, 17);
     }
@@ -287,6 +391,7 @@ const playSong = (): void => {
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
                     scoreNoteHit(ctx, notes[i].startHitTime, notes[i].endHitTime, 10, 25, 50);
+                    particleSystems.push(new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 400, 20));
                 }
 
                 notes[i].wasHit = true;
@@ -306,9 +411,12 @@ const playSong = (): void => {
     }
 
     updateAndRenderOnscreenMessages(currentTime, ctx);
+    updateAndRenderParticleSystems(currentTime, currentTime - lastFrameTime, ctx);
 
     // Draw the current score
     drawScore(ctx);
+
+    lastFrameTime = currentTime;
 }
 
 
@@ -469,6 +577,21 @@ function updateAndRenderOnscreenMessages(currentTime: number, ctx: CanvasRenderi
         ctx.textAlign = 'left'; // Horizontal alignment
         ctx.textBaseline = 'top'; // Vertical alignment
         ctx.fillText(onscreenMessages[i].text, onscreenMessages[i].x, onscreenMessages[i].y);
+    }
+}
+
+
+function updateAndRenderParticleSystems(currentTime: number, msSinceLastFrame: number, ctx: CanvasRenderingContext2D) {
+    // Remove stale particle systems
+    for (let i: number = particleSystems.length - 1; i >= 0; i--) {
+        if (particleSystems[i].isFinished(currentTime)) {
+            particleSystems.splice(i, 1);
+        }
+    }
+
+    for (let i: number = 0; i < particleSystems.length; i++) {
+        particleSystems[i].update(msSinceLastFrame);
+        particleSystems[i].draw(ctx);
     }
 }
 
