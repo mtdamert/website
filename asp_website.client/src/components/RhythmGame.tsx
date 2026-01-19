@@ -240,7 +240,7 @@ class ParticleSystem {
     }
 
     update(msSinceLastFrame: number): void {
-        // TODO: Update all particles
+        // Update all particles
         for (let i: number = 0; i < this.numParticles; i++) {
             this.particles[i].update(msSinceLastFrame);
         }
