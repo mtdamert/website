@@ -230,7 +230,7 @@ class ParticleSystem {
             // TODO: Radius shouldn't be a constant, it should be based on screen size
             // Push each particle in random direction and vary its velocity
             const angle = Math.random() * 2 * Math.PI;
-            const radius = Math.random() * 0.1; // Random radius 0 to 1
+            const radius = Math.random() * (NOTE_RADIUS * 0.02); // Random radius 0 to 1 (or whatever value we multiply by)
 
             // Convert polar coordinates to Cartesian
             const xVelocity = radius * Math.cos(angle);
@@ -391,7 +391,7 @@ const playSong = (): void => {
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
                     scoreNoteHit(ctx, notes[i].startHitTime, notes[i].endHitTime, 10, 25, 50);
-                    particleSystems.push(new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 400, 20));
+                    particleSystems.push(new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 200, 20));
                 }
 
                 notes[i].wasHit = true;
