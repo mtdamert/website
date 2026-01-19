@@ -227,7 +227,6 @@ class ParticleSystem {
         this.numParticles = numParticles;
 
         for (let i: number = 0; i < this.numParticles; i++) {
-            // TODO: Radius shouldn't be a constant, it should be based on screen size
             // Push each particle in random direction and vary its velocity
             const angle = Math.random() * 2 * Math.PI;
             const radius = Math.random() * (NOTE_RADIUS * 0.02); // Random radius 0 to 1 (or whatever value we multiply by)
