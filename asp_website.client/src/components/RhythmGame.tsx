@@ -217,6 +217,7 @@ class ParticleSystem {
     startYPos: number;
     duration: number;
     numParticles: number;
+    parentNote: (Note | null) = null;
     particles: Array<CircleParticle> = [];
 
     constructor(startTime: number, startXPos: number, startYPos: number, duration: number, numParticles: number) {
@@ -240,6 +241,15 @@ class ParticleSystem {
     }
 
     update(msSinceLastFrame: number): void {
+        // When the parent note moves, we also move the particle system
+        if (this.parentNote !== null) {
+            if (this.startXPos !== this.parentNote.x || this.startXPos !== this.parentNote.y) {
+                let xMove: number = this.parentNote.x - this.startXPos;
+                let yMove: number = this.parentNote.y - this.startYPos;
+                this.move(xMove, yMove);
+            }
+        }
+
         // Update all particles
         for (let i: number = 0; i < this.numParticles; i++) {
             this.particles[i].update(msSinceLastFrame);
@@ -252,12 +262,14 @@ class ParticleSystem {
         }
     }
 
-    // TODO: Make this particle system observed by a note. When that note moves, we can also move the particle system
     move(x: number, y: number) {
         for (let i = 0; i < this.particles.length; i++) {
             this.particles[i].xPos += x;
             this.particles[i].yPos += y;
         }
+
+        this.startXPos += x;
+        this.startYPos += y;
     }
 
     isFinished(currentTime: number) {
@@ -294,7 +306,6 @@ class CircleParticle {
     }
 
     draw(ctx: CanvasRenderingContext2D): void {
-        console.log("Drawing a particle at (" + this.xPos + ", " + this.yPos + ")");
         ctx.fillStyle = (this.color);
         ctx.beginPath();
         ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
@@ -390,7 +401,10 @@ const playSong = (): void => {
                 // If this is the first time this note was hit, score a point
                 if (notes[i].wasHit === false) {
                     scoreNoteHit(ctx, notes[i].startHitTime, notes[i].endHitTime, 10, 25, 50);
-                    particleSystems.push(new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 200, 20));
+
+                    let hitParticles: ParticleSystem = new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 200, 20);
+                    hitParticles.parentNote = notes[i];
+                    particleSystems.push(hitParticles);
                 }
 
                 notes[i].wasHit = true;
