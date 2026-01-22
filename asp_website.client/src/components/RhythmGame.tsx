@@ -220,7 +220,7 @@ class ParticleSystem {
     parentNote: (Note | null) = null;
     particles: Array<CircleParticle> = [];
 
-    constructor(startTime: number, startXPos: number, startYPos: number, duration: number, numParticles: number) {
+    constructor(startTime: number, startXPos: number, startYPos: number, duration: number, numParticles: number, initialTime: number) {
         this.startTime = startTime;
         this.startXPos = startXPos;
         this.startYPos = startYPos;
@@ -236,7 +236,7 @@ class ParticleSystem {
             const xVelocity = radius * Math.cos(angle);
             const yVelocity = radius * Math.sin(angle);
 
-            this.particles.push(new CircleParticle(this.startXPos, this.startYPos, xVelocity, yVelocity, 5, "#2b7fff"));
+            this.particles.push(new CircleParticle(this.startXPos, this.startYPos, xVelocity, yVelocity, 5, initialTime, "#2b7fff"));
         }
     }
 
@@ -291,13 +291,17 @@ class CircleParticle {
     color: string;
 
     // TODO: Allow particle to be created at non-zero time so it doesn't start in the middle of a circle, it starts slightly outside it already in motion
-    constructor(startXPos: number, startYPos: number, xVelocity: number, yVelocity: number, radius: number, color: string) {
+    constructor(startXPos: number, startYPos: number, xVelocity: number, yVelocity: number, radius: number, initialTime: number, color: string) {
         this.xPos = startXPos;
         this.yPos = startYPos;
         this.xVelocity = xVelocity;
         this.yVelocity = yVelocity;
         this.radius = radius;
         this.color = color;
+
+        if (initialTime > 0) {
+            this.update(initialTime);
+        }
     }
 
     update(msSinceLastFrame: number): void {
@@ -307,6 +311,9 @@ class CircleParticle {
 
     draw(ctx: CanvasRenderingContext2D): void {
         ctx.fillStyle = (this.color);
+        // TODO: transparency over time
+        //ctx.globalAlpha = 0.3;
+
         ctx.beginPath();
         ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
         ctx.fill();
@@ -402,7 +409,7 @@ const playSong = (): void => {
                 if (notes[i].wasHit === false) {
                     scoreNoteHit(ctx, notes[i].startHitTime, notes[i].endHitTime, 10, 25, 50);
 
-                    let hitParticles: ParticleSystem = new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 200, 20);
+                    let hitParticles: ParticleSystem = new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 100, 20, 100);
                     hitParticles.parentNote = notes[i];
                     particleSystems.push(hitParticles);
                 }
