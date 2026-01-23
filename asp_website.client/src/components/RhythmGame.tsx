@@ -256,10 +256,17 @@ class ParticleSystem {
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(currentTime: number, ctx: CanvasRenderingContext2D): void {
+        // TODO: Make the particle system disappear for the second half of its life
+        let transparency: number = 1.0 - ((currentTime - this.startTime) / this.duration);
+        //let lifePercentage: number = (currentTime - this.startTime) / this.duration;
+        //let transparency: number = (lifePercentage < 0.5) ? 1.0 : (this.duration - lifePercentage) / 2.0;
+
         for (let i = 0; i < this.particles.length; i++) {
-            this.particles[i].draw(ctx);
+            this.particles[i].draw(ctx, transparency);
         }
+
+        ctx.globalAlpha = 1.0; // Reset alpha
     }
 
     move(x: number, y: number) {
@@ -309,10 +316,10 @@ class CircleParticle {
         this.yPos = this.yPos + this.yVelocity * msSinceLastFrame;
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
+    draw(ctx: CanvasRenderingContext2D, transparency: number): void {
         ctx.fillStyle = (this.color);
         // TODO: transparency over time
-        //ctx.globalAlpha = 0.3;
+        ctx.globalAlpha = transparency;
 
         ctx.beginPath();
         ctx.arc(this.xPos, this.yPos, this.radius, 0, 2 * Math.PI);
@@ -409,7 +416,7 @@ const playSong = (): void => {
                 if (notes[i].wasHit === false) {
                     scoreNoteHit(ctx, notes[i].startHitTime, notes[i].endHitTime, 10, 25, 50);
 
-                    let hitParticles: ParticleSystem = new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 100, 20, 100);
+                    let hitParticles: ParticleSystem = new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 150, 20, 100);
                     hitParticles.parentNote = notes[i];
                     particleSystems.push(hitParticles);
                 }
@@ -611,7 +618,7 @@ function updateAndRenderParticleSystems(currentTime: number, msSinceLastFrame: n
 
     for (let i: number = 0; i < particleSystems.length; i++) {
         particleSystems[i].update(msSinceLastFrame);
-        particleSystems[i].draw(ctx);
+        particleSystems[i].draw(currentTime, ctx);
     }
 }
 
