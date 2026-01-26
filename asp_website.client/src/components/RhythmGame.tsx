@@ -217,15 +217,18 @@ class ParticleSystem {
     startYPos: number;
     duration: number;
     numParticles: number;
+    fadeStartTimePercent: number; // 0.0 to 1.0, percentage of duration when fading starts
     parentNote: (Note | null) = null;
     particles: Array<CircleParticle> = [];
 
-    constructor(startTime: number, startXPos: number, startYPos: number, duration: number, numParticles: number, initialTime: number) {
+    constructor(startTime: number, startXPos: number, startYPos: number, duration: number, numParticles: number, initialTime: number,
+        fadeStartTimePercent: number) {
         this.startTime = startTime;
         this.startXPos = startXPos;
         this.startYPos = startYPos;
         this.duration = duration;
         this.numParticles = numParticles;
+        this.fadeStartTimePercent = fadeStartTimePercent;
 
         for (let i: number = 0; i < this.numParticles; i++) {
             // Push each particle in random direction and vary its velocity
@@ -257,10 +260,12 @@ class ParticleSystem {
     }
 
     draw(currentTime: number, ctx: CanvasRenderingContext2D): void {
-        // TODO: Make the particle system disappear for the second half of its life
-        let transparency: number = 1.0 - ((currentTime - this.startTime) / this.duration);
-        //let lifePercentage: number = (currentTime - this.startTime) / this.duration;
-        //let transparency: number = (lifePercentage < 0.5) ? 1.0 : (this.duration - lifePercentage) / 2.0;
+        // Make the particle system disappear for only the part of its life the user specifies
+        let transparency: number = ((currentTime - this.startTime) / this.duration);
+        if (this.fadeStartTimePercent > 0.0) {
+            transparency = (transparency < this.fadeStartTimePercent) ? 0.0 : (transparency - this.fadeStartTimePercent) / (1.0 - this.fadeStartTimePercent);
+        }
+        transparency = 1.0 - transparency;
 
         for (let i = 0; i < this.particles.length; i++) {
             this.particles[i].draw(ctx, transparency);
@@ -416,7 +421,7 @@ const playSong = (): void => {
                 if (notes[i].wasHit === false) {
                     scoreNoteHit(ctx, notes[i].startHitTime, notes[i].endHitTime, 10, 25, 50);
 
-                    let hitParticles: ParticleSystem = new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 150, 20, 100);
+                    let hitParticles: ParticleSystem = new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 250, 20, 100, 0.6);
                     hitParticles.parentNote = notes[i];
                     particleSystems.push(hitParticles);
                 }
