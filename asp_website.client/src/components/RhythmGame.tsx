@@ -239,7 +239,8 @@ class ParticleSystem {
             const xVelocity = radius * Math.cos(angle);
             const yVelocity = radius * Math.sin(angle);
 
-            this.particles.push(new CircleParticle(this.startXPos, this.startYPos, xVelocity, yVelocity, 5, initialTime, "#2b7fff"));
+            let particlesColor: string = "#658ecc";
+            this.particles.push(new CircleParticle(this.startXPos, this.startYPos, xVelocity, yVelocity, NOTE_RADIUS / 2.0, initialTime, particlesColor));
         }
     }
 
@@ -302,7 +303,6 @@ class CircleParticle {
     radius: number;
     color: string;
 
-    // TODO: Allow particle to be created at non-zero time so it doesn't start in the middle of a circle, it starts slightly outside it already in motion
     constructor(startXPos: number, startYPos: number, xVelocity: number, yVelocity: number, radius: number, initialTime: number, color: string) {
         this.xPos = startXPos;
         this.yPos = startYPos;
@@ -395,6 +395,8 @@ const playSong = (): void => {
     // Draw a line at the middle of the screen
     drawHitPointLine(ctx);
 
+    updateAndRenderParticleSystems(currentTime, currentTime - lastFrameTime, ctx);
+
     for (let i: number = 0; i < notes.length; i++) {
         // Move the note
         notes[i].x = (currentTime - notes[i].startTime) * notes[i].speed;
@@ -421,7 +423,7 @@ const playSong = (): void => {
                 if (notes[i].wasHit === false) {
                     scoreNoteHit(ctx, notes[i].startHitTime, notes[i].endHitTime, 10, 25, 50);
 
-                    let hitParticles: ParticleSystem = new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 250, 20, 100, 0.6);
+                    let hitParticles: ParticleSystem = new ParticleSystem(currentTime, HIT_POINT, notes[i].y, 125, 20, 100, 0.7);
                     hitParticles.parentNote = notes[i];
                     particleSystems.push(hitParticles);
                 }
@@ -443,7 +445,6 @@ const playSong = (): void => {
     }
 
     updateAndRenderOnscreenMessages(currentTime, ctx);
-    updateAndRenderParticleSystems(currentTime, currentTime - lastFrameTime, ctx);
 
     // Draw the current score
     drawScore(ctx);
