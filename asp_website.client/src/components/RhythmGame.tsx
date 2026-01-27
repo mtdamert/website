@@ -658,7 +658,7 @@ const updateStartMenuCanvas = () => {
 
     // Draw a dot next to the selected item
     ctx.beginPath();
-    ctx.arc((SCREEN_WIDTH * 0.075), (SCREEN_HEIGHT * 0.55 + (SCREEN_HEIGHT * 0.1 * startMenuSelectedOption)), NOTE_RADIUS, 0, 2 * Math.PI);
+    ctx.arc((SCREEN_WIDTH * 0.075), (SCREEN_HEIGHT * 0.615 + (SCREEN_HEIGHT * 0.1 * startMenuSelectedOption)), NOTE_RADIUS, 0, 2 * Math.PI);
     ctx.fillStyle = "#2b7fff";
     ctx.fill();
 
@@ -826,11 +826,11 @@ function RhythmGame() {
                         PAUSED
                     </div>
                     <div id="titleScreen" className={`absolute h-[${SCREEN_HEIGHT}px] w-[${SCREEN_WIDTH}px] invisible z-10`}>
-                        <div className={`absolute top-[15%] text-center text-4xl font-bold text-pink-700 w-[${SCREEN_WIDTH}px]`}>Rhythm Game</div>
-                        <div id="startNewGameOption" onClick={startNewGame} className={`absolute text-left text-xl indent-[10%] top-[50%] w-[${SCREEN_WIDTH}px]`}>
+                        <div className={`absolute top-[5%] right-[10%] text-right text-9xl font-bold text-pink-700 w-[${SCREEN_WIDTH}px]`}>Rhythm<br/>Game</div>
+                        <div id="startNewGameOption" onClick={startNewGame} className={`absolute text-left text-xl indent-[10%] top-[57%] w-[${SCREEN_WIDTH}px]`}>
                             Start New Game
                         </div>
-                        <div id="startOtherOption" className={`absolute text-left text-xl indent-[10%] top-[60%] w-[${SCREEN_WIDTH}px]`}>
+                        <div id="startOtherOption" className={`absolute text-left text-xl indent-[10%] top-[67%] w-[${SCREEN_WIDTH}px]`}>
                             Other Options
                         </div>
                     </div>
