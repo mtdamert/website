@@ -57,6 +57,7 @@ function RetirementCalc({ emailAddress }) {
                     setStartSocialSecurityAge(data.startSocialSecurityAge);
                     setEstSocialSecurityIncome(data.estSocialSecurityIncome);
                     setPredictedYieldPct(data.predictedYieldPct);
+                    setPredictedRetirementYieldPct(data.predictedRetirementYieldPct);
                     setCpiPct(data.cpiPct);
                     setAgeAtDeath(data.ageAtDeath);
                     setExtrapolateCapGains(data.extrapolateCapGains);
@@ -78,6 +79,7 @@ function RetirementCalc({ emailAddress }) {
     const [startSocialSecurityAge, setStartSocialSecurityAge] = useState(70);
     const [estSocialSecurityIncome, setEstSocialSecurityIncome] = useState(0);
     const [predictedYieldPct, setPredictedYieldPct] = useState(8);
+    const [predictedRetirementYieldPct, setPredictedRetirementYieldPct] = useState(5);
     const [cpiPct, setCpiPct] = useState(3);
     const [ageAtDeath, setAgeAtDeath] = useState(90);
     const [extrapolateCapGains, setExtrapolateCapGains] = useState(false);
@@ -103,6 +105,7 @@ function RetirementCalc({ emailAddress }) {
             startSocialSecurityAge,
             estSocialSecurityIncome,
             predictedYieldPct,
+            predictedRetirementYieldPct,
             cpiPct,
             ageAtDeath,
             extrapolateCapGains
@@ -111,7 +114,7 @@ function RetirementCalc({ emailAddress }) {
 
     useEffect(() => { getSavingsZeroAge(); },
         [currentAge, currentSavings, currentPostTaxSavings, currentRetirementSavings, currentIncome, livingExpenses, retirementAge,
-            startSocialSecurityAge, estSocialSecurityIncome, predictedYieldPct, cpiPct, ageAtDeath, extrapolateCapGains]);
+            startSocialSecurityAge, estSocialSecurityIncome, predictedYieldPct, predictedRetirementYieldPct, cpiPct, ageAtDeath, extrapolateCapGains]);
 
     let calcIsRunning = false;
 
@@ -158,10 +161,14 @@ function RetirementCalc({ emailAddress }) {
 
             yearlyExpenses *= (1.0 + (cpiPct * 0.01));
             sSIncome *= 1.02;
-            remainingSavings *= (1.0 + (predictedYieldPct * 0.01));
-            remainingPreTaxSavings *= (1.0 + (predictedYieldPct * 0.01));
-            if (ageCounter < retirementAge)
+            if (ageCounter < retirementAge) {
+                remainingSavings *= (1.0 + (predictedYieldPct * 0.01));
+                remainingPreTaxSavings *= (1.0 + (predictedYieldPct * 0.01));
                 remainingSavings += Number(currentIncome);
+            } else {
+                remainingSavings *= (1.0 + (predictedRetirementYieldPct * 0.01));
+                remainingPreTaxSavings *= (1.0 + (predictedRetirementYieldPct * 0.01));
+            }
             if (ageCounter >= startSocialSecurityAge)
                 remainingSavings += sSIncome;
 
@@ -238,8 +245,9 @@ function RetirementCalc({ emailAddress }) {
                         <label className="font-semibold">
                             Current Savings:
                         </label>{/* todo: sanitize input */}
-                        <input type="text"
+                        <input type="number"
                             value={currentSavings}
+                            step={10000}
                             onChange={(e) => { setCurrentSavings(e.target.value); setCurrentPostTaxSavings(0); setCurrentRetirementSavings(0); setIsSaveDisabled(false); } } 
                             className="float-right border text-right w-30"
                         />
@@ -279,8 +287,9 @@ function RetirementCalc({ emailAddress }) {
                         <label className="font-semibold">
                             Current Income:
                         </label>
-                        <input type="text"
+                        <input type="number"
                             value={currentIncome}
+                            step={1000}
                             onChange={(e) => { setCurrentIncome(e.target.value); setIsSaveDisabled(false); } }
                             className="float-right border text-right w-30"
                         />
@@ -290,8 +299,9 @@ function RetirementCalc({ emailAddress }) {
                         <label className="font-semibold">
                             Living Expenses:
                         </label>{/* todo: sanitize input */}
-                        <input type="text"
+                        <input type="number"
                             value={livingExpenses}
+                            step={1000}
                                 onChange={(e) => { console.log("living expenses - e.target.value: " + e.target.value); setLivingExpenses(e.target.value); setIsSaveDisabled(false); }}
                             className="float-right border text-right w-24"
                         />
@@ -345,6 +355,18 @@ function RetirementCalc({ emailAddress }) {
 
                     <div className="pt-4">
                         <label className="font-semibold">
+                            Predicted Yield in Retirement:
+                        </label>
+                        <span className="float-right">%</span>
+                        <input type="number"
+                            value={predictedRetirementYieldPct}
+                            onChange={(e) => { setPredictedRetirementYieldPct(e.target.value); setIsSaveDisabled(false); }}
+                            className="float-right border text-right w-12"
+                        />
+                    </div>
+
+                    <div className="pt-4">
+                        <label className="font-semibold">
                             CPI:
                         </label>
                         <span className="float-right">%</span>
@@ -369,7 +391,7 @@ function RetirementCalc({ emailAddress }) {
 
                     <div className="pt-8">
                         <label className="font-semibold">
-                            Use CPI to Extrapolate Capital Gains based on 2025 Rate
+                            Use CPI to Extrapolate Capital Gains based on {new Date().getFullYear()} Rate
                         </label>
                         <input type="checkbox"
                             value={extrapolateCapGains}

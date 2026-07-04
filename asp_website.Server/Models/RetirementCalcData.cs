@@ -15,6 +15,7 @@ namespace asp_website.Server.Models
         public int? startSocialSecurityAge { get; set; }
         public int? estSocialSecurityIncome { get; set; }
         public int? predictedYieldPct { get; set; }
+        public int? predictedRetirementYieldPct { get; set; }
         public int? cpiPct { get; set; }
         public int? ageAtDeath {  get; set; }
         public bool? extrapolateCapGains { get; set; }

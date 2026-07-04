@@ -76,6 +76,7 @@ namespace asp_website.Server.Controllers
                 data.startSocialSecurityAge = updatedData.startSocialSecurityAge;
                 data.estSocialSecurityIncome = updatedData.estSocialSecurityIncome;
                 data.predictedYieldPct = updatedData.predictedYieldPct;
+                data.predictedRetirementYieldPct = updatedData.predictedRetirementYieldPct;
                 data.cpiPct = updatedData.cpiPct;
                 data.ageAtDeath = updatedData.ageAtDeath;
                 data.extrapolateCapGains = updatedData.extrapolateCapGains;
